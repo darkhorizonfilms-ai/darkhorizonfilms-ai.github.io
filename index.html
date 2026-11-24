@@ -30,36 +30,43 @@ async function makeSilentFilm(im,box){
   const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));
   box.innerHTML=`<video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Film.webm">⬇️ تحميل الفيديو</a></div>`;
 }
-async function genInstantImg(q,box){
-  const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus");
-  const realismModels=isAn
-    ?["Anything Diffusion","Counterfeit","MeinaMix","Animagine XL"]
-    :["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","epiCRealism","AbsoluteReality","CyberRealistic","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)"];
-  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","apikey":"0000000000"},
-    body:JSON.stringify({
-      prompt:fp+" ### watermark, logo, signature, text, blurry, deformed, cartoon, 3d render, cgi, plastic skin",
-      models:realismModels,
-      r2:true,
-      params:{width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1}
-    })
-  });
+async function pollHorde(payload,box,label,maxTries){
+  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify(payload)});
   const hd=await hr.json();
-  if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط الآن");
-  for(let i=0;i<35;i++){
+  if(!hd.id)return null;
+  for(let i=0;i<maxTries;i++){
     await new Promise(r=>setTimeout(r,1500));
     const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-    if(st.wait_time!==undefined)box.innerHTML=`📸 جاري التصوير الواقعي (${st.wait_time}ث)...`;
+    if(st.wait_time>20&&maxTries<=8)return null;
+    if(st.wait_time!==undefined)box.innerHTML=`${label} (~${st.wait_time}ث)...`;
     const g=st.generations&&st.generations.at(0);
     if(st.done&&g&&g.img){
       const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
       await new Promise(r=>{im.onload=r;im.src=u});
-      if(im.width)return {im,u,mdl:g.model||"ICBINP-Realism"};
+      if(im.width)return {im,u,mdl:g.model||"ICBINP-Pro"};
     }
   }
-  throw new Error("انتهت المهلة، أعد الضغط للتبديل لأسرع عقدة");
+  return null;
+}
+async function genInstantImg(q,box){
+  const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
+  const fp=en+(isAn?", masterpiece Japanese anime illustration, Ufotable style, vibrant lighting, crisp lineart, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus");
+  const neg=" ### watermark, logo, signature, text, blurry, deformed, bad anatomy, low quality";
+  const targetModels=isAn
+    ?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion","Hassaku"]
+    :["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","epiCRealism","AbsoluteReality","CyberRealistic","Juggernaut XL","RealVisXL V5.0"];
+  const baseParams={width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1};
+
+  // المحاولة 1: نماذج ICBINP / الأنمي المحددة (تبديل تلقائي إذا زاد الانتظار عن 20ث)
+  const res1=await pollHorde({prompt:fp+neg,models:targetModels,r2:true,params:baseParams},box,"📸 جاري التصوير بنماذج ICBINP / الأنمي",8);
+  if(res1)return res1;
+
+  // التبديل التلقائي 2: إطلاق الطلب لأسرع بطاقة GPU فارغة فوراً (بدون انتظار طوابير)
+  box.innerHTML="⚡ تبديل تلقائي لأسرع عقدة GPU متاحة الآن...";
+  const res2=await pollHorde({prompt:fp+neg,r2:true,params:{width:512,height:512,steps:16,n:1}},box,"⚡ جاري الرسم على أسرع عقدة",25);
+  if(res2)return res2;
+
+  throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط");
 }
 async function send(){
   const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
