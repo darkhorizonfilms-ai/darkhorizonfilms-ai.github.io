@@ -33,7 +33,7 @@ async function makeSilentFilm(im,box){
 async function genCleanImg(q,box){
   const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
   const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, ARRI Alexa 65, sharp focus")+" ### watermark, logo, signature, text, blurry, low quality";
-  const models=isAn?["Animagine XL","Counterfeit","MeinaMix"]:["FLUX.1-schnell","Juggernaut XL","AlbedoBase XL (SDXL)","SDXL 1.0"];
+  const models=isAn?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion"]:["FLUX.1-schnell","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper XL","CyberRealistic"];
   const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp,models:models,params:{width:576,height:576,steps:20,cfg_scale:7,n:1}})});
   const hd=await hr.json();
   if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد المحاولة");
