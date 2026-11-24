@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON INFINITE PRO</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:330px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
 <body><header><div class="brand">● DARK HORIZON INFINITE PRO</div><button class="hbtn" id="btnNew">+ جديد</button></header>
-<div id="chat"><div class="msg bot">🌌 <b>DARK HORIZON INFINITE PRO</b> — توليد صور وأنمي وفيديو صامت بلا حدود وبدون علامة مائية (100% مباشر)</div></div>
+<div id="chat"><div class="msg bot">🌌 <b>DARK HORIZON INFINITE PRO</b> — يعمل مباشرة من المتصفح (FLUX.1 • Juggernaut XL • RealVisXL • Animagine XL) بدون علامة مائية</div></div>
 <footer><button class="cbtn" id="btnP">+</button><input id="inp" placeholder="اكتب طلبك (مقام الشهيد، أنمي، فيديو، سؤال)..."><button class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
 <script>
 const chat=document.getElementById("chat"),inp=document.getElementById("inp"),S=String.fromCharCode(47);
@@ -33,7 +33,7 @@ async function makeSilentFilm(im,box){
 async function genCleanImg(q,box){
   const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
   const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, ARRI Alexa 65, sharp focus")+" ### watermark, logo, signature, text, blurry, low quality";
-  const models=isAn?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion"]:["FLUX.1-schnell","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper XL","CyberRealistic"];
+  const models=isAn?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion"]:["FLUX.1-schnell","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper XL"];
   const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp,models:models,params:{width:576,height:576,steps:20,cfg_scale:7,n:1}})});
   const hd=await hr.json();
   if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد المحاولة");
@@ -55,7 +55,7 @@ async function genCleanImg(q,box){
 async function send(){
   const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
   if(/فيديو|فيلم|انمي|أنمي|صمم|صورة|صور|ارسم|سينما|مقام/i.test(q)){
-    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال المباشر بشبكة GPU المفتوحة (بدون علامة مائية)...");
+    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال المباشر بالمولدات السحابية...");
     try{
       const res=await genCleanImg(q,b);
       if(isV)return makeSilentFilm(res.im,b);
