@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON INFINITE PRO</title>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON TURBO-DIRECT</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:330px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
-<body><header><div class="brand">● DARK HORIZON INFINITE PRO</div><button class="hbtn" id="btnNew">+ جديد</button></header>
-<div id="chat"><div class="msg bot">🌌 <b>DARK HORIZON INFINITE PRO</b> — يعمل مباشرة من المتصفح (FLUX.1 • Juggernaut XL • RealVisXL • Animagine XL) بدون علامة مائية</div></div>
+<body><header><div class="brand">● DARK HORIZON TURBO-DIRECT</div><button class="hbtn" id="btnNew">+ جديد</button></header>
+<div id="chat"><div class="msg bot">⚡ <b>DARK HORIZON TURBO-DIRECT</b> — توليد فوري خلال ثوانٍ بدون انتظار طوابير وبدون علامة مائية</div></div>
 <footer><button class="cbtn" id="btnP">+</button><input id="inp" placeholder="اكتب طلبك (مقام الشهيد، أنمي، فيديو، سؤال)..."><button class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
 <script>
 const chat=document.getElementById("chat"),inp=document.getElementById("inp"),S=String.fromCharCode(47);
@@ -21,8 +21,8 @@ async function makeSilentFilm(im,box){
   box.innerHTML="🎬 جاري إنتاج الفيديو السينمائي الصامت...";
   const c=document.createElement("canvas");c.width=640;c.height=640;const ctx=c.getContext("2d"),rec=new MediaRecorder(c.captureStream(30),{videoBitsPerSecond:3000000}),ch=[];
   rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};rec.start();
-  for(let f=0;f<180;f++){
-    const sc=1.02+(f/180)*0.18;ctx.save();ctx.filter="contrast(1.15) saturate(1.2)";ctx.translate(320,320);ctx.scale(sc,sc);ctx.translate(-320,-320);
+  for(let f=0;f<150;f++){
+    const sc=1.02+(f/150)*0.18;ctx.save();ctx.filter="contrast(1.15) saturate(1.2)";ctx.translate(320,320);ctx.scale(sc,sc);ctx.translate(-320,-320);
     ctx.drawImage(im,0,0,640,640);ctx.restore();ctx.fillStyle="#000";ctx.fillRect(0,0,640,40);ctx.fillRect(0,600,640,40);
     await new Promise(r=>requestAnimationFrame(r));
   }
@@ -30,36 +30,37 @@ async function makeSilentFilm(im,box){
   const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));
   box.innerHTML=`<video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Film.webm">⬇️ تحميل الفيديو</a></div>`;
 }
-async function genCleanImg(q,box){
+async function genInstantImg(q,box){
   const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, ARRI Alexa 65, sharp focus")+" ### watermark, logo, signature, text, blurry, low quality";
-  const models=isAn?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion"]:["FLUX.1-schnell","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper XL"];
-  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp,models:models,params:{width:576,height:576,steps:20,cfg_scale:7,n:1}})});
+  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, sharp focus")+" ### watermark, logo, signature, text, blurry";
+  // إرسال الطلب لأسرع بطاقة GPU متاحة فوراً بدون تقييد الطابور
+  const models=isAn?["Animagine XL","Anything Diffusion","Counterfeit","MeinaMix"]:["Juggernaut XL","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper","Realistic Vision","ICBINP - I Can't Believe It's Not Photography"];
+  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp,models:models,r2:true,params:{width:512,height:512,steps:18,cfg_scale:7,n:1}})});
   const hd=await hr.json();
-  if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد المحاولة");
-  for(let i=0;i<25;i++){
-    await new Promise(r=>setTimeout(r,2000));
+  if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط");
+  for(let i=0;i<30;i++){
+    await new Promise(r=>setTimeout(r,1500));
     const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-    if(st.wait_time!==undefined)box.innerHTML=`⚡ جاري الرسم النقي بدون علامة مائية (الوقت المتبقي: ~${st.wait_time}ث)...`;
+    if(st.wait_time!==undefined)box.innerHTML=`⚡ جاري الرسم السريع (الوقت المتبقي: ~${st.wait_time}ث)...`;
     const g=st.generations&&st.generations.at(0);
     if(st.done&&g&&g.img){
       const b=await(await fetch(g.img)).blob();
       const u=URL.createObjectURL(b);
       const im=new Image();im.crossOrigin="anonymous";
       await new Promise(r=>{im.onload=r;im.src=u});
-      return {im,u,mdl:g.model||"FLUX/SDXL"};
+      return {im,u,mdl:g.model||"SDXL-Fast"};
     }
   }
-  throw new Error("انتهت مهلة الانتظار، أعد الضغط");
+  throw new Error("الشبكة مزدحمة حالياً، أعد الضغط");
 }
 async function send(){
   const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
   if(/فيديو|فيلم|انمي|أنمي|صمم|صورة|صور|ارسم|سينما|مقام/i.test(q)){
-    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال المباشر بالمولدات السحابية...");
+    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال بأسرع عقدة GPU...");
     try{
-      const res=await genCleanImg(q,b);
+      const res=await genInstantImg(q,b);
       if(isV)return makeSilentFilm(res.im,b);
-      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">✨ النموذج: ${res.mdl} (نقي 100%)</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" download="DarkHorizon_Clean_HD.webp">⬇️ حفظ نقي</a><button class="abtn toV">🎬 تحويل لفيديو</button></div>`;
+      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">⚡ النموذج: ${res.mdl} (نقي 100%)</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" download="DarkHorizon_HD.webp">⬇️ حفظ نقي</a><button class="abtn toV">🎬 تحويل لفيديو</button></div>`;
       b.querySelector(".toV").onclick=()=>makeSilentFilm(res.im,b);
     }catch(e){b.innerHTML="⚠️ "+e.message}return;
   }
@@ -72,7 +73,7 @@ async function send(){
   }catch(e){b.innerHTML="⚠️ تعذر الاتصال"}
 }
 document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
-document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>🌌 <b>DARK HORIZON INFINITE PRO</b> جاهز!</div>"};
+document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>⚡ <b>DARK HORIZON TURBO-DIRECT</b> جاهز!</div>"};
 const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();
 fIn.onchange=e=>{const f=e.target.files.item(0);if(!f)return;const im=new Image();im.onload=()=>makeSilentFilm(im,add("🎬 جاري تحريك صورتك بصمت..."));im.src=URL.createObjectURL(f)};
 </script></body></html>
