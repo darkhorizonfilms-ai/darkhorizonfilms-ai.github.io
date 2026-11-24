@@ -32,26 +32,30 @@ async function makeSilentFilm(im,box){
 }
 async function genInstantImg(q,box){
   const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, sharp focus")+" ### watermark, logo, signature, text, blurry";
-  // إرسال الطلب لأسرع بطاقة GPU متاحة فوراً بدون تقييد الطابور
-  const models=isAn?["Animagine XL","Anything Diffusion","Counterfeit","MeinaMix"]:["Juggernaut XL","AlbedoBase XL (SDXL)","SDXL 1.0","DreamShaper","Realistic Vision","ICBINP - I Can't Believe It's Not Photography"];
-  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp,models:models,r2:true,params:{width:512,height:512,steps:18,cfg_scale:7,n:1}})});
-  const hd=await hr.json();
-  if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط");
-  for(let i=0;i<30;i++){
-    await new Promise(r=>setTimeout(r,1500));
-    const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-    if(st.wait_time!==undefined)box.innerHTML=`⚡ جاري الرسم السريع (الوقت المتبقي: ~${st.wait_time}ث)...`;
-    const g=st.generations&&st.generations.at(0);
-    if(st.done&&g&&g.img){
-      const b=await(await fetch(g.img)).blob();
-      const u=URL.createObjectURL(b);
-      const im=new Image();im.crossOrigin="anonymous";
-      await new Promise(r=>{im.onload=r;im.src=u});
-      return {im,u,mdl:g.model||"SDXL-Fast"};
+  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", wide shot, photorealistic 8k cinema still, sharp focus");
+  try{
+    const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp+" ### watermark, logo, text, blurry",r2:true,params:{width:512,height:512,steps:15,n:1}})});
+    const hd=await hr.json();
+    if(hd.id){
+      for(let i=0;i<5;i++){
+        await new Promise(r=>setTimeout(r,1500));
+        const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
+        if(st.wait_time>15)break;
+        if(st.wait_time!==undefined)box.innerHTML=`⚡ جاري الرسم السريع (~${st.wait_time}ث)...`;
+        const g=st.generations&&st.generations.at(0);
+        if(st.done&&g&&g.img){
+          const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
+          await new Promise(r=>{im.onload=r;im.src=u});
+          if(im.width)return {im,u,mdl:g.model||"GPU-Fast"};
+        }
+      }
     }
-  }
-  throw new Error("الشبكة مزدحمة حالياً، أعد الضغط");
+  }catch(e){}
+  box.innerHTML="⚡ التبديل الفوري للمحرك السريع (3 ثوانٍ)...";
+  const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(fp)+"?width=1024&height=1024&nologo=true&model=flux&seed="+Math.floor(Math.random()*999999);
+  const im=new Image();im.crossOrigin="anonymous";
+  await new Promise((res,rej)=>{const tm=setTimeout(()=>rej(new Error("أعد المحاولة لحظياً")),20000);im.onload=()=>{clearTimeout(tm);res()};im.onerror=()=>{clearTimeout(tm);rej(new Error("أعد المحاولة لحظياً"))};im.src=pu});
+  return {im,u:pu,mdl:"FLUX-Instant 1024px"};
 }
 async function send(){
   const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
