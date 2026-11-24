@@ -32,31 +32,34 @@ async function makeSilentFilm(im,box){
 }
 async function genInstantImg(q,box){
   const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, sharp focus");
-  const icbinpModels=isAn?["Anything Diffusion","Counterfeit","MeinaMix"]:["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","CyberRealistic","DreamShaper","AbsoluteReality"];
-  try{
-    const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify({prompt:fp+" ### watermark, logo, signature, text, blurry, deformed, cartoon, 3d render",models:icbinpModels,r2:true,params:{width:512,height:512,steps:18,cfg_scale:7,n:1}})});
-    const hd=await hr.json();
-    if(hd.id){
-      for(let i=0;i<12;i++){
-        await new Promise(r=>setTimeout(r,1500));
-        const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-        if(st.wait_time>35)break;
-        if(st.wait_time!==undefined)box.innerHTML=`⚡ جاري الرسم بنموذج ICBINP الواقعي (~${st.wait_time}ث)...`;
-        const g=st.generations&&st.generations.at(0);
-        if(st.done&&g&&g.img){
-          const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
-          await new Promise(r=>{im.onload=r;im.src=u});
-          if(im.width)return {im,u,mdl:g.model||"ICBINP"};
-        }
-      }
+  const fp=en+(isAn?", masterpiece anime Ufotable style, vibrant lighting, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus");
+  const realismModels=isAn
+    ?["Anything Diffusion","Counterfeit","MeinaMix","Animagine XL"]
+    :["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","epiCRealism","AbsoluteReality","CyberRealistic","Juggernaut XL","RealVisXL V5.0","AlbedoBase XL (SDXL)"];
+  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","apikey":"0000000000"},
+    body:JSON.stringify({
+      prompt:fp+" ### watermark, logo, signature, text, blurry, deformed, cartoon, 3d render, cgi, plastic skin",
+      models:realismModels,
+      r2:true,
+      params:{width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1}
+    })
+  });
+  const hd=await hr.json();
+  if(!hd.id)throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط الآن");
+  for(let i=0;i<35;i++){
+    await new Promise(r=>setTimeout(r,1500));
+    const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
+    if(st.wait_time!==undefined)box.innerHTML=`📸 جاري التصوير الواقعي (${st.wait_time}ث)...`;
+    const g=st.generations&&st.generations.at(0);
+    if(st.done&&g&&g.img){
+      const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
+      await new Promise(r=>{im.onload=r;im.src=u});
+      if(im.width)return {im,u,mdl:g.model||"ICBINP-Realism"};
     }
-  }catch(e){}
-  box.innerHTML="⚡ التبديل الفوري لمحرك الواقعية السريع (3 ثوانٍ)...";
-  const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(fp)+"?width=1024&height=1024&nologo=true&model=flux&seed="+Math.floor(Math.random()*999999);
-  const im=new Image();im.crossOrigin="anonymous";
-  await new Promise((res,rej)=>{const tm=setTimeout(()=>rej(new Error("أعد المحاولة لحظياً")),20000);im.onload=()=>{clearTimeout(tm);res()};im.onerror=()=>{clearTimeout(tm);rej(new Error("أعد المحاولة لحظياً"))};im.src=pu});
-  return {im,u:pu,mdl:"FLUX-Realism 1024px"};
+  }
+  throw new Error("انتهت المهلة، أعد الضغط للتبديل لأسرع عقدة");
 }
 async function send(){
   const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
