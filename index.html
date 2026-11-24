@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON ALL-IN-ONE</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:340px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:16px;cursor:pointer}</style></head>
+<body><header><div class="brand">● DARK HORIZON ALL-IN-ONE</div><button class="hbtn" id="btnNew">+ جديد</button></header>
+<div id="chat"><div class="msg bot">👑 <b>منظومة الفيديو والصور الشاملة (محمية بالكامل)</b><br>فيديو: Wan 2.1 • HunyuanVideo • LTX-Video • Mochi 1 • CogVideoX<br>صور: FLUX.1 • SD 3.5 Large • Juggernaut XL • RealVisXL</div></div>
+<footer><input id="inp" placeholder="اكتب 'فيديو ...' أو صف الصورة الواقعية..."><button class="cbtn" id="send">➤</button></footer>
+<script>
+const CF="https://workers.dev",chat=document.getElementById("chat"),inp=document.getElementById("inp");
+const add=(h,w="bot")=>{const d=document.createElement("div");d.className="msg "+w;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d};
+async function send(){
+  const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
+  const isV=/فيديو|فيلم|video|حركة|تحريك/i.test(q);
+  const b=add(isV?"🎥 جاري إخراج الفيديو عبر Wan 2.1 & LTX-Video...":"👑 جاري توليد الصورة فائقة الواقعية...");
+  try{
+    if(isV){
+      const r=await fetch(CF+"/api/video",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:q})});
+      const d=await r.json();
+      if(!r.ok||!d.video_url)throw new Error(d.error||"خوادم الفيديو مشغولة لحظياً");
+      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">🎥 ${d.model}</div><video src="${d.video_url}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${d.video_url}" target="_blank" download="DarkHorizon_Video.mp4">⬇️ تحميل الفيديو MP4</a></div>`;
+    }else{
+      const r=await fetch(CF+"/api/image",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:q})});
+      if(!r.ok)throw new Error("الخادم مشغول لحظياً");
+      const u=URL.createObjectURL(await r.blob());
+      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">👑 تم التوليد بنجاح (نقي 100%)</div><img src="${u}" class="pic"><div class="bar"><a class="abtn" href="${u}" download="DarkHorizon_HD.jpg">⬇️ حفظ HD</a></div>`;
+    }
+  }catch(e){b.innerHTML="⚠️ "+e.message}
+}
+document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
+document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>👑 جاهز لتوليد الفيديو والصور!</div>"};
+</script></body></html>
