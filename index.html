@@ -108,6 +108,65 @@ async function generateKaggleHDImage(en,kind,box,headerHtml){
   return null;
 }
 
+async function generateQuadUltraImage(en,kind,box,headerHtml){
+  const sel=document.getElementById("mdlSel").value;
+  const fullP=en+(kind==="anime"?", masterpiece Japanese anime film still, Ufotable style, 8k":kind==="3d"?", Unreal Engine 5 3D render, raytracing, PBR, 8k":", raw candid photography, shot on ARRI Alexa 65, 85mm f1.4 lens, sharp focus, ultra-detailed skin texture, photorealistic 8k uhd");
+
+  // المحرك 3: Google AI Studio (Imagen / Gemini Image) إذا أدخل المستخدم مفتاحاً مجانياً
+  if((sel==="GEMINI_IMAGEN"||sel==="AUTO")&&CFG.gem){
+    try{
+      box.innerHTML=headerHtml+"<br>💎 <b>جاري التصيير عبر Google Imagen 3 (1024px)...</b>";
+      const gr=await fetch("https:"+S+S+"://googleapis.com"+S+"v1beta"+S+"models"+S+"imagen-3.0-generate-002:predict?key="+encodeURIComponent(CFG.gem),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({instances:[{prompt:fullP}],parameters:{sampleCount:1,aspectRatio:"1:1"}})});
+      if(gr.ok){
+        const gd=await gr.json();const b64=gd&&gd.predictions&&gd.predictions.at(0)&&gd.predictions.at(0).bytesBase64Encoded;
+        if(b64){const u="data:image/png;base64,"+b64;const im=new Image();await new Promise(r=>{im.onload=r;im.src=u});return {im,u,mdl:"Google Imagen 3 (1024px • نقي 100%)"};}
+      }
+    }catch(e){}
+  }
+
+  // المحرك 4: Together AI / SiliconFlow FLUX إذا أدخل المستخدم مفتاحاً مجانياً
+  if((sel==="TOGETHER_FLUX"||sel==="AUTO")&&CFG.tog){
+    try{
+      box.innerHTML=headerHtml+"<br>🚀 <b>جاري التصيير الفوري عبر Together / SiliconFlow FLUX (1024px)...</b>";
+      const isSf=CFG.tog.startsWith("sk-");
+      const ep=isSf?"https:"+S+S+"api.siliconflow.cn"+S+"v1"+S+"images"+S+"generations":"https:"+S+S+"api.together.xyz"+S+"v1"+S+"images"+S+"generations";
+      const md=isSf?"black-forest-labs/FLUX.1-schnell":"black-forest-labs/FLUX.1-schnell-Free";
+      const tr=await fetch(ep,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+CFG.tog},body:JSON.stringify({model:md,prompt:fullP,width:1024,height:1024,steps:4})});
+      if(tr.ok){
+        const td=await tr.json();const u=td&&td.data&&td.data.at(0)&&td.data.at(0).url;
+        if(u){const im=new Image();im.crossOrigin="anonymous";await new Promise(r=>{im.onload=r;im.src=u});return {im,u,mdl:"FLUX.1 Cloud API (1024px • نقي 100%)"};}
+      }
+    }catch(e){}
+  }
+
+  // المحرك 1 و 2: FLUX.1-dev + FLUX.1-schnell + Stable Diffusion 3.5 Large عبر ZeroGPU 24/7 (مجاني بدون مفتاح)
+  const hfSpaces=[];
+  if(sel==="FLUX_DEV"||sel==="AUTO")hfSpaces.push({name:"FLUX.1-dev (1024px)",host:"black-forest-labs-flux-1-dev.hf.space",ep:"infer",data:[fullP,0,true,1024,1024,3.5,24]});
+  if(sel==="FLUX_SCHNELL"||sel==="AUTO")hfSpaces.push({name:"FLUX.1-schnell (1024px)",host:"black-forest-labs-flux-1-schnell.hf.space",ep:"infer",data:[fullP,0,true,1024,1024,4]});
+  if(sel==="SD35_LARGE"||sel==="AUTO")hfSpaces.push({name:"Stable Diffusion 3.5 Large (1024px)",host:"stabilityai-stable-diffusion-3-5-large.hf.space",ep:"infer",data:[fullP,"blurry, watermark, distorted, low quality",0,true,1024,1024,4.5,28]});
+
+  for(const sp of hfSpaces){
+    for(const prefix of ["/gradio_api/call/","/call/"]){
+      try{
+        box.innerHTML=headerHtml+`<br>🔥 <b>جاري التصيير الفائق 24/7 عبر ${sp.name}...</b>`;
+        const base="https:"+S+S+sp.host+prefix+sp.ep;
+        const r=await fetch(base,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({data:sp.data})});
+        if(!r.ok)continue;
+        const {event_id}=await r.json();
+        if(!event_id)continue;
+        const sse=await(await fetch(base+S+event_id)).text();
+        const m=sse.match(/"url":\s*"([^"]+\.(?:webp|png|jpg)[^"]*)"/)||sse.match(/"url":\s*"([^"]+)"/);
+        if(m&&m.at(1)){
+          const u=m.at(1);
+          const im=new Image();im.crossOrigin="anonymous";await new Promise(r=>{im.onload=r;im.src=u});
+          return {im,u,mdl:sp.name+" • نقي 100%"};
+        }
+      }catch(e){}
+    }
+  }
+  return null;
+}
+
 async function generatePureNoWatermark(en,kind,box,headerHtml,label=""){
   const isAn=kind==="anime"||CFG.mdl==="Animagine XL",is3d=kind==="3d";
   const st=isAn?", masterpiece Japanese anime film still, Ufotable dynamic style, 8k":is3d?", 3d game asset render, Unreal Engine 5 Lumen, PBR, 8k":", raw candid photography, DSLR 85mm f1.4, natural lighting, photorealistic 8k uhd, sharp focus";
