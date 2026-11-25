@@ -41,13 +41,9 @@ async function send(){
           }
         }
       }
-    }catch(e){}
+    }catch(e){b.innerHTML="⚠️ خطأ اتصال بخادم Kaggle T4: "+e.message+" — تأكد من تشغيل الخليتين في Kaggle ثم أعد المحاولة.";return;}
   }
-  UP_FILE=null;b.innerHTML="☁️ خادم T4 غير نشط حالياً — جاري التوليد الفوري عبر السحابة المفتوحة 24/7...";
-  const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(en+", photorealistic 8k cinema still, sharp focus")+"?width=1024&height=1024&nologo=true&model=flux&seed="+Math.floor(Math.random()*999999);
-  const im=new Image();im.crossOrigin="anonymous";
-  im.onload=()=>{b.innerHTML=`<div style="color:#38bdf8;font-size:11px;margin-bottom:5px">☁️ السحابة المفتوحة 24/7 (1024px)</div><img src="${pu}" class="pic"><div class="bar"><a class="abtn" href="${pu}" target="_blank" download="DarkHorizon_24_7.jpg">⬇️ حفظ HD</a></div>`};
-  im.onerror=()=>{b.innerHTML="⚠️ أعد المحاولة لحظياً"};im.src=pu;
+  b.innerHTML="⚠️ خادم Kaggle T4 غير متصل حالياً (الشارة حمراء/رمادية). افتح تبويب Kaggle وشغّل الخليتين ليظهر 🟢 Tesla T4 x2 متصل تلقائياً.";
 }
-document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>👑 نظام الربط التلقائي 24/7 جاهز!</div>"};const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();fIn.onchange=e=>{if(e.target.files.item(0)){UP_FILE=e.target.files.item(0);add("📎 تم إرفاق الصورة! اكتب وصف الحركة واضغط إرسال ➤")}};
+document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class=\"msg bot\">👑 جاهز للإنتاج المباشر على بطاقتي Tesla T4 x2!</div>"};const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();fIn.onchange=e=>{if(e.target.files.item(0)){UP_FILE=e.target.files.item(0);add("📎 تم إرفاق الصورة! اكتب وصف الحركة واضغط إرسال ➤")}};
 </script></body></html>
