@@ -1,94 +1,53 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON TURBO-DIRECT</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:330px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
-<body><header><div class="brand">● DARK HORIZON TURBO-DIRECT</div><button class="hbtn" id="btnNew">+ جديد</button></header>
-<div id="chat"><div class="msg bot">⚡ <b>DARK HORIZON TURBO-DIRECT</b> — توليد فوري خلال ثوانٍ بدون انتظار طوابير وبدون علامة مائية</div></div>
-<footer><button class="cbtn" id="btnP">+</button><input id="inp" placeholder="اكتب طلبك (مقام الشهيد، أنمي، فيديو، سؤال)..."><button class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON AUTO-SYNC v29</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:10px 13px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:13px;color:#38bdf8}.status{font-size:11px;padding:4px 9px;border-radius:12px;background:#1e293b;color:#94a3b8}.status.on{background:#064e3b;color:#34d399}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:5px 9px;border-radius:9px;font-size:11px;cursor:pointer}.modes{display:flex;gap:5px;padding:7px 10px;background:#080e1c;border-bottom:1px solid #1e293b;overflow-x:auto}.mbtn{background:#111a2e;color:#94a3b8;border:1px solid #1e293b;padding:5px 10px;border-radius:14px;font-size:11px;white-space:nowrap;cursor:pointer}.mbtn.act{background:#1e3a8a;color:#38bdf8;border-color:#38bdf8}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:340px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
+<body><header><div class="brand">● DARK HORIZON v29</div><div style="display:flex;gap:6px;align-items:center"><span id="gpuBadge" class="status">🔄 بحث تلقائي عن GPU...</span><button type="button" class="hbtn" id="btnNew">+ جديد</button></div></header>
+<div class="modes"><button type="button" class="mbtn act" data-m="t2v">🎬 نص لفيديو (LTX-2B)</button><button type="button" class="mbtn" data-m="i2v">🎞️ صورة لفيديو (I2V)</button><button type="button" class="mbtn" data-m="img">📸 صورة واقعية (1024px)</button><button type="button" class="mbtn" data-m="3d">🧊 مجسم 3D واقعي</button></div>
+<div id="chat"><div class="msg bot">👑 <b>نظام الربط التلقائي 24/7 مُفعّل!</b><br>يلتقط الموقع تلقائياً رابط خادم Kaggle T4 x2 ويعمل مباشرةً، ويتحول للعقد السحابية المفتوحة في غيابه دون تدخلك.</div></div>
+<footer><button type="button" class="cbtn" id="btnP">+</button><input id="inp" type="text" placeholder="صف الفيديو الواقعي أو الصورة أو المجسم..."><button type="button" class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
 <script>
-const chat=document.getElementById("chat"),inp=document.getElementById("inp"),S=String.fromCharCode(47);
+const CF="https://workers.dev",chat=document.getElementById("chat"),inp=document.getElementById("inp"),badge=document.getElementById("gpuBadge"),S=String.fromCharCode(47);
+let MODE="t2v",GPU_URL="",UP_FILE=null;
+document.querySelectorAll(".mbtn").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mbtn").forEach(x=>x.classList.remove("act"));b.classList.add("act");MODE=b.dataset.m});
 const add=(h,w="bot")=>{const d=document.createElement("div");d.className="msg "+w;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d};
-async function toEn(raw){
-  let clean=raw.replace(/^(صمم|ارسم|صور|صورة|فيديو|فيلم)\s*/i,"").trim()||"Maqam Echahid iconic monument in Algiers overlooking the Mediterranean sea at sunset";
-  if(/مقام الشهيد/.test(clean))return "Maqam Echahid iconic three-leaf concrete monument in Algiers overlooking the Mediterranean bay, wide architectural photography";
-  if(/[\u0600-\u06FF]/.test(clean)){
-    try{
-      const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(clean)+"&langpair=ar|en")).json();
-      if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText;
-    }catch(e){}
-  }
-  return clean;
-}
-async function makeSilentFilm(im,box){
-  box.innerHTML="🎬 جاري إنتاج الفيديو السينمائي الصامت...";
-  const c=document.createElement("canvas");c.width=640;c.height=640;const ctx=c.getContext("2d"),rec=new MediaRecorder(c.captureStream(30),{videoBitsPerSecond:3000000}),ch=[];
-  rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};rec.start();
-  for(let f=0;f<150;f++){
-    const sc=1.02+(f/150)*0.18;ctx.save();ctx.filter="contrast(1.15) saturate(1.2)";ctx.translate(320,320);ctx.scale(sc,sc);ctx.translate(-320,-320);
-    ctx.drawImage(im,0,0,640,640);ctx.restore();ctx.fillStyle="#000";ctx.fillRect(0,0,640,40);ctx.fillRect(0,600,640,40);
-    await new Promise(r=>requestAnimationFrame(r));
-  }
-  rec.stop();await new Promise(r=>{rec.onstop=r});
-  const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));
-  box.innerHTML=`<video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Film.webm">⬇️ تحميل الفيديو</a></div>`;
-}
-async function pollHorde(payload,box,label,maxTries){
-  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify(payload)});
-  const hd=await hr.json();
-  if(!hd.id)return null;
-  for(let i=0;i<maxTries;i++){
-    await new Promise(r=>setTimeout(r,1500));
-    const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-    if(st.wait_time>20&&maxTries<=8)return null;
-    if(st.wait_time!==undefined)box.innerHTML=`${label} (~${st.wait_time}ث)...`;
-    const g=st.generations&&st.generations.at(0);
-    if(st.done&&g&&g.img){
-      const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
-      await new Promise(r=>{im.onload=r;im.src=u});
-      if(im.width)return {im,u,mdl:g.model||"ICBINP-Pro"};
-    }
-  }
-  return null;
-}
-async function genInstantImg(q,box){
-  const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece Japanese anime illustration, Ufotable style, vibrant lighting, crisp lineart, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus");
-  const neg=" ### watermark, logo, signature, text, blurry, deformed, bad anatomy, low quality";
-  const targetModels=isAn
-    ?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion","Hassaku"]
-    :["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","epiCRealism","AbsoluteReality","CyberRealistic","Juggernaut XL","RealVisXL V5.0"];
-  const baseParams={width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1};
-
-  // المحاولة 1: نماذج ICBINP / الأنمي المحددة (تبديل تلقائي إذا زاد الانتظار عن 20ث)
-  const res1=await pollHorde({prompt:fp+neg,models:targetModels,r2:true,params:baseParams},box,"📸 جاري التصوير بنماذج ICBINP / الأنمي",8);
-  if(res1)return res1;
-
-  // التبديل التلقائي 2: إطلاق الطلب لأسرع بطاقة GPU فارغة فوراً (بدون انتظار طوابير)
-  box.innerHTML="⚡ تبديل تلقائي لأسرع عقدة GPU متاحة الآن...";
-  const res2=await pollHorde({prompt:fp+neg,r2:true,params:{width:512,height:512,steps:16,n:1}},box,"⚡ جاري الرسم على أسرع عقدة",25);
-  if(res2)return res2;
-
-  throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط");
+async function syncGpu(){try{const d=await(await fetch(CF+"/get-gpu")).json();if(d&&d.gpu){GPU_URL=d.gpu.replace(/\/$/,"");badge.textContent="🟢 Tesla T4 x2 متصل تلقائياً";badge.className="status on"}else{badge.textContent="☁️ وضع السحابة 24/7";badge.className="status"}}catch(e){}}
+syncGpu();setInterval(syncGpu,20000);
+async function toEn(raw){let c=raw.trim()||"cinematic sports car in Algiers at sunset, 8k";if(/مقام الشهيد/.test(c))return "Maqam Echahid monument in Algiers overlooking the Mediterranean bay, wide cinematic shot, 8k";if(/[\u0600-\u06FF]/.test(c)){try{const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(c)+"&langpair=ar|en")).json();if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText}catch(e){}}return c}
+async function uploadToComfy(file){const fd=new FormData();fd.append("image",file);const r=await fetch(GPU_URL+"/upload/image",{method:"POST",body:fd});const d=await r.json();return d.name}
+function getTemplate(mode,en,imgName){
+  const seed=Math.floor(Math.random()*9999999);
+  if(mode==="t2v"){return {"1":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"ltx-video-2b.safetensors"}},"2":{"class_type":"CLIPLoader","inputs":{"clip_name":"t5xxl_fp8_e4m3fn.safetensors","type":"ltxv"}},"3":{"class_type":"CLIPTextEncode","inputs":{"text":en+", photorealistic 8k cinema motion, smooth camera","clip":["2",0]}},"4":{"class_type":"CLIPTextEncode","inputs":{"text":"low quality, blurry, watermark, distorted","clip":["2",0]}},"5":{"class_type":"LTXVConditioning","inputs":{"positive":["3",0],"negative":["4",0],"frame_rate":24}},"6":{"class_type":"EmptyLTXVLatentVideo","inputs":{"width":704,"height":480,"length":65,"batch_size":1}},"7":{"class_type":"LTXVScheduler","inputs":{"steps":20,"max_shift":2.05,"base_shift":0.95,"stretch":true,"terminal":0.1,"latent":["6",0]}},"8":{"class_type":"KSamplerSelect","inputs":{"sampler_name":"euler"}},"9":{"class_type":"RandomNoise","inputs":{"noise_seed":seed}},"10":{"class_type":"CFGGuider","inputs":{"cfg":3.0,"model":["1",0],"positive":["5",0],"negative":["5",1]}},"11":{"class_type":"SamplerCustomAdvanced","inputs":{"noise":["9",0],"guider":["10",0],"sampler":["8",0],"sigmas":["7",0],"latent_image":["6",0]}},"12":{"class_type":"VAEDecode","inputs":{"samples":["11",0],"vae":["1",2]}},"13":{"class_type":"SaveAnimatedWEBP","inputs":{"filename_prefix":"DH_T2V","fps":24,"lossless":false,"quality":85,"method":"default","images":["12",0]}}};}
+  if(mode==="i2v"&&imgName){return {"1":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"ltx-video-2b.safetensors"}},"2":{"class_type":"CLIPLoader","inputs":{"clip_name":"t5xxl_fp8_e4m3fn.safetensors","type":"ltxv"}},"3":{"class_type":"CLIPTextEncode","inputs":{"text":en+", realistic smooth motion, cinematic lighting","clip":["2",0]}},"4":{"class_type":"CLIPTextEncode","inputs":{"text":"static, blurry, watermark, distorted","clip":["2",0]}},"14":{"class_type":"LoadImage","inputs":{"image":imgName}},"15":{"class_type":"LTXVImgToVideo","inputs":{"positive":["3",0],"negative":["4",0],"vae":["1",2],"image":["14",0],"width":704,"height":480,"length":65,"batch_size":1}},"7":{"class_type":"LTXVScheduler","inputs":{"steps":20,"max_shift":2.05,"base_shift":0.95,"stretch":true,"terminal":0.1,"latent":["15",2]}},"8":{"class_type":"KSamplerSelect","inputs":{"sampler_name":"euler"}},"9":{"class_type":"RandomNoise","inputs":{"noise_seed":seed}},"10":{"class_type":"CFGGuider","inputs":{"cfg":3.0,"model":["1",0],"positive":["15",0],"negative":["15",1]}},"11":{"class_type":"SamplerCustomAdvanced","inputs":{"noise":["9",0],"guider":["10",0],"sampler":["8",0],"sigmas":["7",0],"latent_image":["15",2]}},"12":{"class_type":"VAEDecode","inputs":{"samples":["11",0],"vae":["1",2]}},"13":{"class_type":"SaveAnimatedWEBP","inputs":{"filename_prefix":"DH_I2V","fps":24,"lossless":false,"quality":85,"method":"default","images":["12",0]}}};}
+  const p3d=mode==="3d"?", 3d game asset isometric render, studio turntable, Unreal Engine 5, PBR materials":", raw candid photography, photorealistic 8k uhd, sharp focus";
+  return {"3":{"class_type":"KSampler","inputs":{"seed":seed,"steps":22,"cfg":7,"sampler_name":"dpmpp_2m","scheduler":"karras","denoise":1,"model":["4",0],"positive":["6",0],"negative":["7",0],"latent_image":["5",0]}},"4":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"JuggernautXL.safetensors"}},"5":{"class_type":"EmptyLatentImage","inputs":{"width":1024,"height":1024,"batch_size":1}},"6":{"class_type":"CLIPTextEncode","inputs":{"text":en+p3d,"clip":["4",1]}},"7":{"class_type":"CLIPTextEncode","inputs":{"text":"watermark, logo, blurry, deformed, cartoon, low quality","clip":["4",1]}},"8":{"class_type":"VAEDecode","inputs":{"samples":["3",0],"vae":["4",2]}},"9":{"class_type":"SaveImage","inputs":{"filename_prefix":"DH_Render","images":["8",0]}}};
 }
 async function send(){
-  const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
-  if(/فيديو|فيلم|انمي|أنمي|صمم|صورة|صور|ارسم|سينما|مقام/i.test(q)){
-    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال بأسرع عقدة GPU...");
+  const q=inp.value.trim();if(!q&&!UP_FILE)return;inp.value="";add(UP_FILE?"📎 صورة + "+q:q,"user");
+  await syncGpu();const b=add("🚀 جاري المعالجة التلقائية...");const en=await toEn(q);
+  if(GPU_URL){
     try{
-      const res=await genInstantImg(q,b);
-      if(isV)return makeSilentFilm(res.im,b);
-      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">⚡ النموذج: ${res.mdl} (نقي 100%)</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" download="DarkHorizon_HD.webp">⬇️ حفظ نقي</a><button class="abtn toV">🎬 تحويل لفيديو</button></div>`;
-      b.querySelector(".toV").onclick=()=>makeSilentFilm(res.im,b);
-    }catch(e){b.innerHTML="⚠️ "+e.message}return;
+      let imgName=null;if(UP_FILE){b.innerHTML="📤 جاري رفع صورتك لبطاقات Tesla T4...";imgName=await uploadToComfy(UP_FILE);UP_FILE=null;}
+      const activeMode=imgName?"i2v":MODE,wf=getTemplate(activeMode,en,imgName);
+      const pr=await fetch(GPU_URL+"/prompt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:wf})});
+      if(pr.ok){
+        const {prompt_id}=await pr.json();b.innerHTML="⚙️ جاري التصيير على بطاقتي Tesla T4 x2 تلقائياً...";
+        for(let i=0;i<75;i++){
+          await new Promise(r=>setTimeout(r,2000));
+          const hr=await(await fetch(GPU_URL+"/history/"+prompt_id)).json();
+          if(hr[prompt_id]){
+            const outNode=(activeMode==="t2v"||activeMode==="i2v")?"13":"9",file=hr[prompt_id].outputs[outNode].images.at(0);
+            const vu=GPU_URL+"/view?filename="+encodeURIComponent(file.filename)+"&subfolder="+encodeURIComponent(file.subfolder)+"&type="+file.type;
+            b.innerHTML=`<div style="color:#34d399;font-size:11px;margin-bottom:5px">🟢 تم الإنتاج تلقائياً على Kaggle T4 (${activeMode.toUpperCase()})</div><img src="${vu}" class="pic"><div class="bar"><a class="abtn" href="${vu}" target="_blank" download="${file.filename}">⬇️ حفظ الملف</a></div>`;
+            return;
+          }
+        }
+      }
+    }catch(e){}
   }
-  const b=add("⚡...");
-  try{
-    const r=await fetch("https:"+S+S+"text.pollinations.ai"+S+encodeURIComponent(q));
-    const rep=await r.text();
-    b.innerHTML=`<div>${rep.replace(/\n/g,"<br>")}</div><div class="bar"><button class="abtn cp">📋 نسخ</button></div>`;
-    b.querySelector(".cp").onclick=function(){navigator.clipboard.writeText(rep);this.textContent="✅"};
-  }catch(e){b.innerHTML="⚠️ تعذر الاتصال"}
+  UP_FILE=null;b.innerHTML="☁️ خادم T4 غير نشط حالياً — جاري التوليد الفوري عبر السحابة المفتوحة 24/7...";
+  const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(en+", photorealistic 8k cinema still, sharp focus")+"?width=1024&height=1024&nologo=true&model=flux&seed="+Math.floor(Math.random()*999999);
+  const im=new Image();im.crossOrigin="anonymous";
+  im.onload=()=>{b.innerHTML=`<div style="color:#38bdf8;font-size:11px;margin-bottom:5px">☁️ السحابة المفتوحة 24/7 (1024px)</div><img src="${pu}" class="pic"><div class="bar"><a class="abtn" href="${pu}" target="_blank" download="DarkHorizon_24_7.jpg">⬇️ حفظ HD</a></div>`};
+  im.onerror=()=>{b.innerHTML="⚠️ أعد المحاولة لحظياً"};im.src=pu;
 }
-document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
-document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>⚡ <b>DARK HORIZON TURBO-DIRECT</b> جاهز!</div>"};
-const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();
-fIn.onchange=e=>{const f=e.target.files.item(0);if(!f)return;const im=new Image();im.onload=()=>makeSilentFilm(im,add("🎬 جاري تحريك صورتك بصمت..."));im.src=URL.createObjectURL(f)};
+document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>👑 نظام الربط التلقائي 24/7 جاهز!</div>"};const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();fIn.onchange=e=>{if(e.target.files.item(0)){UP_FILE=e.target.files.item(0);add("📎 تم إرفاق الصورة! اكتب وصف الحركة واضغط إرسال ➤")}};
 </script></body></html>
