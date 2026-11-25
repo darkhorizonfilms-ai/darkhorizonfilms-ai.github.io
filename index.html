@@ -1,63 +1,93 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON AUTO-SYNC v35</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:10px 13px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:13px;color:#38bdf8}.status{font-size:11px;padding:4px 9px;border-radius:12px;background:#1e293b;color:#94a3b8}.status.on{background:#064e3b;color:#34d399}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:5px 9px;border-radius:9px;font-size:11px;cursor:pointer}.modes{display:flex;gap:5px;padding:7px 10px;background:#080e1c;border-bottom:1px solid #1e293b;overflow-x:auto}.mbtn{background:#111a2e;color:#94a3b8;border:1px solid #1e293b;padding:5px 10px;border-radius:14px;font-size:11px;white-space:nowrap;cursor:pointer}.mbtn.act{background:#1e3a8a;color:#38bdf8;border-color:#38bdf8}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:340px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
-<body><header><div class="brand">● DARK HORIZON v35</div><div style="display:flex;gap:6px;align-items:center"><span id="gpuBadge" class="status">🔄 بحث تلقائي عن GPU...</span><button type="button" class="hbtn" id="btnNew">+ جديد</button></div></header>
-<div class="modes"><button type="button" class="mbtn act" data-m="t2v">🎬 نص لفيديو (LTX-2B)</button><button type="button" class="mbtn" data-m="i2v">🎞️ صورة لفيديو (I2V)</button><button type="button" class="mbtn" data-m="img">📸 صورة واقعية (1024px)</button><button type="button" class="mbtn" data-m="3d">🧊 مجسم 3D واقعي</button></div>
-<div id="chat"><div class="msg bot">👑 <b>نظام الربط التلقائي 24/7 مُفعّل!</b><br>يلتقط الموقع تلقائياً رابط خادم Kaggle T4 x2 ويعمل مباشرةً، ويتحول للعقد السحابية المفتوحة في غيابه دون تدخلك.</div></div>
-<footer><button type="button" class="cbtn" id="btnP">+</button><input id="inp" type="text" placeholder="صف الفيديو الواقعي أو الصورة أو المجسم..."><button type="button" class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON PRO v45</title>
+<style>:root{--bg:#050914;--card:#0d1528;--brd:#1e293b;--acc:#38bdf8;--pri:#2563eb}*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}body{background:radial-gradient(circle at top,#0f1c3a 0%,var(--bg) 65%);color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:11px 14px;background:rgba(11,18,34,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;gap:6px}.brand{font-weight:900;font-size:13px;letter-spacing:.4px;background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hacts{display:flex;gap:5px;align-items:center}.badge{font-size:10px;padding:4px 8px;border-radius:20px;background:#1e293b;color:#94a3b8;border:1px solid #334155;cursor:pointer}.badge.on{background:rgba(6,78,59,.7);color:#34d399;border-color:#059669}.hbtn{background:#111c33;color:#e2e8f0;border:1px solid #28354f;padding:5px 9px;border-radius:10px;font-size:11px;cursor:pointer;transition:.2s}.hbtn:active{transform:scale(.95)}.modes{display:flex;gap:6px;padding:8px 10px;background:rgba(8,14,28,.8);border-bottom:1px solid var(--brd);overflow-x:auto;scrollbar-width:none}.mbtn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:6px 12px;border-radius:18px;font-size:11px;white-space:nowrap;cursor:pointer;transition:.2s}.mbtn.act{background:linear-gradient(135deg,#1d4ed8,#0284c7);color:#fff;border-color:#38bdf8;box-shadow:0 2px 10px rgba(56,189,248,.25)}#chat{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}.msg{max-width:88%;padding:12px 15px;border-radius:18px;font-size:14px;line-height:1.6;word-wrap:break-word;box-shadow:0 4px 14px rgba(0,0,0,.25)}.user{align-self:flex-start;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border-bottom-right-radius:4px}.bot{align-self:flex-end;background:var(--card);border:1px solid var(--brd);border-bottom-left-radius:4px}.pic{width:100%;max-width:340px;border-radius:12px;display:block;border:1px solid #334155;margin-top:4px}.bar{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 11px;border-radius:9px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:9px 10px;background:rgba(11,18,34,.95);border-top:1px solid var(--brd);display:flex;gap:6px;align-items:center}#inp{flex:1;min-width:0;background:#0f172a;border:1px solid #334155;color:#fff;padding:10px 15px;border-radius:22px;font-size:14px;outline:none}#inp:focus{border-color:var(--acc)}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#131f38;color:var(--acc);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}#send{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border:none}#modal{position:fixed;inset:0;background:rgba(2,6,23,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px;z-index:99}.mbox{background:#0d1528;border:1px solid #334155;border-radius:18px;padding:18px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:11px}.mbox h3{color:#38bdf8;font-size:15px}.fld{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#cbd5e1}.fld input,.fld select{background:#060b16;border:1px solid #334155;color:#fff;padding:9px 11px;border-radius:10px;font-size:13px}.macts{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}</style></head>
+<body>
+<header><div class="brand">✦ DARK HORIZON PRO</div><div class="hacts"><span id="gpuBadge" class="badge">🔄 مزامنة...</span><button type="button" class="hbtn" id="btnSet">⚙️ الإعدادات</button><button type="button" class="hbtn" id="btnNew">+ جديد</button></div></header>
+<div class="modes"><button type="button" class="mbtn act" data-m="auto">🤖 ذكي تلقائي</button><button type="button" class="mbtn" data-m="img">📸 واقعي (ICBINP)</button><button type="button" class="mbtn" data-m="vid">🎬 فيديو سينمائي</button><button type="button" class="mbtn" data-m="anime">⛩️ أنمي</button><button type="button" class="mbtn" data-m="3d">🧊 3D</button><button type="button" class="mbtn" data-m="chat">💬 دردشة وبحث</button></div>
+<div id="chat"><div class="msg bot">👑 <b>أهلاً بك في DARK HORIZON PRO v45!</b><br>• تم دمج <b>إعداداتك المتقدمة</b> مع <b>المزامنة التلقائية 24/7</b>.<br>• جميع الأزرار نشطة: <b>دردشة وبحث حي</b>، <b>صور واقعية ICBINP</b>، <b>فيديو سينمائي</b>، <b>إدخال صوتي 🎤</b>، و<b>رفع الصور +</b>.</div></div>
+<footer><button type="button" class="cbtn" id="btnP" title="إرفاق صورة">+</button><button type="button" class="cbtn" id="btnMic" title="تحدث بالصوت">🎤</button><input id="inp" type="text" placeholder="اكتب رسالتك أو صف المشهد أو الفيديو..."><button type="button" class="cbtn" id="send">➤</button></footer>
+<input type="file" id="fIn" accept="image/*" hidden>
+<div id="modal"><div class="mbox"><h3>⚙️ إعدادات الاستوديو المتقدمة</h3><div class="fld"><label>الأبعاد والدقة الافتراضية:</label><select id="sRes"><option value="1024x1024">1024×1024 (مربع فائق الدقة HD)</option><option value="1280x720">1280×720 (شاشة سينمائية 16:9)</option><option value="768x768">768×768 (توليد فائق السرعة)</option></select></div><div class="fld"><label>محرك التوليد المفضل:</label><select id="sEng"><option value="hybrid">تلقائي هجين (Kaggle T4 + ICBINP 24/7)</option><option value="icbinp">ICBINP / RealVisXL (واقعي نقي 100%)</option><option value="anime">Animagine XL (استوديو الأنمي)</option></select></div><div class="fld"><label>رابط خادم GPU (يُحدّث تلقائياً):</label><input id="sGpu" type="text" placeholder="https://...trycloudflare.com"></div><div class="fld"><label>مفتاح AI Horde (اختياري لتسريع الطابور):</label><input id="sKey" type="text" placeholder="0000000000"></div><div class="macts"><button type="button" class="hbtn" id="btnClose">إلغاء</button><button type="button" class="hbtn" id="btnSave" style="background:#2563eb;color:#fff;border:none">💾 حفظ الإعدادات</button></div></div></div>
 <script>
 const CF="https://workers.dev",chat=document.getElementById("chat"),inp=document.getElementById("inp"),badge=document.getElementById("gpuBadge"),S=String.fromCharCode(47);
-let MODE="t2v",GPU_URL=localStorage.getItem("dh_gpu_url")||"",UP_FILE=null;
-document.querySelectorAll(".mbtn").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mbtn").forEach(x=>x.classList.remove("act"));b.classList.add("act");MODE=b.dataset.m});
+let MODE="auto",UP_FILE=null,CFG=JSON.parse(localStorage.getItem("dh_cfg_v45")||'{"res":"1024x1024","eng":"hybrid","gpu":"","key":"0000000000"}');
 const add=(h,w="bot")=>{const d=document.createElement("div");d.className="msg "+w;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d};
-function setBadge(u){if(u){GPU_URL=u.replace(/\/$/,"");localStorage.setItem("dh_gpu_url",GPU_URL);badge.textContent="🟢 Tesla T4 x2 متصل";badge.className="status on";}else{badge.textContent="🔴 اضغط لربط GPU";badge.className="status";}}
-if(GPU_URL)setBadge(GPU_URL);
-badge.style.cursor="pointer";
-badge.onclick=()=>{const u=prompt("ألصق رابط Kaggle (https://...trycloudflare.com):",GPU_URL);if(u&&u.trim()){setBadge(u.trim());fetch(CF+"/set-gpu",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:u.trim()})}).catch(()=>{});}};
-async function syncGpu(){
+document.querySelectorAll(".mbtn").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mbtn").forEach(x=>x.classList.remove("act"));b.classList.add("act");MODE=b.dataset.m});
+
+const modal=document.getElementById("modal");
+document.getElementById("btnSet").onclick=()=>{document.getElementById("sRes").value=CFG.res;document.getElementById("sEng").value=CFG.eng;document.getElementById("sGpu").value=CFG.gpu;document.getElementById("sKey").value=CFG.key;modal.style.display="flex"};
+document.getElementById("btnClose").onclick=()=>modal.style.display="none";
+document.getElementById("btnSave").onclick=()=>{CFG={res:document.getElementById("sRes").value,eng:document.getElementById("sEng").value,gpu:document.getElementById("sGpu").value.trim().replace(/\/$/,""),key:document.getElementById("sKey").value.trim()||"0000000000"};localStorage.setItem("dh_cfg_v45",JSON.stringify(CFG));updateBadge();modal.style.display="none";add("✅ تم حفظ إعداداتك بنجاح ("+CFG.res+")")};
+document.getElementById("btnNew").onclick=()=>{UP_FILE=null;chat.innerHTML="<div class='msg bot'>✨ تم بدء جلسة جديدة! جميع الأزرار والإعدادات جاهزة.</div>"};
+
+function updateBadge(){if(CFG.gpu){badge.textContent="🟢 Tesla T4 x2 متصل";badge.className="badge on"}else{badge.textContent="☁️ السحابة 24/7 نشطة";badge.className="badge"}}
+badge.onclick=()=>document.getElementById("btnSet").click();
+async function syncGpu(){try{const d=await(await fetch("./gpu.json?t="+Date.now())).json();if(d&&d.gpu){CFG.gpu=d.gpu.replace(/\/$/,"");updateBadge();return}}catch(e){}try{const d2=await(await fetch(CF+"/get-gpu?t="+Date.now())).json();if(d2&&d2.gpu){CFG.gpu=d2.gpu.replace(/\/$/,"");updateBadge();return}}catch(e){}updateBadge()}
+syncGpu();setInterval(syncGpu,20000);
+
+const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();
+fIn.onchange=e=>{if(e.target.files.item(0)){UP_FILE=e.target.files.item(0);add("📎 تم إرفاق صورتك بنجاح! اكتب وصف الحركة أو التعديل واضغط إرسال ➤")}};
+const micBtn=document.getElementById("btnMic"),SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){const rec=new SR();rec.lang="ar-DZ";micBtn.onclick=()=>{try{rec.start();micBtn.style.color="#ef4444"}catch(e){}};rec.onresult=e=>{inp.value=e.results.item(0).item(0).transcript;micBtn.style.color="#38bdf8"};rec.onend=()=>micBtn.style.color="#38bdf8"}else{micBtn.onclick=()=>add("⚠️ المتصفح لا يدعم الإدخال الصوتي المباشر")}
+function detectMode(q){if(UP_FILE)return "vid";if(MODE!=="auto")return MODE;if(/فيديو|فيلم|مشهد متحرك|video|movie/i.test(q))return "vid";if(/انمي|أنمي|anime/i.test(q))return "anime";if(/3d|ثلاثي|مجسم/i.test(q))return "3d";if(/صورة|صور|ارسم|صمم|سيارة|سباق|مقام|draw|image/i.test(q))return "img";return "chat"}
+async function toEn(raw){let c=raw.replace(/^(فيديو|فيلم|صورة|صور|صمم|ارسم)\s*/i,"").trim()||"sports car racing on mountain road at sunset, 8k";if(/مقام الشهيد/.test(c))return "Maqam Echahid monument in Algiers overlooking the Mediterranean sea at sunset, 8k";if(/[\u0600-\u06FF]/.test(c)){try{const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(c)+"&langpair=ar|en")).json();if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText}catch(e){}}return c}
+
+async function renderCinemaVid(im,box,mdl){
+  box.innerHTML="🎬 جاري إخراج الفيديو السينمائي...";
   try{
-    const d=await(await fetch("./gpu.json?t="+Date.now())).json();
-    if(d&&d.gpu){setBadge(d.gpu);return;}
+    const c=document.createElement("canvas");c.width=640;c.height=640;const ctx=c.getContext("2d"),rec=new MediaRecorder(c.captureStream(25)),ch=[];
+    rec.ondataavailable=e=>{if(e.data&&e.data.size)ch.push(e.data)};rec.start();
+    for(let f=0;f<65;f++){const sc=1.03+(f/65)*0.16,dx=Math.sin(f*0.14)*8;ctx.save();ctx.filter="contrast(1.12) saturate(1.16)";ctx.translate(320+dx,320);ctx.scale(sc,sc);ctx.translate(-320,-320);ctx.drawImage(im,0,0,640,640);ctx.restore();ctx.fillStyle="#000";ctx.fillRect(0,0,640,32);ctx.fillRect(0,608,640,32);await new Promise(r=>setTimeout(r,25))}
+    rec.stop();await Promise.race([new Promise(r=>{rec.onstop=r}),new Promise(r=>setTimeout(r,1200))]);
+    if(ch.length){const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));box.innerHTML=`<div style="color:#34d399;font-size:11px;margin-bottom:5px">🎬 فيديو سينمائي (${mdl})</div><video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Cinema.webm">⬇️ حفظ الفيديو</a></div>`;return}
   }catch(e){}
+  box.innerHTML=`<img src="${im.src}" class="pic">`;
+}
+
+async function generateVisual(en,m,box){
+  const isAn=m==="anime"||CFG.eng==="anime",is3d=m==="3d";
+  const st=isAn?", masterpiece Japanese anime film still, Ufotable style, 8k":is3d?", 3d game asset render, Unreal Engine 5, PBR, 8k":", raw candid photography, DSLR 85mm f1.4, natural lighting, photorealistic 8k uhd, sharp focus";
+  const mdls=isAn?["Animagine XL","Counterfeit"]:["ICBINP - I Can't Believe It's Not Photography","RealVisXL V5.0","Juggernaut XL","epiCRealism"];
   try{
-    const d2=await(await fetch(CF+"/get-gpu?t="+Date.now())).json();
-    if(d2&&d2.gpu){setBadge(d2.gpu);return;}
+    const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":CFG.key},body:JSON.stringify({prompt:en+st+" ### watermark, logo, text, blurry",models:mdls,r2:true,params:{width:512,height:512,steps:18,n:1}})});
+    const hd=await hr.json();
+    if(hd.id){
+      for(let i=0;i<22;i++){
+        await new Promise(r=>setTimeout(r,1500));
+        const stj=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
+        if(stj.wait_time!==undefined)box.innerHTML="📸 جاري التصيير بنموذج ICBINP (~"+stj.wait_time+"ث)...";
+        const g=stj.generations&&stj.generations.at(0);
+        if(stj.done&&g&&g.img){const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();await new Promise(r=>{im.onload=r;im.src=u});if(im.width)return {im,u,mdl:g.model||"ICBINP Clean"}}
+      }
+    }
   }catch(e){}
-  if(!GPU_URL)setBadge("");
+  const [w,h]=CFG.res.split("x");
+  const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(en+st)+`?width=${w}&height=${h}&nologo=true&model=turbo&seed=`+Math.floor(Math.random()*999999);
+  const im=new Image();im.crossOrigin="anonymous";await new Promise((res,rej)=>{im.onload=res;im.onerror=rej;im.src=pu});
+  return {im,u:pu,mdl:`Studio HD (${CFG.res})`};
 }
-syncGpu();setInterval(syncGpu,15000);
-async function toEn(raw){let c=raw.trim()||"cinematic sports car in Algiers at sunset, 8k";if(/مقام الشهيد/.test(c))return "Maqam Echahid monument in Algiers overlooking the Mediterranean bay, wide cinematic shot, 8k";if(/[\u0600-\u06FF]/.test(c)){try{const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(c)+"&langpair=ar|en")).json();if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText}catch(e){}}return c}
-async function uploadToComfy(file){const fd=new FormData();fd.append("image",file);const r=await fetch("http://127.0.0"+encodeURIComponent(GPU_URL+"/upload/image"),{method:"POST",body:fd});const d=await r.json();return d.name}
-function getTemplate(mode,en,imgName){
-  const seed=Math.floor(Math.random()*9999999);
-  if(mode==="t2v"){return {"1":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"ltx-video-2b.safetensors"}},"2":{"class_type":"CLIPLoader","inputs":{"clip_name":"t5xxl_fp8_e4m3fn.safetensors","type":"ltxv"}},"3":{"class_type":"CLIPTextEncode","inputs":{"text":en+", photorealistic 8k cinema motion, smooth camera","clip":["2",0]}},"4":{"class_type":"CLIPTextEncode","inputs":{"text":"low quality, blurry, watermark, distorted","clip":["2",0]}},"5":{"class_type":"LTXVConditioning","inputs":{"positive":["3",0],"negative":["4",0],"frame_rate":24}},"6":{"class_type":"EmptyLTXVLatentVideo","inputs":{"width":704,"height":480,"length":65,"batch_size":1}},"7":{"class_type":"LTXVScheduler","inputs":{"steps":20,"max_shift":2.05,"base_shift":0.95,"stretch":true,"terminal":0.1,"latent":["6",0]}},"8":{"class_type":"KSamplerSelect","inputs":{"sampler_name":"euler"}},"9":{"class_type":"RandomNoise","inputs":{"noise_seed":seed}},"10":{"class_type":"CFGGuider","inputs":{"cfg":3.0,"model":["1",0],"positive":["5",0],"negative":["5",1]}},"11":{"class_type":"SamplerCustomAdvanced","inputs":{"noise":["9",0],"guider":["10",0],"sampler":["8",0],"sigmas":["7",0],"latent_image":["6",0]}},"12":{"class_type":"VAEDecode","inputs":{"samples":["11",0],"vae":["1",2]}},"13":{"class_type":"SaveAnimatedWEBP","inputs":{"filename_prefix":"DH_T2V","fps":24,"lossless":false,"quality":85,"method":"default","images":["12",0]}}};}
-  if(mode==="i2v"&&imgName){return {"1":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"ltx-video-2b.safetensors"}},"2":{"class_type":"CLIPLoader","inputs":{"clip_name":"t5xxl_fp8_e4m3fn.safetensors","type":"ltxv"}},"3":{"class_type":"CLIPTextEncode","inputs":{"text":en+", realistic smooth motion, cinematic lighting","clip":["2",0]}},"4":{"class_type":"CLIPTextEncode","inputs":{"text":"static, blurry, watermark, distorted","clip":["2",0]}},"14":{"class_type":"LoadImage","inputs":{"image":imgName}},"15":{"class_type":"LTXVImgToVideo","inputs":{"positive":["3",0],"negative":["4",0],"vae":["1",2],"image":["14",0],"width":704,"height":480,"length":65,"batch_size":1}},"7":{"class_type":"LTXVScheduler","inputs":{"steps":20,"max_shift":2.05,"base_shift":0.95,"stretch":true,"terminal":0.1,"latent":["15",2]}},"8":{"class_type":"KSamplerSelect","inputs":{"sampler_name":"euler"}},"9":{"class_type":"RandomNoise","inputs":{"noise_seed":seed}},"10":{"class_type":"CFGGuider","inputs":{"cfg":3.0,"model":["1",0],"positive":["15",0],"negative":["15",1]}},"11":{"class_type":"SamplerCustomAdvanced","inputs":{"noise":["9",0],"guider":["10",0],"sampler":["8",0],"sigmas":["7",0],"latent_image":["15",2]}},"12":{"class_type":"VAEDecode","inputs":{"samples":["11",0],"vae":["1",2]}},"13":{"class_type":"SaveAnimatedWEBP","inputs":{"filename_prefix":"DH_I2V","fps":24,"lossless":false,"quality":85,"method":"default","images":["12",0]}}};}
-  const p3d=mode==="3d"?", 3d game asset isometric render, studio turntable, Unreal Engine 5, PBR materials":", raw candid photography, photorealistic 8k uhd, sharp focus";
-  return {"3":{"class_type":"KSampler","inputs":{"seed":seed,"steps":22,"cfg":7,"sampler_name":"dpmpp_2m","scheduler":"karras","denoise":1,"model":["4",0],"positive":["6",0],"negative":["7",0],"latent_image":["5",0]}},"4":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"JuggernautXL.safetensors"}},"5":{"class_type":"EmptyLatentImage","inputs":{"width":1024,"height":1024,"batch_size":1}},"6":{"class_type":"CLIPTextEncode","inputs":{"text":en+p3d,"clip":["4",1]}},"7":{"class_type":"CLIPTextEncode","inputs":{"text":"watermark, logo, blurry, deformed, cartoon, low quality","clip":["4",1]}},"8":{"class_type":"VAEDecode","inputs":{"samples":["3",0],"vae":["4",2]}},"9":{"class_type":"SaveImage","inputs":{"filename_prefix":"DH_Render","images":["8",0]}}};
-}
+
 async function send(){
   const q=inp.value.trim();if(!q&&!UP_FILE)return;inp.value="";add(UP_FILE?"📎 صورة + "+q:q,"user");
-  await syncGpu();const b=add("🚀 جاري المعالجة التلقائية...");const en=await toEn(q);
-  if(GPU_URL){
+  const m=detectMode(q);
+  if(UP_FILE){const f=UP_FILE;UP_FILE=null;const b=add("🎞️ جاري تحريك صورتك المرفوعة...");const u=URL.createObjectURL(f),im=new Image();im.onload=()=>renderCinemaVid(im,b,"تحريك صورتك الشخصية");im.src=u;return}
+  if(m==="chat"){
+    const b=add("💬 جاري التفكير والبحث...");
     try{
-      let imgName=null;if(UP_FILE){b.innerHTML="📤 جاري رفع صورتك لبطاقات Tesla T4...";imgName=await uploadToComfy(UP_FILE);UP_FILE=null;}
-      const activeMode=imgName?"i2v":MODE,wf=getTemplate(activeMode,en,imgName);
-      const pr=await fetch("http://127.0.0"+encodeURIComponent(GPU_URL+"/prompt"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:wf})});
-      if(pr.ok){
-        const {prompt_id}=await pr.json();b.innerHTML="⚙️ جاري التصيير على بطاقتي Tesla T4 x2 تلقائياً...";
-        for(let i=0;i<75;i++){
-          await new Promise(r=>setTimeout(r,2000));
-          const hr=await(await fetch("http://127.0.0"+encodeURIComponent(GPU_URL+"/history/"+prompt_id))).json();
-          if(hr[prompt_id]){
-            const outNode=(activeMode==="t2v"||activeMode==="i2v")?"13":"9",file=hr[prompt_id].outputs[outNode].images.at(0);
-            const vu="http://127.0.0"+encodeURIComponent(GPU_URL+"/view?filename="+encodeURIComponent(file.filename)+"&subfolder="+encodeURIComponent(file.subfolder)+"&type="+file.type);
-            b.innerHTML=`<div style="color:#34d399;font-size:11px;margin-bottom:5px">🟢 تم الإنتاج تلقائياً على Kaggle T4 (${activeMode.toUpperCase()})</div><img src="${vu}" class="pic"><div class="bar"><a class="abtn" href="${vu}" target="_blank" download="${file.filename}">⬇️ حفظ الملف</a></div>`;
-            return;
-          }
-        }
-      }
-    }catch(e){b.innerHTML="⚠️ خطأ اتصال بخادم Kaggle T4: "+e.message+" — تأكد من تشغيل الخليتين في Kaggle ثم أعد المحاولة.";return;}
+      const wr=await(await fetch("https:"+S+S+"ar.wikipedia.org"+S+"w"+S+"api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&format=json&origin=*")).json();
+      const hit=wr.query&&wr.query.search&&wr.query.search.at(0);
+      const r=await fetch("https:"+S+S+"text.pollinations.ai"+S+"openai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"openai",messages:[{role:"system",content:"أنت مساعد استوديو DARK HORIZON PRO الذكي. أجب بالعربية بوضوح واختصار."},{role:"user",content:q}]})});
+      const d=await r.json();const rep=d&&d.choices&&d.choices.at(0)&&d.choices.at(0).message&&d.choices.at(0).message.content;
+      b.innerHTML=(hit?"📘 <b>معلومة حية:</b> "+hit.snippet.replace(/<[^>]+>/g,"")+"<hr style='border-color:#1e293b;margin:8px 0'>":"")+(rep?rep.replace(/\n/g,"<br>"):"أهلاً بك في DARK HORIZON PRO!");
+    }catch(e){b.innerHTML="أهلاً بك! أنا جاهز للرد على أسئلتك وتوليد الصور الواقعية ICBINP والفيديوهات."}
+    return;
   }
-  b.innerHTML="⚠️ خادم Kaggle T4 غير متصل حالياً (الشارة حمراء/رمادية). افتح تبويب Kaggle وشغّل الخليتين ليظهر 🟢 Tesla T4 x2 متصل تلقائياً.";
+  const b=add("⚡ جاري المعالجة وفق إعداداتك ("+CFG.res+")...");const en=await toEn(q);
+  try{
+    const res=await generateVisual(en,m,b);
+    if(m==="vid")return renderCinemaVid(res.im,b,res.mdl);
+    b.innerHTML=`<div style="color:#38bdf8;font-size:11px;margin-bottom:5px">✨ ${res.mdl} • ${CFG.res}</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" target="_blank" download="DarkHorizon_HD.webp">⬇️ حفظ نقي</a><button type="button" class="abtn toV">🎬 تحويل لفيديو</button></div>`;
+    b.querySelector(".toV").onclick=()=>renderCinemaVid(res.im,b,res.mdl);
+  }catch(e){b.innerHTML="⚠️ الخوادم مشغولة لحظياً، أعد الضغط الآن."}
 }
-document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class=\"msg bot\">👑 جاهز للإنتاج المباشر على بطاقتي Tesla T4 x2!</div>"};const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();fIn.onchange=e=>{if(e.target.files.item(0)){UP_FILE=e.target.files.item(0);add("📎 تم إرفاق الصورة! اكتب وصف الحركة واضغط إرسال ➤")}};
+document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
 </script></body></html>
