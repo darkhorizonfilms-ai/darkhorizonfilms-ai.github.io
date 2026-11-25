@@ -1,94 +1,18 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON TURBO-DIRECT</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:330px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
-<body><header><div class="brand">● DARK HORIZON TURBO-DIRECT</div><button class="hbtn" id="btnNew">+ جديد</button></header>
-<div id="chat"><div class="msg bot">⚡ <b>DARK HORIZON TURBO-DIRECT</b> — توليد فوري خلال ثوانٍ بدون انتظار طوابير وبدون علامة مائية</div></div>
-<footer><button class="cbtn" id="btnP">+</button><input id="inp" placeholder="اكتب طلبك (مقام الشهيد، أنمي، فيديو، سؤال)..."><button class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON ULTRA-NEXUS v24</title>
+<style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}body{background:#060b16;color:#f1f5f9;height:100dvh;display:flex;flex-direction:column;overflow:hidden}header{padding:12px 15px;background:#0b1222;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:14px;color:#38bdf8}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:6px 11px;border-radius:10px;font-size:12px;cursor:pointer}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:11px}.msg{max-width:88%;padding:11px 14px;border-radius:15px;font-size:14px;line-height:1.55;word-wrap:break-word}.user{align-self:flex-start;background:#2563eb;color:#fff}.bot{align-self:flex-end;background:#111a2e;border:1px solid #1e293b}.pic{width:100%;max-width:340px;border-radius:11px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.abtn{background:#1e293b;color:#f8fafc;border:1px solid #334155;padding:6px 10px;border-radius:8px;font-size:11px;text-decoration:none;cursor:pointer}footer{padding:8px 10px;background:#0b1222;border-top:1px solid #1e293b;display:flex;gap:6px}#inp{flex:1;min-width:0;background:#111a2e;border:1px solid #334155;color:#fff;padding:10px 14px;border-radius:20px;font-size:14px}.cbtn{width:38px;height:38px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#38bdf8;font-size:16px;cursor:pointer}#send{background:#2563eb;color:#fff;border:none}</style></head>
+<body><header><div class="brand">● DARK HORIZON ULTRA-NEXUS v24</div><button class="hbtn" id="btnNew">+ جديد</button></header>
+<div id="chat"><div class="msg bot">👑 <b>DARK HORIZON ULTRA-NEXUS v24</b><br>📸 12 نموذج واقعي • 🎬 5 نماذج فيديو واقعي • 🔍 4 محركات بحث حية</div></div>
+<footer><button class="cbtn" id="btnP">+</button><input id="inp" placeholder="اكتب: صور... | فيديو... | بحث عن... | أو سؤالك"><button class="cbtn" id="send">➤</button></footer><input type="file" id="fIn" accept="image/*" hidden>
 <script>
 const chat=document.getElementById("chat"),inp=document.getElementById("inp"),S=String.fromCharCode(47);
 const add=(h,w="bot")=>{const d=document.createElement("div");d.className="msg "+w;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d};
-async function toEn(raw){
-  let clean=raw.replace(/^(صمم|ارسم|صور|صورة|فيديو|فيلم)\s*/i,"").trim()||"Maqam Echahid iconic monument in Algiers overlooking the Mediterranean sea at sunset";
-  if(/مقام الشهيد/.test(clean))return "Maqam Echahid iconic three-leaf concrete monument in Algiers overlooking the Mediterranean bay, wide architectural photography";
-  if(/[\u0600-\u06FF]/.test(clean)){
-    try{
-      const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(clean)+"&langpair=ar|en")).json();
-      if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText;
-    }catch(e){}
-  }
-  return clean;
-}
-async function makeSilentFilm(im,box){
-  box.innerHTML="🎬 جاري إنتاج الفيديو السينمائي الصامت...";
-  const c=document.createElement("canvas");c.width=640;c.height=640;const ctx=c.getContext("2d"),rec=new MediaRecorder(c.captureStream(30),{videoBitsPerSecond:3000000}),ch=[];
-  rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};rec.start();
-  for(let f=0;f<150;f++){
-    const sc=1.02+(f/150)*0.18;ctx.save();ctx.filter="contrast(1.15) saturate(1.2)";ctx.translate(320,320);ctx.scale(sc,sc);ctx.translate(-320,-320);
-    ctx.drawImage(im,0,0,640,640);ctx.restore();ctx.fillStyle="#000";ctx.fillRect(0,0,640,40);ctx.fillRect(0,600,640,40);
-    await new Promise(r=>requestAnimationFrame(r));
-  }
-  rec.stop();await new Promise(r=>{rec.onstop=r});
-  const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));
-  box.innerHTML=`<video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Film.webm">⬇️ تحميل الفيديو</a></div>`;
-}
-async function pollHorde(payload,box,label,maxTries){
-  const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify(payload)});
-  const hd=await hr.json();
-  if(!hd.id)return null;
-  for(let i=0;i<maxTries;i++){
-    await new Promise(r=>setTimeout(r,1500));
-    const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();
-    if(st.wait_time>20&&maxTries<=8)return null;
-    if(st.wait_time!==undefined)box.innerHTML=`${label} (~${st.wait_time}ث)...`;
-    const g=st.generations&&st.generations.at(0);
-    if(st.done&&g&&g.img){
-      const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();
-      await new Promise(r=>{im.onload=r;im.src=u});
-      if(im.width)return {im,u,mdl:g.model||"ICBINP-Pro"};
-    }
-  }
-  return null;
-}
-async function genInstantImg(q,box){
-  const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q);
-  const fp=en+(isAn?", masterpiece Japanese anime illustration, Ufotable style, vibrant lighting, crisp lineart, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus");
-  const neg=" ### watermark, logo, signature, text, blurry, deformed, bad anatomy, low quality";
-  const targetModels=isAn
-    ?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion","Hassaku"]
-    :["ICBINP - I Can't Believe It's Not Photography","Realistic Vision","epiCRealism","AbsoluteReality","CyberRealistic","Juggernaut XL","RealVisXL V5.0"];
-  const baseParams={width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1};
-
-  // المحاولة 1: نماذج ICBINP / الأنمي المحددة (تبديل تلقائي إذا زاد الانتظار عن 20ث)
-  const res1=await pollHorde({prompt:fp+neg,models:targetModels,r2:true,params:baseParams},box,"📸 جاري التصوير بنماذج ICBINP / الأنمي",8);
-  if(res1)return res1;
-
-  // التبديل التلقائي 2: إطلاق الطلب لأسرع بطاقة GPU فارغة فوراً (بدون انتظار طوابير)
-  box.innerHTML="⚡ تبديل تلقائي لأسرع عقدة GPU متاحة الآن...";
-  const res2=await pollHorde({prompt:fp+neg,r2:true,params:{width:512,height:512,steps:16,n:1}},box,"⚡ جاري الرسم على أسرع عقدة",25);
-  if(res2)return res2;
-
-  throw new Error("الشبكة مزدحمة لحظياً، أعد الضغط");
-}
-async function send(){
-  const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");
-  if(/فيديو|فيلم|انمي|أنمي|صمم|صورة|صور|ارسم|سينما|مقام/i.test(q)){
-    const isV=/فيديو|فيلم/i.test(q),b=add("⚡ جاري الاتصال بأسرع عقدة GPU...");
-    try{
-      const res=await genInstantImg(q,b);
-      if(isV)return makeSilentFilm(res.im,b);
-      b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">⚡ النموذج: ${res.mdl} (نقي 100%)</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" download="DarkHorizon_HD.webp">⬇️ حفظ نقي</a><button class="abtn toV">🎬 تحويل لفيديو</button></div>`;
-      b.querySelector(".toV").onclick=()=>makeSilentFilm(res.im,b);
-    }catch(e){b.innerHTML="⚠️ "+e.message}return;
-  }
-  const b=add("⚡...");
-  try{
-    const r=await fetch("https:"+S+S+"text.pollinations.ai"+S+encodeURIComponent(q));
-    const rep=await r.text();
-    b.innerHTML=`<div>${rep.replace(/\n/g,"<br>")}</div><div class="bar"><button class="abtn cp">📋 نسخ</button></div>`;
-    b.querySelector(".cp").onclick=function(){navigator.clipboard.writeText(rep);this.textContent="✅"};
-  }catch(e){b.innerHTML="⚠️ تعذر الاتصال"}
-}
-document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};
-document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>⚡ <b>DARK HORIZON TURBO-DIRECT</b> جاهز!</div>"};
-const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();
-fIn.onchange=e=>{const f=e.target.files.item(0);if(!f)return;const im=new Image();im.onload=()=>makeSilentFilm(im,add("🎬 جاري تحريك صورتك بصمت..."));im.src=URL.createObjectURL(f)};
+async function toEn(raw){let c=raw.replace(/^(صمم|ارسم|صور|صورة|فيديو|فيلم|بحث عن|ابحث عن|بحث)\s*/i,"").trim()||"Maqam Echahid iconic monument in Algiers overlooking the Mediterranean sea at sunset";if(/مقام الشهيد/.test(c))return "Maqam Echahid iconic three-leaf concrete monument in Algiers overlooking the Mediterranean bay, wide architectural photography";if(/[\u0600-\u06FF]/.test(c)){try{const d=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(c)+"&langpair=ar|en")).json();if(d&&d.responseData&&d.responseData.translatedText)return d.responseData.translatedText}catch(e){}}return c}
+async function liveMultiSearch(q,box){const term=q.replace(/^(بحث عن|ابحث عن|بحث|معلومات عن)\s*/i,"").trim();box.innerHTML=`🔍 جاري البحث في 4 محركات عن: <b>${term}</b>...`;let sec=[];try{const wr=await(await fetch("https:"+S+S+"ar.wikipedia.org"+S+"w"+S+"api.php?action=query&list=search&srsearch="+encodeURIComponent(term)+"&format=json&origin=*")).json();const hits=(wr.query&&wr.query.search)||[];if(hits.length)sec.push("📘 <b>Wikipedia:</b><br>"+hits.slice(0,2).map(h=>`• <b>${h.title}:</b> ${h.snippet.replace(/<[^>]+>/g,"")}...`).join("<br>"))}catch(e){}try{const dr=await(await fetch("https:"+S+S+"://duckduckgo.com"+S+"?q="+encodeURIComponent(term)+"&format=json&no_html=1")).json();if(dr.AbstractText)sec.push(`🦆 <b>DuckDuckGo:</b> ${dr.AbstractText}`)}catch(e){}try{const oa=await(await fetch("https:"+S+S+"api.openalex.org"+S+"works?search="+encodeURIComponent(term)+"&per-page=2")).json();const w=oa.results||[];if(w.length)sec.push("🎓 <b>OpenAlex:</b><br>"+w.map(x=>`• ${x.title}`).join("<br>"))}catch(e){}try{const aiR=await(await fetch("https:"+S+S+"text.pollinations.ai"+S+encodeURIComponent("لخص بدقة واختصار بالعربية أحدث المعلومات عن: "+term))).text();if(aiR)sec.push(`🌐 <b>ملخص الويب:</b><br>${aiR.replace(/\n/g,"<br>")}`)}catch(e){}box.innerHTML=sec.length?sec.join("<hr style='border-color:#1e293b;margin:8px 0'>"):"⚠️ لم يتم العثور على نتائج"}
+async function pollHorde(payload,box,label,maxTries){const hr=await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"async",{method:"POST",headers:{"Content-Type":"application/json","apikey":"0000000000"},body:JSON.stringify(payload)});const hd=await hr.json();if(!hd.id)return null;for(let i=0;i<maxTries;i++){await new Promise(r=>setTimeout(r,1500));const st=await(await fetch("https:"+S+S+"stablehorde.net"+S+"api"+S+"v2"+S+"generate"+S+"status"+S+hd.id)).json();if(st.wait_time>18&&maxTries<=6)return null;if(st.wait_time!==undefined)box.innerHTML=`${label} (~${st.wait_time}ث)...`;const g=st.generations&&st.generations.at(0);if(st.done&&g&&g.img){const u=URL.createObjectURL(await(await fetch(g.img)).blob()),im=new Image();await new Promise(r=>{im.onload=r;im.src=u});if(im.width)return {im,u,mdl:g.model||"ICBINP-Pro"}}}return null}
+async function callZeroGPUSpace(host,ep,data){const ac=new AbortController();setTimeout(()=>ac.abort(),9000);const r=await fetch("https:"+S+S+host+S+"gradio_api"+S+"call"+S+ep,{method:"POST",signal:ac.signal,headers:{"Content-Type":"application/json"},body:JSON.stringify({data:data})});if(!r.ok)throw new Error("b");const {event_id}=await r.json();const sse=await(await fetch("https:"+S+S+host+S+"gradio_api"+S+"call"+S+ep+S+event_id,{signal:ac.signal})).text();const m=sse.match(/"url":\s*"([^"]+)"/);if(m&&m.at(1))return m.at(1);throw new Error("f")}
+async function genPhotorealistic(q,box){const en=await toEn(q),isAn=/انمي|أنمي|anime/i.test(q),fp=en+(isAn?", masterpiece Japanese anime film still, Ufotable style, vibrant lighting, 8k":", raw candid photography, photorealistic 8k uhd, natural skin texture, DSLR 85mm lens, sharp focus"),neg=" ### watermark, logo, signature, text, blurry, deformed, cartoon, 3d render, cgi, plastic skin",topModels=isAn?["Animagine XL","Counterfeit","MeinaMix","Anything Diffusion"]:["ICBINP - I Can't Believe It's Not Photography","RealVisXL V5.0","Juggernaut XL","epiCRealism","Realistic Vision","AbsoluteReality","CyberRealistic","AlbedoBase XL (SDXL)","MajicMIX realistic","Photon"];const r1=await pollHorde({prompt:fp+neg,models:topModels,r2:true,params:{width:512,height:512,steps:18,cfg_scale:7,sampler_name:"k_dpmpp_2m",karras:true,n:1}},box,"📸 العقدة 1: نماذج الواقعية",6);if(r1)return r1;for(const [name,host,data] of [["FLUX.1 H200","black-forest-labs-flux-1-schnell.hf.space",[fp,0,true,1024,1024,4]],["SD-3.5 H200","stabilityai-stable-diffusion-3-5-large.hf.space",[fp,"watermark, blurry",0,true,1024,1024,4.5,28]]){try{box.innerHTML=`👑 العقدة 2: بطاقات H200 (${name})...`;const u=await callZeroGPUSpace(host,"infer",data),im=new Image();im.crossOrigin="anonymous";await new Promise(ok=>{im.onload=ok;im.onerror=ok;im.src=u});if(im.width>200)return {im,u,mdl:name}}catch(e){}}box.innerHTML="⚡ العقدة 3: تبديل لأسرع عقدة GPU...";const r3=await pollHorde({prompt:fp+neg,r2:true,params:{width:512,height:512,steps:16,n:1}},box,"⚡ رسم فوري",12);if(r3)return r3;box.innerHTML="🌐 العقدة 4: FLUX-1024 الفورية...";const pu="https:"+S+S+"image.pollinations.ai"+S+"prompt"+S+encodeURIComponent(fp)+"?width=1024&height=1024&nologo=true&model=flux&seed="+Math.floor(Math.random()*999999),im=new Image();im.crossOrigin="anonymous";await new Promise((res,rej)=>{const tm=setTimeout(()=>rej(new Error("أعد المحاولة")),20000);im.onload=()=>{clearTimeout(tm);res()};im.onerror=()=>{clearTimeout(tm);rej(new Error("أعد المحاولة"))};im.src=pu});return {im,u:pu,mdl:"FLUX.1-1024px"}}
+async function makeSilentFilm(im,box){box.innerHTML="🎬 جاري إخراج الفيديو الواقعي الصامت...";const c=document.createElement("canvas");c.width=720;c.height=720;const ctx=c.getContext("2d"),rec=new MediaRecorder(c.captureStream(30),{videoBitsPerSecond:3500000}),ch=[];rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data)};rec.start();for(let f=0;f<150;f++){const sc=1.02+(f/150)*0.16;ctx.save();ctx.filter="contrast(1.12) saturate(1.18)";ctx.translate(360,360);ctx.scale(sc,sc);ctx.translate(-360,-360);ctx.drawImage(im,0,0,720,720);ctx.restore();ctx.fillStyle="#000";ctx.fillRect(0,0,720,36);ctx.fillRect(0,684,720,36);await new Promise(r=>requestAnimationFrame(r))}rec.stop();await new Promise(r=>{rec.onstop=r});const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));box.innerHTML=`<video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" download="DarkHorizon_Cinema.webm">⬇️ تحميل الفيديو</a></div>`}
+async function genRealisticVideo(q,box){const en=await toEn(q),vSpaces=[["Wan-2.2 14B","wan-ai-wan2-1.hf.space","t2v_generation_async",[en+", photorealistic 8k cinema","832*480",0,true]],["LTX-2.3 Video","lightricks-ltx-video-distilled.hf.space","text_to_video",[en+", photorealistic 8k","blurry, watermark",512,768,65,25,3,0,true]],["HunyuanVideo","tencent-hunyuanvideo.hf.space","generate_video",[en,720,480,65,0,true]],["Mochi-1","genmo-mochi-1-preview.hf.space","generate_video",[en,"blurry",64,84,4.5,0]],["CogVideoX-5B","thudm-cogvideox-5b-space.hf.space","generate",[en,50,6]]];for(const [name,host,ep,payload] of vSpaces){try{box.innerHTML=`🎥 عقدة الفيديو الواقعي: <b>${name}</b>...`;const vu=await callZeroGPUSpace(host,ep,payload);if(vu){box.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">🎥 النموذج: ${name} (واقعي)</div><video src="${vu}" controls autoplay loop muted playsinline class="pic"></video><div class="bar"><a class="abtn" href="${vu}" target="_blank" download="DarkHorizon_${name}.mp4">⬇️ تحميل MP4</a></div>`;return}}catch(e){}}const imgRes=await genPhotorealistic(q,box);await makeSilentFilm(imgRes.im,box)}
+async function send(){const q=inp.value.trim();if(!q)return;inp.value="";add(q,"user");if(/^(بحث|ابحث|معلومات عن)/i.test(q))return liveMultiSearch(q,add("🔍..."));if(/فيديو|فيلم|video|حركة/i.test(q))return genRealisticVideo(q,add("🎬 جاري تشغيل عقد الفيديو الواقعي..."));if(/انمي|أنمي|صمم|صورة|صور|ارسم|سينما|مقام/i.test(q)){const b=add("📸 جاري تشغيل عقد التصوير الفوتوغرافي...");try{const res=await genPhotorealistic(q,b);b.innerHTML=`<div style="font-size:11px;color:#38bdf8;margin-bottom:5px">✨ النموذج: ${res.mdl} (نقي 100%)</div><img src="${res.u}" class="pic"><div class="bar"><a class="abtn" href="${res.u}" target="_blank" download="DarkHorizon_Realism.webp">⬇️ حفظ نقي</a><button class="abtn toV">🎬 تحويل لفيديو</button></div>`;b.querySelector(".toV").onclick=()=>makeSilentFilm(res.im,b)}catch(e){b.innerHTML="⚠️ "+e.message}return}const b=add("⚡...");try{const r=await fetch("https:"+S+S+"text.pollinations.ai"+S+encodeURIComponent(q));const rep=await r.text();b.innerHTML=`<div>${rep.replace(/\n/g,"<br>")}</div><div class="bar"><button class="abtn cp">📋 نسخ</button></div>`;b.querySelector(".cp").onclick=function(){navigator.clipboard.writeText(rep);this.textContent="✅"}}catch(e){b.innerHTML="⚠️ تعذر الاتصال"}}
+document.getElementById("send").onclick=send;inp.onkeydown=e=>{if(e.key==="Enter")send()};document.getElementById("btnNew").onclick=()=>{chat.innerHTML="<div class='msg bot'>👑 <b>DARK HORIZON ULTRA-NEXUS v24</b> جاهز!</div>"};const fIn=document.getElementById("fIn");document.getElementById("btnP").onclick=()=>fIn.click();fIn.onchange=e=>{const f=e.target.files.item(0);if(!f)return;const im=new Image();im.onload=()=>makeSilentFilm(im,add("🎬 جاري تحريك صورتك بصمت..."));im.src=URL.createObjectURL(f)};
 </script></body></html>
