@@ -95,7 +95,7 @@ async function deepUnderstand(q,archObj){
   }catch(e){}
   let en=q.replace(/^(فيديو|فيلم|صورة|صور|صمم|ارسم)\s*/i,"").replace(/مدته.*$/i,"").trim()||"cinematic action scene";
   if(/[\u0600-\u06FF]/.test(en)){try{const tr=await(await fetch("https:"+S+S+"api.mymemory.translated.net"+S+"get?q="+encodeURIComponent(en)+"&langpair=ar|en")).json();if(tr&&tr.responseData&&tr.responseData.translatedText)en=tr.responseData.translatedText}catch(e){}}
-  return {intent:/فيديو|فيلم|سباق|حركة|video|movie/i.test(q)?"video":(/صورة|صور|ارسم|صمم/i.test(q)?"image":"chat"),reply:archObj.text||"",scenes:Array.from({length:clipCount},(_,i)=>en+`, shot ${i+1}, dynamic camera movement`),secs};
+  return {intent:/فيديو|فيلم|سباق|حركة|video|movie/i.test(q)?"video":(/صورة|صور|طبيعة|ارسم|صمم/i.test(q)?"image":"chat"),reply:archObj.text||"",scenes:Array.from({length:clipCount},(_,i)=>en+`, shot ${i+1}, dynamic camera movement`),secs};
 }
 async function generateKaggleHDImage(en,kind,box,headerHtml){
   if(!CFG.gpu)return null;
