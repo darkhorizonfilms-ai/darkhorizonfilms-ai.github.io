@@ -10,7 +10,7 @@
 <script>
 const CF="https://workers.dev",chat=document.getElementById("chat"),inp=document.getElementById("inp"),badge=document.getElementById("gpuBadge"),S=String.fromCharCode(47);
 let MODE="auto",UP_FILE=null,TOP_MODELS=["ICBINP - I Can't Believe It's Not Photography","RealVisXL V5.0","Juggernaut XL","Flux.1-Schnell","epiCRealism","AbsoluteReality","DreamShaper XL","Deliberate","Realistic Vision","CyberRealistic"];
-let CFG=JSON.parse(localStorage.getItem("dh_cfg_v77")||'{"mdl":"ALL","gpu":"https://ctrl-played-intervals-forums.trycloudflare.com","key":"0000000000"}');
+let CFG=JSON.parse(localStorage.getItem("dh_cfg_v77")||'{"mdl":"ALL","gpu":"https://bean-aside-powerpoint-wiley.trycloudflare.com","key":"0000000000"}');
 const add=(h,w="bot")=>{const d=document.createElement("div");d.className="msg "+w;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d};
 document.querySelectorAll(".mbtn").forEach(b=>b.onclick=()=>{document.querySelectorAll(".mbtn").forEach(x=>x.classList.remove("act"));b.classList.add("act");MODE=b.dataset.m});
 
