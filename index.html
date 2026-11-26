@@ -7,12 +7,12 @@ const S=String.fromCharCode(47),CF="https:"+S+S+"hidden-bread-95eb.dz30007000.wo
 function add(h,c="bot"){const d=document.createElement("div");d.className="msg "+c;d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;}
 document.querySelectorAll(".chip[data-m]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".chip[data-m]").forEach(x=>x.classList.remove("act"));b.classList.add("act");MODE=b.dataset.m;});
 document.getElementById("btnNew").onclick=()=>{chat.innerHTML="";add("✨ استوديو v103 الهجين جاهز.");};
-document.getElementById("btnSet").onclick=()=>{document.getElementById("inGpu").value=CFG.gpu||"";document.getElementById("inGem").value=CFG.gem||"";document.getElementById("inHf").value=CFG.hf||"";document.getElementById("inSf").value=CFG.sf||"";document.getElementById("modal").style.display="flex";};
+document.getElementById("btnSet").onclick=()=>{document.getElementById("inGpu").value=("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")||"";document.getElementById("inGem").value=CFG.gem||"";document.getElementById("inHf").value=CFG.hf||"";document.getElementById("inSf").value=CFG.sf||"";document.getElementById("modal").style.display="flex";};
 document.getElementById("closeCfg").onclick=()=>document.getElementById("modal").style.display="none";
-document.getElementById("saveCfg").onclick=()=>{CFG.gpu=document.getElementById("inGpu").value.trim().replace(/\/$/,"");CFG.gem=document.getElementById("inGem").value.trim();CFG.hf=document.getElementById("inHf").value.trim();CFG.sf=document.getElementById("inSf").value.trim();localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));document.getElementById("modal").style.display="none";add("✅ تم حفظ الإعدادات.");};
-async function syncGpu(){for(const u of [CF+"/get-gpu?t="+Date.now(),"./gpu.json?t="+Date.now()]){try{const d=await(await fetch(u)).json();if(d&&d.gpu&&d.gpu.startsWith("https://")){CFG.gpu=d.gpu.replace(/\/$/,"");localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));badge.textContent="🟢 Kaggle 8K + 24/7 AI";return true;}}catch(e){}}badge.textContent="🔵 وضع 24/7 المستقل (FLUX + ICBINP)";return false;}syncGpu();
-document.getElementById("btnOn").onclick=async()=>{add("🔄 جاري فحص رابط Kaggle T4...");if(await syncGpu())add("✅ Kaggle متصل: "+CFG.gpu);else{add("⚠️ لا يوجد خادم Kaggle نشط حالياً (يعمل الموقع الآن بمحركات 24/7 المستقلة).");window.open("https:"+S+S+"://kaggle.com"+S+"code","_blank");}};
-document.getElementById("btnOff").onclick=async()=>{await syncGpu();if(!CFG.gpu){box.innerHTML=hdr+'<br>⚠️ خادم Kaggle T4 غير متصل! اضغط ▶️ تفعيل.';return;}if(CFG.gpu){try{await fetch(CFG.gpu+"/shutdown",{method:"POST"});}catch(e){}CFG.gpu="";localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));badge.textContent="🔵 وضع 24/7 المستقل (الرصيد محفوظ)";add("✅ تم إغلاق Kaggle وحفظ رصيدك! يعمل الموقع الآن بالمحركات المستقلة 24/7.");}};
+document.getElementById("saveCfg").onclick=()=>{("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")=document.getElementById("inGpu").value.trim().replace(/\/$/,"");CFG.gem=document.getElementById("inGem").value.trim();CFG.hf=document.getElementById("inHf").value.trim();CFG.sf=document.getElementById("inSf").value.trim();localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));document.getElementById("modal").style.display="none";add("✅ تم حفظ الإعدادات.");};
+async function syncGpu(){for(const u of [CF+"/get-gpu?t="+Date.now(),"./gpu.json?t="+Date.now()]){try{const d=await(await fetch(u)).json();if(d&&d.gpu&&d.gpu.startsWith("https://")){("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")=d.gpu.replace(/\/$/,"");localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));badge.textContent="🟢 Kaggle 8K + 24/7 AI";return true;}}catch(e){}}badge.textContent="🔵 وضع 24/7 المستقل (FLUX + ICBINP)";return false;}syncGpu();
+document.getElementById("btnOn").onclick=async()=>{add("🔄 جاري فحص رابط Kaggle T4...");if(await syncGpu())add("✅ Kaggle متصل: "+("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run"));else{add("⚠️ لا يوجد خادم Kaggle نشط حالياً (يعمل الموقع الآن بمحركات 24/7 المستقلة).");window.open("https:"+S+S+"://kaggle.com"+S+"code","_blank");}};
+document.getElementById("btnOff").onclick=async()=>{await syncGpu();if(!("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")){box.innerHTML=hdr+'<br>⚠️ خادم Kaggle T4 غير متصل! اضغط ▶️ تفعيل.';return;}if(("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")){try{await fetch(("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")+"/shutdown",{method:"POST"});}catch(e){}("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")="";localStorage.setItem("dh_cfg_v103",JSON.stringify(CFG));badge.textContent="🔵 وضع 24/7 المستقل (الرصيد محفوظ)";add("✅ تم إغلاق Kaggle وحفظ رصيدك! يعمل الموقع الآن بالمحركات المستقلة 24/7.");}};
 document.getElementById("btnIdea").onclick=()=>{const a=["صورة واقعية فائقة الدقة 8K لمحارب عربي في الصحراء وقت الغروب","فيديو معركة ملحمية في شوارع طوكيو ليلاً تحت المطر مدته 10 ثوان","صورة سينمائية لسيارة رياضية خارقة على طريق جبلي ساحلي","فيديو قتال فنون قتالية سريع داخل معبد قديم مدته 10 ثوان"];inp.value=a[Math.floor(Math.random()*a.length)];inp.focus();};
 document.getElementById("tplSel").onchange=async function(){const v=this.value;if(!v)return;if(GLOBAL_VID_TEMPLATES[v]){window._activeVidTpl=GLOBAL_VID_TEMPLATES[v];MODE="vid";document.querySelectorAll(".chip[data-m]").forEach(x=>x.classList.toggle("act",x.dataset.m==="vid"));add("🎬 <b>تم تفعيل القالب العالمي بنجاح!</b> اكتب فكرة المشهد وسأنتجه لك مجاناً 24/7.");inp.focus();return;}this.value="";if(v==="GEN_INF"){inp.value="فيديو مطاردة سيارات خارقة في مدينة مستقبلية مدته 10 ثوان";inp.focus();add("♾️ تم تجهيز قالب فيديو جديد!");}};
 function speakVoice(t,f=false){try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=/[\u0600-\u06FF]/.test(t)?"ar-SA":"en-US";u.pitch=f?1.18:0.86;u.rate=0.96;window.speechSynthesis.speak(u);}catch(e){}}
@@ -22,7 +22,7 @@ async function genHybridImage(en,kind,box,hdr){
   const boost=", shot on Canon EOS R5, 85mm f/1.4 lens, sharp facial details, crisp eyes, realistic skin texture, 8k uhd, photorealistic, hyper-detailed";
   const fullP=en+(kind==="anime"?", masterpiece anime film still, Ufotable style, 8k":kind==="3d"?", Unreal Engine 5 3D render, raytracing, PBR, 8k":boost);
   await syncGpu();
-  const gpuUrl=CFG.gpu;
+  const gpuUrl=("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run");
   if(!gpuUrl){
     box.innerHTML=hdr+"<br>⚠️ <b>خادم Kaggle T4 غير متصل حالياً!</b><br>شغّل الجلسة في Kaggle ثم اضغط زر <b>▶️ تفعيل</b> في الأعلى.";
     throw new Error("Kaggle غير متصل");
@@ -74,19 +74,19 @@ async function genHybridVideo(scenes,secs,dlg,box,hdr){
     let gotUrl="",usedEng="";
 
     // 1. خادمك الخاص (Kaggle T4 x2 أو Lightning AI L4) - صفر ضغط عالمي
-    if(CFG.gpu&&!gotUrl){
+    if(("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")&&!gotUrl){
       try{
         box.innerHTML=hdr+`<br>🚀 <b>تصيير المقطع (${c+1}/${clipCount}) على خادمك الخاص (Kaggle / Lightning AI)...</b>`;
         const wf={"1":{"class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"ltx-video-2b.safetensors"}},"2":{"class_type":"CLIPLoader","inputs":{"clip_name":"t5xxl_fp8_e4m3fn.safetensors","type":"ltxv"}},"3":{"class_type":"CLIPTextEncode","inputs":{"text":fullPrompt,"clip":["2",0]}},"4":{"class_type":"CLIPTextEncode","inputs":{"text":"static, frozen, blurry, watermark","clip":["2",0]}},"5":{"class_type":"LTXVConditioning","inputs":{"positive":["3",0],"negative":["4",0],"frame_rate":24}},"6":{"class_type":"EmptyLTXVLatentVideo","inputs":{"width":704,"height":480,"length":121,"batch_size":1}},"7":{"class_type":"LTXVScheduler","inputs":{"steps":18,"max_shift":2.05,"base_shift":0.95,"stretch":true,"terminal":0.1,"latent":["6",0]}},"8":{"class_type":"KSamplerSelect","inputs":{"sampler_name":"euler"}},"9":{"class_type":"RandomNoise","inputs":{"noise_seed":Math.floor(Math.random()*9999999)}},"10":{"class_type":"CFGGuider","inputs":{"cfg":5.0,"model":["1",0],"positive":["5",0],"negative":["5",1]}},"11":{"class_type":"SamplerCustomAdvanced","inputs":{"noise":["9",0],"guider":["10",0],"sampler":["8",0],"sigmas":["7",0],"latent_image":["6",0]}},"12":{"class_type":"VAEDecode","inputs":{"samples":["11",0],"vae":["1",2]}},"13":{"class_type":"SaveAnimatedWEBP","inputs":{"filename_prefix":"DH_Clip","fps":24,"lossless":false,"quality":85,"method":"default","images":["12",0]}}};
-        const pr=await fetch(CFG.gpu+"/prompt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:wf})});
+        const pr=await fetch(("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")+"/prompt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:wf})});
         if(pr.ok){
           const {prompt_id}=await pr.json();
           for(let i=0;i<180;i++){
             await new Promise(r=>setTimeout(r,1500));
-            const hr=await(await fetch(CFG.gpu+"/history/"+prompt_id)).json();
+            const hr=await(await fetch(("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")+"/history/"+prompt_id)).json();
             if(hr[prompt_id]){
               const f=hr[prompt_id].outputs["13"].images.at(0);
-              gotUrl=CFG.gpu+"/view?filename="+encodeURIComponent(f.filename)+"&subfolder="+encodeURIComponent(f.subfolder)+"&type="+f.type;
+              gotUrl=("https://dzmimo3--dark-horizon-studio-comfy-server.modal.run")+"/view?filename="+encodeURIComponent(f.filename)+"&subfolder="+encodeURIComponent(f.subfolder)+"&type="+f.type;
               usedEng="خادمك الخاص (Kaggle / Lightning L4)";
               break;
             }
