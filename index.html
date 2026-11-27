@@ -73,4 +73,37 @@ async function send(){if(!inp)return;const t=inp.value.trim();if(!t)return;inp.v
 if(inp)inp.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
 addMsg("ai","👑 <b>تم تفعيل الاستوديو بالكامل (v118)!</b> جميع الأزرار تعمل 24/7.");
 })();
-</script></body></html>
+</script>
+<!-- START_HF_TOOLS_SUITE -->
+<div id="hf-tools-dock" style="margin:12px auto;max-width:760px;background:#090d1a;border:1px solid #1e293b;border-radius:16px;padding:12px;font-family:sans-serif;direction:rtl">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <span style="color:#38bdf8;font-weight:bold;font-size:13px">🚀 أدوات ZeroGPU المجانية المدمجة (Hugging Face Spaces)</span>
+    <button onclick="document.getElementById('hf-frame-box').style.display='none'" style="background:#dc2626;color:#fff;border:none;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer">إغلاق النافذة</button>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">
+    <button onclick="openHfTool('https://jcishere-wan2-2-14b-fast-preview.hf.space')" style="background:#0284c7;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🎬 Wan 2.2 فيديو سريع</button>
+    <button onclick="openHfTool('https://rdata92-ltx-2-3-10eros-image-to-video.hf.space')" style="background:#0284c7;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🔊 LTX 2.3 فيديو + صوت</button>
+    <button onclick="openHfTool('https://wank3r-minimax-h3-turbo-lora-s.hf.space')" style="background:#0284c7;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🎵 MiniMax H3 سينمائي</button>
+    <button onclick="openHfTool('https://victor-longcat-video-avatar-1-6.hf.space')" style="background:#7c3aed;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🎤 تحريك وجه متكلم</button>
+    <button onclick="openHfTool('https://microsoft-trellis-2.hf.space')" style="background:#059669;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🏢 TRELLIS.2 مجسمات 3D</button>
+    <button onclick="openHfTool('https://amisima-qwen-2-1-turbo-relight-camera-angle-face-swap-moss.hf.space')" style="background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🎥 Qwen تغيير زاوية وإضاءة</button>
+    <button onclick="openHfTool('https://waitinghere-krea-2-turbo-revamped-image-editor.hf.space')" style="background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🖼 Krea 2 تعديل صور</button>
+    <button onclick="openHfTool('https://briaai-bria-rmbg-3-0.hf.space')" style="background:#334155;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">✂️ إزالة الخلفية 3.0</button>
+    <button onclick="openHfTool('https://mrfakename-voice-isolator.hf.space')" style="background:#334155;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer">🎙 عزل الصوت</button>
+  </div>
+  <div id="hf-frame-box" style="display:none;margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid #38bdf8">
+    <iframe id="hf-iframe" src="" style="width:100%;height:620px;border:none;background:#050811" allow="microphone;camera;clipboard-write"></iframe>
+  </div>
+</div>
+<script>
+function openHfTool(url){
+  const box=document.getElementById('hf-frame-box');
+  const ifr=document.getElementById('hf-iframe');
+  ifr.src=url;
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth'});
+}
+</script>
+<!-- END_HF_TOOLS_SUITE -->
+
+</body></html>
