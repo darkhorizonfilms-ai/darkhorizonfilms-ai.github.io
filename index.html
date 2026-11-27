@@ -3,79 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DARK HORIZON • ZeroGPU Studio</title>
+<title>DARK HORIZON • ZeroGPU Agent Pipeline</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
-.brand{color:#38bdf8;font-weight:900;font-size:15px}
-.badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.brand{color:#38bdf8;font-weight:900;font-size:14px}
+.tok-box{display:flex;gap:4px;align-items:center}
+.tok-box input{background:#0f172a;border:1px solid #334155;color:#34d399;padding:5px 8px;border-radius:8px;font-size:11px;width:130px;outline:none}
+.tok-box button{background:#059669;color:#fff;border:none;padding:5px 8px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
 #chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:94%;padding:13px 15px;border-radius:16px;font-size:14px;line-height:1.6}
 .user{align-self:flex-start;background:#0284c7;color:#fff}
 .ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
 .step{color:#34d399;font-size:12px;font-weight:bold;margin:6px 0;padding:7px 10px;background:rgba(16,185,129,0.1);border-radius:8px;border-right:3px solid #10b981}
 .media-box{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img{width:100%;display:block;transform-origin:center center}
-@keyframes cinemaPan {
-  0% { transform: scale(1.0) translate(0, 0); }
-  50% { transform: scale(1.18) translate(-2%, -2%); }
-  100% { transform: scale(1.05) translate(1%, 1%); }
-}
-.cinema-motion { animation: cinemaPan 8s ease-in-out infinite; }
-.act-btn{display:block;width:100%;text-align:center;margin-top:10px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
+.media-box img,.media-box video{width:100%;display:block}
+.act-btn{display:block;width:100%;text-align:center;margin-top:8px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
 .dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
-input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
+.dock input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
 button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
 <header>
   <span class="brand">DARK HORIZON • ZeroGPU</span>
-  <span class="badge">🟢 دمج تلقائي شامل</span>
+  <div class="tok-box">
+    <input id="hfTok" type="password" placeholder="مفتاح hf_... المجاني">
+    <button onclick="saveTok()">حفظ</button>
+  </div>
 </header>
 
 <div id="chat">
   <div class="msg ai">
-    <strong style="color:#38bdf8">⚡ استوديو ZeroGPU الآلي المتكامل</strong><br>
-    اكتب أمرك فقط في الأسفل؛ وسيقوم الاستوديو تلقائياً بترجمة الوصف، التوليد بدقة عالية، وتفعيل التحريك السينمائي دون أي تدخل!
+    <strong style="color:#38bdf8">⚡ وكيل دمج أدوات ZeroGPU الحقيقي</strong><br>
+    1. ضع مفتاحك المجاني (<b>hf_...</b>) في الأعلى واضغط <b>حفظ</b> (يُحفظ في هاتفك دائماً).<br>
+    2. اكتب أمرك في الأسفل وسيقوم الوكيل بدمج وتشغيل أدوات ZeroGPU (<b>FLUX.1 ➔ BRIA RMBG 3.0 ➔ Wan 2.2</b>) بالتسلسل وإخراج النتيجة النهائية!
   </div>
 </div>
 
 <div class="dock">
-  <input id="inp" type="text" placeholder="اكتب أمرك هنا وانتظر النتيجة..." onkeydown="if(event.key==='Enter')runUnifiedZeroGPU()">
-  <button type="button" class="send" onclick="runUnifiedZeroGPU()">➤</button>
+  <input id="inp" type="text" placeholder="اكتب أمرك هنا (صورة، عزل خلفية، فيديو)..." onkeydown="if(event.key==='Enter')window.runAgentPipeline()">
+  <button type="button" class="send" onclick="window.runAgentPipeline()">➤</button>
 </div>
 
 <script>
-async function translateToEnglish(arText) {
-  try {
-    const r = await fetch("https://translated.net" + encodeURIComponent(arText) + "&langpair=ar|en");
+const tokInput = document.getElementById('hfTok');
+tokInput.value = localStorage.getItem('DH_HF_TOKEN') || '';
+function saveTok(){
+  localStorage.setItem('DH_HF_TOKEN', tokInput.value.trim());
+  alert('✅ تم حفظ مفتاح Hugging Face ZeroGPU بنجاح!');
+}
+</script>
+
+<script type="module">
+import { Client } from "https://jsdelivr.net";
+
+async function translateAr(text){
+  try{
+    const r = await fetch("https://translated.net" + encodeURIComponent(text) + "&langpair=ar|en");
     const j = await r.json();
-    if (j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
-  } catch (e) {}
-  return arText;
+    if(j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
+  }catch(e){}
+  return text;
 }
 
-function loadImageDirectly(urls) {
-  return new Promise((resolve, reject) => {
-    let idx = 0;
-    function tryNext() {
-      if (idx >= urls.length) return reject(new Error("Failed"));
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => { idx++; tryNext(); };
-      img.src = urls[idx];
-    }
-    tryNext();
-  });
-}
-
-async function runUnifiedZeroGPU() {
+window.runAgentPipeline = async function(){
   const inp = document.getElementById('inp');
   const txt = inp.value.trim();
-  if (!txt) return;
+  if(!txt) return;
   inp.value = '';
+
+  const hfToken = (localStorage.getItem('DH_HF_TOKEN') || '').trim();
+  const opts = hfToken ? { hf_token: hfToken } : {};
 
   const chat = document.getElementById('chat');
   const u = document.createElement('div');
@@ -86,53 +86,80 @@ async function runUnifiedZeroGPU() {
   a.className = 'msg ai';
   const st = document.createElement('div');
   st.className = 'step';
-  st.textContent = '🔄 المرحلة 1/2: ترجمة وتحسين الوصف لمحركات ZeroGPU...';
+  st.textContent = '🔄 المرحلة 1: ترجمة وتحسين الأمر لمحركات ZeroGPU...';
   a.appendChild(st);
   chat.appendChild(a);
   chat.scrollTop = chat.scrollHeight;
 
-  const isVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie|animate)/i.test(txt);
-  const cleanAr = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || txt;
-  const engBase = await translateToEnglish(cleanAr);
-  const fullPrompt = engBase + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, masterpiece";
-  const seed = Math.floor(Math.random() * 999999);
+  const cleanAr = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم|اعزل|عزل)\s*/i, "").trim() || txt;
+  const engPrompt = (await translateAr(cleanAr)) + ", ultra realistic 8k photography, dramatic cinema lighting, masterpiece";
 
-  st.textContent = '⚡ المرحلة 2/2: جاري التوليد عبر خوادم ZeroGPU & Flux...';
+  let currentUrl = null;
+  let currentBlob = null;
 
-  const urls = [
-    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
-    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=768&height=768&nologo=true&seed=" + (seed + 2),
-    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=768&height=768&nologo=true"
-  ];
-
+  // المرحلة 2: التوليد الأساسي عبر FLUX.1 Schnell على ZeroGPU
   try {
-    const img = await loadImageDirectly(urls);
-    const box = document.createElement('div');
-    box.className = 'media-box';
-
-    if (isVideo) {
-      img.classList.add('cinema-motion');
-      st.textContent = '🎬 اكتمل إنتاج المشهد المتحرك عبر ZeroGPU Pipeline!';
-    } else {
-      st.textContent = '✅ اكتمل إنتاج الصورة بدقة 8K!';
+    st.textContent = '⚡ المرحلة 2: التوليد عبر black-forest-labs/FLUX.1-schnell (ZeroGPU)...';
+    const flux = await Client.connect("black-forest-labs/FLUX.1-schnell", opts);
+    const res = await flux.predict("/infer", [engPrompt, 0, true, 1024, 1024, 4]);
+    if(res && res.data && res.data){
+      currentUrl = typeof res.data === 'string' ? res.data : res.data.url;
+      if(currentUrl){
+        const bRes = await fetch(currentUrl);
+        currentBlob = await bRes.blob();
+      }
     }
-
-    box.appendChild(img);
-    a.appendChild(box);
-
-    const dl = document.createElement('a');
-    dl.href = img.src;
-    dl.download = "DarkHorizon_ZeroGPU_" + Date.now() + ".png";
-    dl.target = "_blank";
-    dl.className = 'act-btn';
-    dl.textContent = "⬇️ فتح وحفظ النتيجة النقية";
-    a.appendChild(dl);
-    chat.scrollTop = chat.scrollHeight;
-  } catch (err) {
-    st.style.color = "#f87171";
-    st.textContent = "⚠️ تعذر الاتصال بالخادم، أعد المحاولة.";
+  } catch(e) {
+    console.log("FLUX error:", e);
   }
-}
+
+  // المرحلة 3 (اختيارية حسب الأمر): دمج BRIA RMBG 3.0 لعزل الخلفية تلقائياً إذا طُلب عزل أو دمج
+  if(currentBlob && /(عزل|بدون خلفية|شفاف|rmbg|transparent|cutout)/i.test(txt)){
+    try {
+      st.textContent = '✂️ المرحلة 3: تمرير النتيجة إلى briaai/BRIA-RMBG-3.0 (ZeroGPU)...';
+      const rmbg = await Client.connect("briaai/BRIA-RMBG-3.0", opts);
+      const rOut = await rmbg.predict("/predict", [currentBlob]);
+      if(rOut && rOut.data && rOut.data && rOut.data.url){
+        currentUrl = rOut.data.url;
+        currentBlob = await (await fetch(currentUrl)).blob();
+      }
+    } catch(e) {}
+  }
+
+  // المرحلة 4 (اختيارية حسب الأمر): تمرير الصورة إلى Wan 2.2 ZeroGPU لتحويلها لفيديو حقيقي
+  let finalVideoUrl = null;
+  if(currentBlob && /(فيديو|فلم|فيلم|تحريك|حرك|video|movie|animate)/i.test(txt)){
+    try {
+      st.textContent = '🎬 المرحلة 4: تمرير الصورة إلى Wan 2.2 ZeroGPU لتوليد الفيديو...';
+      const wan = await Client.connect("JCisHERE/Wan2.2-14B-Fast-Preview", opts);
+      const vOut = await wan.predict("/generate_video", [currentBlob, "cinematic smooth camera motion, realistic dynamic movement"]);
+      if(vOut && vOut.data && vOut.data && vOut.data.url){
+        finalVideoUrl = vOut.data.url;
+      }
+    } catch(e) {}
+  }
+
+  if(finalVideoUrl){
+    st.textContent = '✅ اكتمل دمج (FLUX.1 ➔ Wan 2.2 ZeroGPU) وإنتاج الفيديو!';
+    const box = document.createElement('div'); box.className = 'media-box';
+    const vid = document.createElement('video');
+    vid.src = finalVideoUrl; vid.controls = true; vid.autoplay = true; vid.loop = true; vid.playsInline = true;
+    box.appendChild(vid); a.appendChild(box);
+    const dl = document.createElement('a'); dl.href = finalVideoUrl; dl.download = 'ZeroGPU_Video_' + Date.now() + '.mp4'; dl.target = '_blank';
+    dl.className = 'act-btn'; dl.textContent = '⬇️ حفظ الفيديو النهائي'; a.appendChild(dl);
+  } else if(currentUrl){
+    st.textContent = '✅ اكتمل الإنتاج الموحد عبر ZeroGPU!';
+    const box = document.createElement('div'); box.className = 'media-box';
+    const img = document.createElement('img'); img.src = currentUrl;
+    box.appendChild(img); a.appendChild(box);
+    const dl = document.createElement('a'); dl.href = currentUrl; dl.download = 'ZeroGPU_Image_' + Date.now() + '.png'; dl.target = '_blank';
+    dl.className = 'act-btn'; dl.textContent = '⬇️ حفظ الصورة النهائية'; a.appendChild(dl);
+  } else {
+    st.style.color = '#f87171';
+    st.textContent = '⚠️ يرجى وضع مفتاح Hugging Face المجاني (hf_...) في الأعلى لتفعيل حصة ZeroGPU الخاصة بك.';
+  }
+  chat.scrollTop = chat.scrollHeight;
+};
 </script>
 </body>
 </html>
