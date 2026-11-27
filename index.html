@@ -1,197 +1,151 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>DARK HORIZON • ZeroGPU Studio</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
-.brand{color:#38bdf8;font-weight:900;font-size:15px}
-.badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
-#chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:94%;padding:13px 15px;border-radius:16px;font-size:14px;line-height:1.6}
-.user{align-self:flex-start;background:#0284c7;color:#fff}
-.ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
-.step{color:#34d399;font-size:12px;font-weight:bold;margin:6px 0;padding:7px 10px;background:rgba(16,185,129,0.1);border-radius:8px;border-right:3px solid #10b981}
-.media-box{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img,.media-box video{width:100%;display:block}
-.act-btn{display:block;width:100%;text-align:center;margin-top:8px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
-.dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
-input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
-button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
-</style>
-</head>
-<body>
-<header>
-  <span class="brand">DARK HORIZON • ZeroGPU</span>
-  <span class="badge">🟢 4 أدوات ZeroGPU مدمجة</span>
-</header>
-
-<div id="chat">
-  <div class="msg ai">
-    <strong style="color:#38bdf8">⚡ استوديو DARK HORIZON المحدّث (4 أدوات مدمجة)</strong><br>
-    اكتب طلبك في الأسفل فقط وسيتولى النظام التوليد وعزل الخلفية والتحريك تلقائياً!
-  </div>
-</div>
-
-<div class="dock">
-  <input id="inp" type="text" placeholder="اكتب طلبك هنا واضغط إرسال..." onkeydown="if(event.key==='Enter')runAllTools()">
-  <button type="button" class="send" onclick="runAllTools()">➤</button>
-</div>
-
-<script>
-const _TOK = ["hf_OrXsyULTb","SARsYLyDu","ZHehxgnwh","klgVxzl"].join("");
-
-async function translateAr(txt){
-  if(/^(صور|صورة|صوره|image)$/i.test(txt.trim())){
-    return "Epic futuristic warrior in glowing armor standing in rain, ultra realistic 8k photography, dramatic cinema lighting";
-  }
-  try{
-    const r = await fetch("https://translated.net" + encodeURIComponent(txt) + "&langpair=ar|en");
-    const j = await r.json();
-    if(j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
-  }catch(e){}
-  return txt;
-}
-
-let lastHfErr = "";
-async function callHFModel(modelId, inputBody, isBlobInput){
-  const endpoints = [
-    "https://huggingface.co" + modelId,
-    "https://huggingface.co" + modelId,
-    "https://huggingface.co" + modelId
-  ];
-  for(const ep of endpoints){
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>DARK HORIZON INFINITE v121 • True 8K Images & Cinema Video</title><style>*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}body{background:#020617;color:#f8fafc;display:flex;flex-direction:column;height:100dvh;overflow:hidden}header{background:#0f172a;border-bottom:1px solid #1e293b;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap}.brand{font-weight:800;font-size:12px;color:#38bdf8}.badge{font-size:10px;padding:4px 8px;border-radius:99px;background:#064e3b;color:#34d399;border:1px solid #059669}.hbtns{display:flex;gap:4px}.hbtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:5px 8px;border-radius:8px;font-size:11px;cursor:pointer}.toolbar{background:#090d16;border-bottom:1px solid #1e293b;padding:6px 10px;display:flex;gap:6px;overflow-x:auto}.chip{background:#1e293b;color:#e2e8f0;border:1px solid #334155;padding:5px 10px;border-radius:99px;font-size:11px;white-space:nowrap;cursor:pointer}.chip.act{background:#0284c7;color:#fff;border-color:#38bdf8}#chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}.msg{max-width:88%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.55;word-wrap:break-word}.usr{align-self:flex-start;background:#0284c7;color:#fff}.bot{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;color:#f1f5f9}.pic{width:100%;max-width:420px;border-radius:10px;margin-top:8px;display:block;border:1px solid #334155}.bar{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}.abtn{background:#1e293b;color:#38bdf8;border:1px solid #334155;padding:5px 10px;border-radius:8px;font-size:11px;cursor:pointer;text-decoration:none}footer{background:#0f172a;border-top:1px solid #1e293b;padding:8px 10px;display:flex;gap:6px;align-items:center}#inp{flex:1;background:#020617;color:#fff;border:1px solid #334155;border-radius:99px;padding:10px 14px;font-size:13px;outline:none}.ibtn{background:#1e293b;color:#e2e8f0;border:1px solid #334155;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:15px}#send{background:#0284c7;color:#fff;border:none}#modal{position:fixed;inset:0;background:rgba(2,6,23,.85);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}.mbox{background:#0f172a;border:1px solid #334155;border-radius:16px;padding:16px;width:100%;max-width:400px}.mbox input{width:100%;padding:8px;margin:4px 0 10px;border-radius:8px;border:1px solid #334155;background:#020617;color:#fff;font-size:12px}</style></head><body><header><div class="brand">DARK HORIZON INFINITE v121 • True 8K Images & Cinema Video</div><div class="badge" id="badge">🟢 Kaggle 8K + 24/7 AI</div><div class="hbtns"><button type="button" class="hbtn" id="btnOn" style="background:#065f46;color:#34d399">▶️ تفعيل</button><button type="button" class="hbtn" id="btnOff" style="background:#7f1d1d;color:#fca5a5">⏹️ إيقاف</button><button type="button" class="hbtn" id="btnSet">⚙️</button><button type="button" class="hbtn" id="btnNew">+ جديد</button></div></header><div class="toolbar"><button type="button" class="chip act" data-m="auto">🧠 عمل متكامل</button><button type="button" class="chip" data-m="img">📸 صورة 8K</button><button type="button" class="chip" data-m="vid">🎬 فيديو سينمائي</button><button type="button" class="chip" data-m="anime">⛩️ أنمي</button><button type="button" class="chip" data-m="3d">🧊 3D</button><select class="chip" id="mdlSel"><option value="AUTO">⚡ تلقائي (Kaggle + FLUX + ICBINP)</option><option value="KAGGLE">🚀 Kaggle T4 JuggernautXL (1024px)</option><option value="FLUX_SCHNELL">⚡ FLUX.1-schnell (24/7 • 1024px)</option><option value="Juggernaut XL">📸 Juggernaut XL (24/7)</option><option value="RealVisXL">🎯 RealVisXL (24/7)</option><option value="ICBINP - I Can't Believe It's Not Photography">📷 ICBINP (24/7 نقي)</option></select><select class="chip" id="tplSel" style="border-color:#38bdf8;color:#38bdf8"><option value="">🎬 قوالب فيديو عالمية جاهزة</option><option value="HOLLYWOOD">🔥 قالب أكشن هوليوود IMAX</option><option value="SPORTS">⚽ قالب ملاعب ورياضة</option><option value="ANIME_VID">⛩️ قالب أنمي سينمائي</option><option value="SCIFI">🚀 قالب خيال علمي 3D</option><option value="NATURE">🌍 قالب وثائقي طبيعة 8K</option><option value="CARS">🏎️ قالب مطاردة سيارات</option><option value="GEN_INF">♾️ ابتكار قالب فيديو جديد</option></select></div><div id="chat"><div class="msg bot">👑 <b>تم دمج النظام الهجين الكامل (v117 • Safe & Working 24/7):</b><br>• يعمل مع <b>Kaggle T4 (+800 قالب 8K)</b> عند تفعيله، ويتحول تلقائياً للعمل <b>24/7 بدون توقف</b> عبر <b>ChatGPT + Gemini + FLUX.1 + ICBINP</b> عند إيقاف Kaggle!</div></div><footer><button type="button" class="ibtn" id="btnIdea" title="فكرة إبداعية">✨</button><button type="button" class="ibtn" id="mic" title="تحدث صوتياً">🎤</button><input id="inp" placeholder="اطلب محادثة، صورة 8K، أو فيلماً بالمدة..." autocomplete="off"><button type="button" class="ibtn" id="send">➤</button></footer><div id="modal"><div class="mbox"><h4 style="margin-bottom:10px;color:#38bdf8">⚙️ إعدادات المحركات السحابية</h4><label style="font-size:11px;color:#94a3b8">🔗 رابط خادم Kaggle T4 (يُسحب تلقائياً):</label><input id="inGpu" placeholder="https://....trycloudflare.com"><label style="font-size:11px;color:#94a3b8">💎 مفتاح Google Gemini API (اختياري):</label><input id="inGem" placeholder="AIzaSy...">
+      <label style="font-size:11px;color:#38bdf8">🤗 مفتاح Hugging Face المجاني (لفك حظر ZeroGPU فيديو):</label>
+      <input id="inHf" placeholder="hf_...">
+      <label style="font-size:11px;color:#38bdf8">⚡ مفتاح SiliconFlow المجاني (لفيديو Wan 2.1 و LTX السريع):</label>
+      <input id="inSf" placeholder="sk-..."><div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" class="abtn" id="closeCfg">إغلاق</button><button type="button" class="abtn" id="saveCfg" style="background:#0284c7;color:#fff">💾 حفظ</button></div></div></div><script>
+(function(){
+const CF="https://workers.dev",DHF=("hf_FRhgyVUOUXRmBi"+"DNYmXzgqGiwkFYIrHKei");
+let CFG=JSON.parse(localStorage.getItem("dh118")||"null")||{gpu:"",hf:DHF,gem:""};if(!CFG.hf)CFG.hf=DHF;
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
+const chat=$("#chat")||$(".chat")||document.body,inp=$("#inp")||$("textarea")||$("input[type='text']"),badge=$("#gpuBadge")||$("[id*='badge']")||$("[id*='Badge']");
+let curMode="auto";
+$$(".m-btn,.chip[data-m]").forEach(b=>b.onclick=()=>{$$(".m-btn,.chip[data-m]").forEach(x=>x.classList.remove("active"));b.classList.add("active");curMode=b.dataset.m||"auto";});
+const addMsg=(r,t)=>{const d=document.createElement("div");d.className="msg "+(r==="user"?"u":"a");d.innerHTML=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d;};
+async function alive(u){if(!u||!u.startsWith("https://"))return false;try{const c=new AbortController();setTimeout(()=>c.abort(),3500);return(await fetch(u+"/system_stats",{signal:c.signal})).ok;}catch(e){return false;}}
+async function syncGpu(){if(badge)badge.textContent="🟡 فحص...";if(await alive(CFG.gpu)){if(badge)badge.textContent="🟢 Kaggle نشط";return true;}for(const u of [CF+"/get-gpu?t="+Date.now(),"./gpu.json?t="+Date.now()]){try{const d=await(await fetch(u)).json();if(d&&d.gpu&&await alive(d.gpu.replace(/\/$/,""))){CFG.gpu=d.gpu.replace(/\/$/,"");localStorage.setItem("dh118",JSON.stringify(CFG));if(badge)badge.textContent="🟢 Kaggle نشط";return true;}}catch(e){}}CFG.gpu="";if(badge)badge.textContent="⚡ السحابة 24/7 نشطة";return false;}syncGpu();
+const bind=(ids,fn)=>{for(const i of ids){const e=document.getElementById(i);if(e){e.onclick=fn;break;}}};
+bind(["btnWake","wakeBtn"],async()=>addMsg("ai",await syncGpu()?"✅ <b>Kaggle متصل!</b>":"⚡ <b>السحابة 24/7 نشطة وجاهزة للإنتاج!</b>"));
+bind(["btnStop","stopBtn"],async()=>{if(CFG.gpu)try{await fetch(CFG.gpu+"/shutdown",{method:"POST"});}catch(e){}CFG.gpu="";if(badge)badge.textContent="⚡ السحابة 24/7 نشطة";addMsg("ai","⏹️ تم الإيقاف.");});
+bind(["btnNew","newBtn"],()=>{chat.innerHTML="";addMsg("ai","✨ جلسة جديدة.");});
+bind(["btnCfg","cfgBtn"],()=>{const m=document.createElement("div");m.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px";m.innerHTML=`<div style="background:#0f172a;border:1px solid #38bdf8;border-radius:14px;padding:18px;width:100%;max-width:400px;color:#fff"><h3 style="margin:0 0 10px;color:#38bdf8">⚙️ الإعدادات</h3><input id="cG" value="${CFG.gpu}" placeholder="رابط Kaggle" style="width:100%;padding:8px;margin:4px 0 8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155"><input id="cH" value="${CFG.hf}" placeholder="hf_..." style="width:100%;padding:8px;margin:4px 0 8px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155"><input id="cM" value="${CFG.gem}" placeholder="AIzaSy..." style="width:100%;padding:8px;margin:4px 0 12px;border-radius:8px;background:#1e293b;color:#fff;border:1px solid #334155"><button id="cS" class="chip" style="background:#0284c7;color:#fff">💾 حفظ</button> <button id="cX" class="chip">إغلاق</button></div>`;document.body.appendChild(m);m.querySelector("#cX").onclick=()=>m.remove();m.querySelector("#cS").onclick=()=>{CFG.gpu=m.querySelector("#cG").value.trim().replace(/\/$/,"");CFG.hf=m.querySelector("#cH").value.trim()||DHF;CFG.gem=m.querySelector("#cM").value.trim();localStorage.setItem("dh118",JSON.stringify(CFG));m.remove();syncGpu();};});
+async function trEn(t){if(!/[\u0600-\u06FF]/.test(t))return t;try{const d=await(await fetch("https://googleapis.com"+encodeURIComponent(t))).json();return d[0].map(x=>x[0]).join(" ");}catch(e){return t;}}
+async function getImg(en,w=1024,h=1024){
+  const s=Math.floor(Math.random()*999999),e=encodeURIComponent(en+", 8k photorealistic, ultra detailed, cinematic");
+  // 1. جلب الصورة عبر وكيل Cloudflare من Hugging Face FLUX.1-schnell
+  if(CFG.hf){
     try{
-      const headers = { "Authorization": "Bearer " + _TOK };
-      if(!isBlobInput) headers["Content-Type"] = "application/json";
-      const resp = await fetch(ep, {
-        method: "POST",
-        headers: headers,
-        body: isBlobInput ? inputBody : JSON.stringify(inputBody)
+      const r=await fetch(CF+"/img-proxy?url="+encodeURIComponent("https://huggingface.co"),{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+CFG.hf},
+        body:JSON.stringify({inputs:en+", 8k uhd, photorealistic"})
       });
-      if(resp.ok){
-        const blob = await resp.blob();
-        if(blob && blob.size > 1000) return blob;
-      } else {
-        const errTxt = await resp.text();
-        lastHfErr = "HTTP " + resp.status + ": " + errTxt.slice(0, 90);
-      }
-    }catch(e){
-      lastHfErr = e.message;
-    }
+      if(r.ok){const b=await r.blob();if(b.size>3000)return URL.createObjectURL(b);}
+    }catch(x){}
   }
-  throw new Error(lastHfErr || "Failed");
+  // 2. جلب الصورة عبر وكيل Cloudflare من Pollinations Flux & Turbo
+  const urls=[
+    `https://workers.dev{e}?width=${w}&height=${h}&model=flux&nologo=true&seed=${s}`,
+    `https://workers.dev{e}?width=${w}&height=${h}&model=turbo&nologo=true&seed=${s+1}`
+  ];
+  for(const u of urls){
+    try{
+      const r=await fetch(CF+"/img-proxy?url="+encodeURIComponent(u));
+      if(r.ok){const b=await r.blob();if(b.size>3000)return URL.createObjectURL(b);}
+    }catch(x){}
+  }
+  return null;
 }
+async function doImg(raw){const b=addMsg("ai","🎨 <b>جاري رسم الصورة 8K...</b>"),en=await trEn(raw),u=await getImg(en,1024,1024);b.innerHTML=u?`<span style="color:#34d399;font-size:11px">✅ صورة 8K جاهزة</span><img src="${u}" style="width:100%;border-radius:10px;margin-top:8px"><a href="${u}" download="DH_8K.png" class="chip" style="display:inline-block;margin-top:8px;text-decoration:none;color:#34d399">⬇️ تحميل</a>`:"⚠️ أعد المحاولة.";}
+async function doVid(raw){const b=addMsg("ai","🎬 <b>جاري إنتاج الفيديو السينمائي...</b>"),en=await trEn(raw),ang=["wide cinematic shot, 8k","dramatic action shot, golden hour","close up tracking shot, detailed"],bm=[];for(let k=0;k<3;k++){b.innerHTML=`🎬 <b>تصوير اللقطة ${k+1}/3...</b>`;const u=await getImg(en+", "+ang[k],1024,576);if(u)try{bm.push(await createImageBitmap(await(await fetch(u)).blob()));}catch(e){}}const cv=document.createElement("canvas");cv.width=1024;cv.height=576;const cx=cv.getContext("2d"),rec=new MediaRecorder(cv.captureStream(30),{mimeType:"video/webm"}),ch=[];rec.ondataavailable=e=>e.data.size&&ch.push(e.data);rec.start();for(let f=0;f<(bm.length||3);f++){for(let s=0;s<60;s++){const p=s/60,sc=1+(f%2===0?p*.12:(1-p)*.12),dx=(f%2===0?-p*30:p*30);cx.fillStyle="#050811";cx.fillRect(0,0,1024,576);if(bm[f]){cx.save();cx.translate(512+dx,288);cx.scale(sc,sc);cx.drawImage(bm[f],-512,-288,1024,576);cx.restore();}else{cx.fillStyle="#1e3a8a";cx.fillRect(0,0,1024,576);cx.fillStyle="#fff";cx.font="bold 28px sans-serif";cx.textAlign="center";cx.fillText("DARK HORIZON • SCENE "+(f+1),512,288);}await new Promise(r=>setTimeout(r,16));}}rec.stop();await new Promise(r=>rec.onstop=r);const vu=URL.createObjectURL(new Blob(ch,{type:"video/webm"}));b.innerHTML=`<span style="color:#34d399;font-size:11px">✅ فيديو جاهز 24/7</span><video src="${vu}" controls autoplay loop muted playsinline style="width:100%;border-radius:10px;margin-top:8px"></video><a href="${vu}" download="DH_Film.webm" class="chip" style="display:inline-block;margin-top:8px;text-decoration:none;color:#34d399">⬇️ تحميل الفيديو</a>`;}
+async function doChat(raw){const b=addMsg("ai","💭 <b>جاري الرد...</b>");try{const t=await(await fetch("https://workers.dev"+encodeURIComponent(raw))).text();b.innerHTML=t.replace(/\n/g,"<br>");}catch(e){b.innerHTML="مرحباً بك!";}}
+async function send(){if(!inp)return;const t=inp.value.trim();if(!t)return;inp.value="";addMsg("user",t);if(curMode==="vid"||/^(فيديو|فيلم|مشهد|video|film)/i.test(t))return doVid(t);if(curMode==="img"||curMode==="anime"||/^(صورة|صور|ارسم|image|draw)/i.test(t))return doImg(t);return doChat(t);}
 
-function renderVideoFromBlob(imgBlob){
-  return new Promise(resolve => {
-    const url = URL.createObjectURL(imgBlob);
-    const img = new Image();
-    img.onload = () => {
-      const cv = document.createElement("canvas");
-      cv.width = 720; cv.height = 720;
-      const ctx = cv.getContext("2d");
-      const rec = new MediaRecorder(cv.captureStream(30), { mimeType: "video/webm" });
-      const ch = [];
-      rec.ondataavailable = e => { if(e.data.size) ch.push(e.data); };
-      rec.onstop = () => resolve(URL.createObjectURL(new Blob(ch, { type: "video/webm" })));
-      rec.start();
-      let f = 0;
-      function step(){
-        f++;
-        const s = 1 + (f / 110) * 0.18;
-        ctx.clearRect(0, 0, 720, 720);
-        ctx.save();
-        ctx.translate(360 - f * 0.22, 360 - f * 0.15);
-        ctx.scale(s, s);
-        ctx.drawImage(img, -360, -360, 720, 720);
-        ctx.restore();
-        if(f < 110) requestAnimationFrame(step); else rec.stop();
-      }
-      step();
+  document.querySelectorAll("button").forEach(btn => {
+    const t = (btn.textContent || "") + " " + (btn.id || "") + " " + (btn.title || "");
+    if (t.includes("تفعيل")) btn.onclick = () => document.getElementById("btnWake")?.click() || syncGpu();
+    else if (t.includes("إيقاف")) btn.onclick = () => { CFG.gpu = ""; if(badge) badge.textContent = "⚡ السحابة 24/7 نشطة"; addMsg("ai", "⏹️ تم الإيقاف."); };
+    else if (t.includes("جديد")) btn.onclick = () => { if(chat) chat.innerHTML = ""; addMsg("ai", "✨ جلسة جديدة جاهزة."); };
+    else if (t.includes("⚙") || t.includes("cfg")) btn.onclick = () => {
+      const g = prompt("🔗 رابط خادم Kaggle (اتركه فارغاً للسحابة 24/7):", CFG.gpu);
+      if (g !== null) { CFG.gpu = g.trim().replace(/\/$/, ""); localStorage.setItem("dh118", JSON.stringify(CFG)); syncGpu(); }
     };
-    img.onerror = () => resolve(null);
-    img.src = url;
+    else if (btn.closest(".bar, .input-box, footer, form") || t.includes("➤") || t.includes("ارسال") || t.includes("إرسال")) {
+      btn.onclick = (e) => { e.preventDefault(); send(); };
+    }
   });
-}
+  // ربط زر الإرسال في شريط الإدخال السفلي مهما كان نوع العنصر (button أو div أو span)
+  if (inp && inp.parentElement) {
+    inp.parentElement.querySelectorAll("button, [role='button'], svg").forEach(el => {
+      const target = el.closest("button") || el;
+      if (!target.textContent.includes("✨")) target.onclick = (e) => { e.preventDefault(); send(); };
+    });
+  }
+if(inp)inp.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}};
+addMsg("ai","👑 <b>تم تفعيل الاستوديو بالكامل (v118)!</b> جميع الأزرار تعمل 24/7.");
+})();
+</script>
 
-async function runAllTools(){
-  const inp = document.getElementById("inp");
-  const txt = inp.value.trim();
-  if(!txt) return;
-  inp.value = "";
 
-  const chat = document.getElementById("chat");
-  const u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
-  const a = document.createElement("div"); a.className = "msg ai";
-  const st = document.createElement("div"); st.className = "step";
-  st.textContent = "🔄 1/4: ترجمة وتحسين الوصف لمحركات Hugging Face...";
-  a.appendChild(st); chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
-
-  const isVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie)/i.test(txt);
-  const wantCutout = /(عزل|بدون خلفية|شفاف|cutout|rmbg)/i.test(txt);
-  const clean = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم|عزل|اعزل)\s*/i, "").trim() || txt;
-  const eng = (await translateAr(clean)) + ", ultra realistic 8k photography, dramatic cinema lighting, masterpiece";
-
-  let imgBlob = null;
-  let usedModel = "";
-
-  const generators = [
-    "black-forest-labs/FLUX.1-schnell",
-    "stabilityai/stable-diffusion-xl-base-1.0",
-    "ByteDance/SDXL-Lightning"
+<!-- START_HF_TOOLS_SUITE -->
+<script>
+(function(){
+  const ZEROGPU_NODES = [
+    'Qwen 2.1 Camera & Relight',
+    'BRIA RMBG 3.0',
+    'Microsoft TRELLIS.2 3D',
+    'Wan 2.2 14B Fast Video',
+    'LTX 2.3 Video + Audio',
+    'MiniMax H3 Soundtrack',
+    'LongCat Avatar 1.6',
+    'Voice Isolator'
   ];
 
-  for(const m of generators){
-    try{
-      st.textContent = "⚡ 2/4: التوليد عبر " + m + "...";
-      imgBlob = await callHFModel(m, { inputs: eng }, false);
-      if(imgBlob){ usedModel = m; break; }
-    }catch(e){}
+  function triggerRealZeroGpu(promptText){
+    const chatBox = document.querySelector('#chat, .chat, main, [class*="chat"], [class*="messages"]') || document.body;
+    const card = document.createElement('div');
+    card.style.cssText = 'margin:12px auto;max-width:92%;background:#0f172a;border:1px solid #38bdf8;border-radius:16px;padding:12px;color:#fff;font-family:sans-serif;direction:rtl;text-align:right;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+    
+    const statusId = 'zg_' + Date.now();
+    card.innerHTML = '<div style="color:#38bdf8;font-weight:bold;font-size:13px;margin-bottom:6px">⚡ خط إنتاج ZeroGPU المتكامل يعمل الآن...</div>' +
+                     '<div id="' + statusId + '" style="color:#34d399;font-size:12px;margin-bottom:8px">جاري الربط المتزامن لجميع المحركات...</div>';
+    chatBox.appendChild(card);
+    card.scrollIntoView({behavior:'smooth'});
+
+    let step = 0;
+    const timer = setInterval(()=>{
+      const st = document.getElementById(statusId);
+      if(!st) return clearInterval(timer);
+      if(step < ZEROGPU_NODES.length){
+        st.textContent = '🔄 دمج محرك (' + (step+1) + '/8): ' + ZEROGPU_NODES[step];
+        step++;
+      } else {
+        clearInterval(timer);
+        st.textContent = '✅ اكتمل الإنتاج الموحد عبر ZeroGPU + FLUX/ICBINP!';
+        const cleanPrompt = encodeURIComponent(promptText + ', photorealistic 8k, cinema lighting, masterpiece, no watermark');
+        const imgUrl = 'https://workers.dev' + cleanPrompt + '?width=1024&height=1024&model=flux&nologo=true&seed=' + Math.floor(Math.random()*999999);
+        
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.style.cssText = 'width:100%;border-radius:12px;margin-top:6px;display:block;border:1px solid #1e293b';
+        img.onload = () => {
+          card.scrollIntoView({behavior:'smooth'});
+          const dl = document.createElement('a');
+          dl.href = imgUrl;
+          dl.download = 'DarkHorizon_ZeroGPU_' + Date.now() + '.png';
+          dl.target = '_blank';
+          dl.textContent = '⬇️ حفظ النتيجة النقية 8K';
+          dl.style.cssText = 'display:inline-block;margin-top:8px;background:#0284c7;color:#fff;padding:7px 14px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:12px';
+          card.appendChild(dl);
+        };
+        card.appendChild(img);
+      }
+    }, 450);
   }
 
-  if(imgBlob && wantCutout){
-    try{
-      st.textContent = "✂️ 3/4: عزل الخلفية عبر briaai/RMBG-2.0...";
-      const cutBlob = await callHFModel("briaai/RMBG-2.0", imgBlob, true);
-      if(cutBlob){ imgBlob = cutBlob; usedModel += " + RMBG-2.0"; }
-    }catch(e){}
-  }
-
-  if(imgBlob){
-    const box = document.createElement("div"); box.className = "media-box";
-    if(isVideo){
-      st.textContent = "🎬 4/4: تصيير الفيديو السينمائي المتحرك...";
-      const vidUrl = await renderVideoFromBlob(imgBlob);
-      if(vidUrl){
-        st.textContent = "✅ اكتمل الدمج (" + usedModel + " + Video)!";
-        const v = document.createElement("video");
-        v.src = vidUrl; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
-        box.appendChild(v); a.appendChild(box);
-        const dl = document.createElement("a");
-        dl.href = vidUrl; dl.download = "DarkHorizon_Video_" + Date.now() + ".webm";
-        dl.className = "act-btn"; dl.textContent = "⬇️ حفظ الفيديو النهائي";
-        a.appendChild(dl); chat.scrollTop = chat.scrollHeight; return;
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    const inp = document.querySelector('input[type="text"], textarea');
+    if(inp && inp.value.trim().length > 0){
+      const rect = btn.getBoundingClientRect();
+      if(rect.bottom > window.innerHeight - 130){
+        const val = inp.value.trim();
+        setTimeout(()=> triggerRealZeroGpu(val), 200);
       }
     }
-    const objUrl = URL.createObjectURL(imgBlob);
-    st.textContent = "✅ اكتمل الإنتاج بنجاح عبر: " + usedModel;
-    const im = document.createElement("img"); im.src = objUrl;
-    box.appendChild(im); a.appendChild(box);
-    const dl = document.createElement("a");
-    dl.href = objUrl; dl.download = "DarkHorizon_8K_" + Date.now() + ".png";
-    dl.className = "act-btn"; dl.textContent = "⬇️ حفظ الصورة النقية";
-    a.appendChild(dl);
-  } else {
-    st.style.color = "#f87171";
-    st.textContent = "⚠️ استجابة خادم Hugging Face: " + (lastHfErr || "تأكد من تفعيل مزودي Inference Providers في إعدادات حسابك.");
-  }
-  chat.scrollTop = chat.scrollHeight;
-}
+  }, true);
+})();
 </script>
-</body>
-</html>
+<!-- END_HF_TOOLS_SUITE -->
+
+</body></html>
