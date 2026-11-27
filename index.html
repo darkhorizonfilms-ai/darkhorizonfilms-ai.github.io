@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON INFINITE v89</title>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON • AI Drama Studio</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
@@ -8,62 +8,98 @@ body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-s
 .brand{color:#38bdf8;font-weight:900;font-size:15px}
 .status-pill{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold;display:flex;align-items:center;gap:5px}
 .dot{width:8px;height:8px;background:#10b981;border-radius:50%;box-shadow:0 0 8px #10b981}
-.ctrl-row{display:flex;gap:6px}
-.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
+.ctrl-row{display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
+.mini-btn.gold{border-color:#f59e0b;color:#fbbf24;background:rgba(245,158,11,.1)}
 .modes{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}
 .modes::-webkit-scrollbar{display:none}
 .mode-btn{white-space:nowrap;background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;cursor:pointer}
 .mode-btn.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-color:#38bdf8}
-#chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}
+.presets{display:flex;overflow-x:auto;gap:6px;padding:7px 10px;background:#0a0f1d;border-bottom:1px solid #1e293b;scrollbar-width:none}
+.presets::-webkit-scrollbar{display:none}
+.pre-btn{white-space:nowrap;background:rgba(56,189,248,.1);color:#7dd3fc;border:1px solid rgba(56,189,248,.3);padding:5px 10px;border-radius:12px;font-size:11px;font-weight:bold;cursor:pointer}
+#chat{flex:1;overflow-y:auto;padding:14px 14px 100px 14px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:92%;padding:12px 15px;border-radius:16px;font-size:14px;line-height:1.6}
 .user{align-self:flex-start;background:#0284c7;color:#fff}
 .ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
 .media-card{margin-top:8px;border-radius:14px;overflow:hidden;border:1px solid #1e293b;background:#03060d;padding:8px}
 .media-card img,.media-card video{width:100%;border-radius:10px;display:block}
-.card-actions{display:flex;gap:8px;margin-top:8px}
-.btn-save,.btn-vid{flex:1;text-align:center;padding:8px;border-radius:9px;text-decoration:none;font-size:12px;font-weight:bold;cursor:pointer;border:none}
+.card-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.btn-save,.btn-vid,.btn-tool{flex:1;min-width:110px;text-align:center;padding:8px;border-radius:9px;text-decoration:none;font-size:11px;font-weight:bold;cursor:pointer;border:none}
 .btn-save{background:#0f172a;color:#38bdf8;border:1px solid #38bdf8}
 .btn-vid{background:#1e293b;color:#f8fafc;border:1px solid #475569}
+.btn-tool{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981}
 .dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
 .inp-box{flex:1;background:#0f172a;border:1px solid #334155;border-radius:24px;display:flex;align-items:center;padding:0 12px}
 input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font-size:14px;outline:none}
 .icon-btn{background:none;border:none;color:#94a3b8;font-size:17px;padding:5px;cursor:pointer}
 .send-btn{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
+#charModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:#0f172a;border:1px solid #f59e0b;border-radius:16px;padding:16px;width:100%;max-width:420px}
+.modal-box textarea{width:100%;height:95px;background:#050811;border:1px solid #334155;border-radius:10px;padding:10px;margin:10px 0;color:#fbbf24;font-size:12px;direction:ltr}
 </style></head>
 <body>
 <div class="top-bar">
-  <div class="title-row"><span class="brand">DARK HORIZON INFINITE v89</span><span class="status-pill"><span class="dot"></span>GPT + Gemini + FLUX + ICBINP 24/7</span></div>
-  <div class="ctrl-row"><button type="button" onclick="resetChat()" class="mini-btn">+ جلسة جديدة</button></div>
+  <div class="title-row"><span class="brand">DARK HORIZON INFINITE v89</span><span class="status-pill"><span class="dot"></span>AI Drama + FLUX 9:16</span></div>
+  <div class="ctrl-row">
+    <button type="button" onclick="openCharLock()" class="mini-btn gold">🎭 بصمة تثبيت الشخصية</button>
+    <button type="button" onclick="resetChat()" class="mini-btn">+ جلسة جديدة</button>
+  </div>
 </div>
 <div class="modes">
-  <button type="button" onclick="pickMode(this)" class="mode-btn active" data-mode="hybrid">🔴 عمل متكامل (ذكاء + إنتاج)</button>
+  <button type="button" onclick="pickMode(this)" class="mode-btn active" data-mode="drama">🎭 فيلم صيني/كوري (9:16 مثبت)</button>
   <button type="button" onclick="pickMode(this)" class="mode-btn" data-mode="photo">🖼️ صورة واقعية 8K</button>
   <button type="button" onclick="pickMode(this)" class="mode-btn" data-mode="video">🎬 فيديو سينمائي 8ث</button>
   <button type="button" onclick="pickMode(this)" class="mode-btn" data-mode="anime">✨ أنمي احترافي</button>
 </div>
-<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">⚡ استوديو DARK HORIZON INFINITE v89 جاهز!</strong><br>متصل تلقائياً بأقوى وأسرع خوادم الذكاء الاصطناعي في العالم. اكتب فكرتك في الأسفل فقط!</div></div>
+<div class="presets">
+  <button type="button" onclick="quickScene('يجلس في قصر فاخر يتحدث بجدية وينظر للكاميرا')" class="pre-btn">🎬 مشهد 1: حوار في القصر</button>
+  <button type="button" onclick="quickScene('يمشي ببطء في شارع ليلي ممطر بنظرة حادة')" class="pre-btn">🌧️ مشهد 2: تحت المطر</button>
+  <button type="button" onclick="quickScene('يدخل قاعة اجتماعات فخمة والجميع ينظر إليه بصدمة')" class="pre-btn">💼 مشهد 3: دخول القاعة</button>
+  <button type="button" onclick="quickScene('لقطة قريبة لوجهه وهو يبتسم بثقة وغموض')" class="pre-btn">👁️ مشهد 4: نظرة غامضة</button>
+</div>
+<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">🎭 استوديو الأفلام الصينية والكورية جاهز!</strong><br>تم تفعيل <b>قالب تثبيت الشخصية (Character DNA)</b> تلقائياً بأبعاد <b>9:16</b>. اختر مشهداً من الشريط العلوي أو اكتب أي مشهد في الأسفل وسيحافظ النظام على نفس الشخصية في كل اللقطات!</div></div>
 <div class="dock">
-  <div class="inp-box"><button type="button" onclick="addMagic()" class="icon-btn">✨</button><input id="inp" type="text" placeholder="اكتب فكرتك أو فيلماً بالكامل..." onkeydown="if(event.key==='Enter')goSend()"><button type="button" onclick="runMic()" class="icon-btn">🎤</button></div>
+  <div class="inp-box"><button type="button" onclick="addMagic()" class="icon-btn">✨</button><input id="inp" type="text" placeholder="اكتب المشهد التالي للشخصية..." onkeydown="if(event.key==='Enter')goSend()"><button type="button" onclick="runMic()" class="icon-btn">🎤</button></div>
   <button type="button" onclick="goSend()" class="send-btn">➤</button>
 </div>
-
-
+<div id="charModal"><div class="modal-box"><strong style="color:#fbbf24">🎭 بصمة تثبيت الشخصية (Character DNA Lock)</strong><p style="font-size:11px;color:#94a3b8;margin-top:4px">هذا الوصف يُدمج تلقائياً في كل مشهد لتثبيت ملامح الشخصية وملابسها:</p><textarea id="charDnaInp"></textarea><div style="display:flex;gap:8px"><button type="button" onclick="saveCharLock()" class="btn-save">حفظ البصمة</button><button type="button" onclick="closeCharLock()" class="btn-vid">إغلاق</button></div></div></div>
 <script>
-var activeMode = "hybrid";
+var activeMode = "drama";
+var DEFAULT_DNA = "70-year-old dignified East Asian billionaire patriarch, neat silver white hair, sharp wise eyes, wearing a tailored dark charcoal Mandarin collar suit with white inner shirt, holding a wooden cane with gold ring";
 var HF_KEY = "hf_OrXsyULTb" + "SARsYLyDu" + "ZHehxgnwh" + "klgVxzl";
 
+function getCharDNA() {
+  return localStorage.getItem("DH_CHAR_DNA") || DEFAULT_DNA;
+}
+function openCharLock() {
+  document.getElementById("charDnaInp").value = getCharDNA();
+  document.getElementById("charModal").style.display = "flex";
+}
+function saveCharLock() {
+  var v = document.getElementById("charDnaInp").value.trim();
+  localStorage.setItem("DH_CHAR_DNA", v || DEFAULT_DNA);
+  document.getElementById("charModal").style.display = "none";
+}
+function closeCharLock() {
+  document.getElementById("charModal").style.display = "none";
+}
+function quickScene(txt) {
+  document.getElementById("inp").value = txt;
+  goSend();
+}
 function pickMode(el) {
   var all = document.querySelectorAll(".mode-btn");
   for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
   el.classList.add("active");
-  activeMode = el.getAttribute("data-mode") || "hybrid";
+  activeMode = el.getAttribute("data-mode") || "drama";
 }
 function resetChat() {
   document.getElementById("chat").innerHTML = '<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>';
 }
 function addMagic() {
   var inp = document.getElementById("inp");
-  if (inp.value.trim()) inp.value += " ، إضاءة سينمائية 8K فائق الواقعية";
+  if (inp.value.trim()) inp.value += " ، إضاءة درامية سينمائية 8K";
 }
 function runMic() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -75,7 +111,7 @@ function runMic() {
 function makeVid(im, btn, card) {
   btn.textContent = "⏳ جاري التصيير (8ث)...";
   btn.disabled = true;
-  var cv = document.createElement("canvas"); cv.width = 720; cv.height = 720;
+  var cv = document.createElement("canvas"); cv.width = 576; cv.height = 1024;
   var ctx = cv.getContext("2d");
   var rec = new MediaRecorder(cv.captureStream(30), { mimeType: "video/webm" });
   var ch = [];
@@ -87,15 +123,15 @@ function makeVid(im, btn, card) {
     im.replaceWith(vid);
     btn.textContent = "✅ فيديو (8ث) جاهز";
     var sl = card.querySelector(".btn-save");
-    if (sl) { sl.href = vUrl; sl.download = "DarkHorizon_8s_" + Date.now() + ".webm"; sl.textContent = "⬇️ حفظ الفيديو النقي"; }
+    if (sl) { sl.href = vUrl; sl.download = "DarkHorizon_Drama_8s_" + Date.now() + ".webm"; sl.textContent = "⬇️ حفظ الفيديو"; }
   };
   rec.start();
   var f = 0;
   function step() {
-    f++; var p = f / 240, s = 1 + Math.sin(p * Math.PI) * 0.16;
-    ctx.clearRect(0, 0, 720, 720); ctx.save();
-    ctx.translate(360 - Math.sin(p * Math.PI) * 20, 360 - p * 15); ctx.scale(s, s);
-    ctx.drawImage(im, -360, -360, 720, 720); ctx.restore();
+    f++; var p = f / 240, s = 1 + Math.sin(p * Math.PI) * 0.14;
+    ctx.clearRect(0, 0, 576, 1024); ctx.save();
+    ctx.translate(288 - Math.sin(p * Math.PI) * 16, 512 - p * 12); ctx.scale(s, s);
+    ctx.drawImage(im, -288, -512, 576, 1024); ctx.restore();
     if (f < 240) requestAnimationFrame(step); else rec.stop();
   }
   step();
@@ -106,17 +142,20 @@ function showMedia(url, isBlob, rawTxt, a, chat) {
     a.innerHTML = "";
     var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
     var acts = document.createElement("div"); acts.className = "card-actions";
-    var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = url; dl.download = "DarkHorizon_8K_" + Date.now() + ".png";
+    var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = url; dl.download = "DarkHorizon_Scene_" + Date.now() + ".png";
     if (!isBlob) dl.target = "_blank";
-    dl.textContent = "⬇️ حفظ نقي 8K";
-    var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحويل لفيديو (8ث)";
+    dl.textContent = "⬇️ حفظ المشهد";
+    var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحريك محلي (8ث)";
     vb.onclick = function() { makeVid(im, vb, card); };
-    acts.appendChild(dl); acts.appendChild(vb); card.appendChild(acts); a.appendChild(card);
+    var wan = document.createElement("a"); wan.className = "btn-tool"; wan.href = "https://huggingface.co"; wan.target = "_blank"; wan.textContent = "🎥 تحريك Wan 2.2";
+    var lip = document.createElement("a"); lip.className = "btn-tool"; lip.href = "https://huggingface.co"; lip.target = "_blank"; lip.textContent = "🗣️ نطق LivePortrait";
+    acts.appendChild(dl); acts.appendChild(vb); acts.appendChild(wan); acts.appendChild(lip);
+    card.appendChild(acts); a.appendChild(card);
     chat.scrollTop = chat.scrollHeight;
     if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
   };
   im.onerror = function() {
-    a.innerHTML = '<span style="color:#fbbf24">⚠️ تعذر عرض الصورة، أعد الإرسال.</span>';
+    a.innerHTML = '<span style="color:#fbbf24">⚠️ تعذر تحميل المشهد، أعد الإرسال.</span>';
   };
   im.src = url;
 }
@@ -127,44 +166,55 @@ function goSend() {
   var chat = document.getElementById("chat");
   var u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
   var a = document.createElement("div"); a.className = "msg ai";
-  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد الفوري عبر FLUX.1-schnell...</span>';
+  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">🎭 جاري دمج بصمة الشخصية وتوليد المشهد 9:16...</span>';
   chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
-  var clean = txt.replace("صور ", "").replace("صورة ", "").replace("صوره ", "").replace("فيديو ", "").trim();
-  if (!clean || clean === "صور" || clean === "صورة" || clean === "photo") {
-    runHF("Close up portrait of a rugged warrior in neon rain, ultra realistic 8k photography, dramatic cinema lighting", txt, a, chat);
+  var clean = txt.replace("صور ", "").replace("صورة ", "").replace("فيديو ", "").trim();
+  if (!clean || clean === "صور" || clean === "صورة") {
+    buildAndRun("sitting in a luxury mansion hall speaking seriously, cinematic close up", txt, a, chat);
     return;
   }
   if (!/[؀-ۿ]/.test(txt)) {
-    runHF(txt, txt, a, chat);
+    buildAndRun(txt, txt, a, chat);
     return;
   }
   fetch("https://translated.net" + encodeURIComponent(clean) + "&langpair=ar|en")
     .then(function(r) { return r.json(); })
     .then(function(j) {
       var en = (j && j.responseData && j.responseData.translatedText) ? j.responseData.translatedText : clean;
-      runHF(en, txt, a, chat);
+      buildAndRun(en, txt, a, chat);
     })
-    .catch(function() { runHF(clean, txt, a, chat); });
+    .catch(function() { buildAndRun(clean, txt, a, chat); });
 }
-function runHF(eng, rawTxt, a, chat) {
-  var suf = activeMode === "anime" ? ", masterpiece anime style, 8k" : ", ultra realistic 8k photography, ICBINP realism, dramatic cinema lighting, no watermark";
-  var full = eng + suf;
+function buildAndRun(sceneEn, rawTxt, a, chat) {
+  var fullPrompt = "";
+  var w = 576, h = 1024;
+  if (activeMode === "drama") {
+    fullPrompt = "Chinese billionaire short drama movie still, " + getCharDNA() + ", " + sceneEn + ", dramatic warm rim lighting, shallow depth of field, 35mm cinema lens, photorealistic 8k, vertical 9:16";
+  } else if (activeMode === "anime") {
+    fullPrompt = sceneEn + ", masterpiece anime style, makoto shinkai lighting, 8k";
+    w = 768; h = 768;
+  } else {
+    fullPrompt = sceneEn + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, no watermark";
+    w = 768; h = 768;
+  }
 
   fetch("https://huggingface.co", {
     method: "POST",
     headers: { "Authorization": "Bearer " + HF_KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({ inputs: full })
+    body: JSON.stringify({ inputs: fullPrompt, parameters: { width: w, height: h } })
   })
   .then(function(resp) {
-    if (!resp.ok) return resp.text().then(function(t) { throw new Error("HF " + resp.status + ": " + t.slice(0, 60)); });
+    if (!resp.ok) throw new Error("HF_" + resp.status);
     return resp.blob();
   })
   .then(function(blob) {
     showMedia(URL.createObjectURL(blob), true, rawTxt, a, chat);
   })
-  .catch(function(err) {
-    a.innerHTML = '<span style="color:#fbbf24">⚠️ استجابة الخادم: ' + err.message + '</span>';
+  .catch(function() {
+    var seed = Math.floor(Math.random() * 999999);
+    var fb = "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=" + w + "&height=" + h + "&model=flux&nologo=true&seed=" + seed;
+    showMedia(fb, false, rawTxt, a, chat);
   });
 }
 </script></body></html>
