@@ -49,7 +49,7 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 
 <script>
 const tokInput = document.getElementById('hfTok');
-tokInput.value = localStorage.getItem('DH_HF_TOKEN') || '';
+tokInput.value = '';
 function saveTok(){
   localStorage.setItem('DH_HF_TOKEN', tokInput.value.trim());
   alert('✅ تم حفظ مفتاح Hugging Face ZeroGPU بنجاح!');
@@ -74,7 +74,7 @@ window.runAgentPipeline = async function(){
   if(!txt) return;
   inp.value = '';
 
-  const hfToken = (localStorage.getItem('DH_HF_TOKEN') || '').trim();
+  const hfToken = ('').trim();
   const opts = hfToken ? { hf_token: hfToken } : {};
 
   const chat = document.getElementById('chat');
