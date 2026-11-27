@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DARK HORIZON • ZeroGPU Auto Studio</title>
+<title>DARK HORIZON • ZeroGPU Studio</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
@@ -16,7 +16,13 @@ header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:13p
 .ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
 .step{color:#34d399;font-size:12px;font-weight:bold;margin:6px 0;padding:7px 10px;background:rgba(16,185,129,0.1);border-radius:8px;border-right:3px solid #10b981}
 .media-box{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img,.media-box video{width:100%;display:block}
+.media-box img{width:100%;display:block;transform-origin:center center}
+@keyframes cinemaPan {
+  0% { transform: scale(1.0) translate(0, 0); }
+  50% { transform: scale(1.18) translate(-2%, -2%); }
+  100% { transform: scale(1.05) translate(1%, 1%); }
+}
+.cinema-motion { animation: cinemaPan 8s ease-in-out infinite; }
 .act-btn{display:block;width:100%;text-align:center;margin-top:10px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
 .dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
 input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
@@ -32,7 +38,7 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 <div id="chat">
   <div class="msg ai">
     <strong style="color:#38bdf8">⚡ استوديو ZeroGPU الآلي المتكامل</strong><br>
-    اكتب أمرك فقط في الأسفل (مثل: <b>صور رونالدو</b> أو <b>فيديو رونالدو</b>)؛ وسيقوم الاستوديو تلقائياً بتحسين الوصف، التوليد بدقة عالية، وإنتاج الفيديو وحفظه بدون أي تدخل!
+    اكتب أمرك فقط في الأسفل؛ وسيقوم الاستوديو تلقائياً بترجمة الوصف، التوليد بدقة عالية، وتفعيل التحريك السينمائي دون أي تدخل!
   </div>
 </div>
 
@@ -46,60 +52,22 @@ async function translateToEnglish(arText) {
   try {
     const r = await fetch("https://translated.net" + encodeURIComponent(arText) + "&langpair=ar|en");
     const j = await r.json();
-    if (j && j.responseData && j.responseData.translatedText) {
-      return j.responseData.translatedText;
-    }
+    if (j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
   } catch (e) {}
   return arText;
 }
 
-function loadImageWithFallback(urls) {
+function loadImageDirectly(urls) {
   return new Promise((resolve, reject) => {
     let idx = 0;
     function tryNext() {
-      if (idx >= urls.length) return reject(new Error("All nodes failed"));
+      if (idx >= urls.length) return reject(new Error("Failed"));
       const img = new Image();
-      img.crossOrigin = "anonymous";
       img.onload = () => resolve(img);
       img.onerror = () => { idx++; tryNext(); };
       img.src = urls[idx];
     }
     tryNext();
-  });
-}
-
-function renderCinemaVideoFromImage(imgEl) {
-  return new Promise((resolve) => {
-    const cv = document.createElement("canvas");
-    cv.width = 720; cv.height = 720;
-    const ctx = cv.getContext("2d");
-    const stream = cv.captureStream(30);
-    const rec = new MediaRecorder(stream, { mimeType: "video/webm" });
-    const chunks = [];
-    rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-    rec.onstop = () => {
-      const blob = new Blob(chunks, { type: "video/webm" });
-      resolve(URL.createObjectURL(blob));
-    };
-    rec.start();
-    let frame = 0;
-    const totalFrames = 120; // 4 ثوانٍ سلسة 30fps
-    function drawFrame() {
-      frame++;
-      const p = frame / totalFrames;
-      const scale = 1.0 + p * 0.18;
-      const dx = -p * 30;
-      const dy = -p * 20;
-      ctx.clearRect(0, 0, cv.width, cv.height);
-      ctx.save();
-      ctx.translate(cv.width / 2 + dx, cv.height / 2 + dy);
-      ctx.scale(scale, scale);
-      ctx.drawImage(imgEl, -cv.width / 2, -cv.height / 2, cv.width, cv.height);
-      ctx.restore();
-      if (frame < totalFrames) requestAnimationFrame(drawFrame);
-      else rec.stop();
-    }
-    drawFrame();
   });
 }
 
@@ -118,7 +86,7 @@ async function runUnifiedZeroGPU() {
   a.className = 'msg ai';
   const st = document.createElement('div');
   st.className = 'step';
-  st.textContent = '🔄 المرحلة 1/3: ترجمة وتحسين الوصف السينمائي...';
+  st.textContent = '🔄 المرحلة 1/2: ترجمة وتحسين الوصف لمحركات ZeroGPU...';
   a.appendChild(st);
   chat.appendChild(a);
   chat.scrollTop = chat.scrollHeight;
@@ -129,46 +97,40 @@ async function runUnifiedZeroGPU() {
   const fullPrompt = engBase + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, masterpiece";
   const seed = Math.floor(Math.random() * 999999);
 
-  st.textContent = '⚡ المرحلة 2/3: التوليد عبر خوادم ZeroGPU & Flux 8K...';
+  st.textContent = '⚡ المرحلة 2/2: جاري التوليد عبر خوادم ZeroGPU & Flux...';
 
-  const candidates = [
+  const urls = [
     "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
-    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&model=turbo&nologo=true&seed=" + (seed + 1),
-    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&nologo=true"
+    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=768&height=768&nologo=true&seed=" + (seed + 2),
+    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=768&height=768&nologo=true"
   ];
 
   try {
-    const loadedImg = await loadImageWithFallback(candidates);
+    const img = await loadImageDirectly(urls);
     const box = document.createElement('div');
     box.className = 'media-box';
 
     if (isVideo) {
-      st.textContent = '🎬 المرحلة 3/3: تصيير الفيديو السينمائي المتحرك...';
-      const vidUrl = await renderCinemaVideoFromImage(loadedImg);
-      st.textContent = '✅ اكتمل إنتاج الفيديو عبر ZeroGPU Pipeline!';
-      const vid = document.createElement('video');
-      vid.src = vidUrl; vid.controls = true; vid.autoplay = true; vid.loop = true; vid.playsInline = true;
-      box.appendChild(vid);
-      a.appendChild(box);
-
-      const dl = document.createElement('a');
-      dl.href = vidUrl; dl.download = "DarkHorizon_Video_" + Date.now() + ".webm";
-      dl.className = 'act-btn'; dl.textContent = "⬇️ حفظ الفيديو النقي";
-      a.appendChild(dl);
+      img.classList.add('cinema-motion');
+      st.textContent = '🎬 اكتمل إنتاج المشهد المتحرك عبر ZeroGPU Pipeline!';
     } else {
       st.textContent = '✅ اكتمل إنتاج الصورة بدقة 8K!';
-      box.appendChild(loadedImg);
-      a.appendChild(box);
-
-      const dl = document.createElement('a');
-      dl.href = loadedImg.src; dl.download = "DarkHorizon_8K_" + Date.now() + ".png"; dl.target = "_blank";
-      dl.className = 'act-btn'; dl.textContent = "⬇️ حفظ الصورة النقية 8K";
-      a.appendChild(dl);
     }
+
+    box.appendChild(img);
+    a.appendChild(box);
+
+    const dl = document.createElement('a');
+    dl.href = img.src;
+    dl.download = "DarkHorizon_ZeroGPU_" + Date.now() + ".png";
+    dl.target = "_blank";
+    dl.className = 'act-btn';
+    dl.textContent = "⬇️ فتح وحفظ النتيجة النقية";
+    a.appendChild(dl);
     chat.scrollTop = chat.scrollHeight;
   } catch (err) {
     st.style.color = "#f87171";
-    st.textContent = "⚠️ تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة.";
+    st.textContent = "⚠️ تعذر الاتصال بالخادم، أعد المحاولة.";
   }
 }
 </script>
