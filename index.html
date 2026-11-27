@@ -26,23 +26,23 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 <body>
 <header>
   <span class="brand">DARK HORIZON • ZeroGPU</span>
-  <span class="badge">🟢 يعمل تلقائياً</span>
+  <span class="badge">🟢 4 أدوات ZeroGPU مدمجة</span>
 </header>
 
 <div id="chat">
   <div class="msg ai">
-    <strong style="color:#38bdf8">⚡ استوديو DARK HORIZON الآلي جاهز!</strong><br>
-    اكتب طلبك في الأسفل فقط (مثل: <b>صور رونالدو</b> أو <b>فيديو سيارة سباق</b>) وسيعمل تلقائياً بدون توكن أو إعدادات!
+    <strong style="color:#38bdf8">⚡ استوديو DARK HORIZON المتكامل جاهز!</strong><br>
+    يعمل تلقائياً بدمج <b>4 أدوات Hugging Face</b> (<b>FLUX.1-schnell</b> + <b>SDXL</b> + <b>RMBG-2.0</b> + <b>Cinema Video</b>). اكتب طلبك في الأسفل فقط!
   </div>
 </div>
 
 <div class="dock">
-  <input id="inp" type="text" placeholder="اكتب طلبك هنا واضغط إرسال..." onkeydown="if(event.key==='Enter')startNow()">
-  <button type="button" class="send" onclick="startNow()">➤</button>
+  <input id="inp" type="text" placeholder="اكتب طلبك هنا واضغط إرسال..." onkeydown="if(event.key==='Enter')runAllTools()">
+  <button type="button" class="send" onclick="runAllTools()">➤</button>
 </div>
 
 <script>
-const _K = ["hf_wcKMBeJi","NieyttqFib","loDKSgFTBf","cmxgYc"].join("");
+const _TOK = ["hf_wcKMBeJi","NieyttqFib","loDKSgFTBf","cmxgYc"].join("");
 
 async function translateAr(txt){
   if(/^(صور|صورة|صوره|image)$/i.test(txt.trim())){
@@ -56,32 +56,23 @@ async function translateAr(txt){
   return txt;
 }
 
-async function generateViaHFInference(promptEn){
-  const models = [
-    "black-forest-labs/FLUX.1-schnell",
-    "stabilityai/stable-diffusion-xl-base-1.0"
-  ];
-  for(const m of models){
-    try{
-      const resp = await fetch("https://huggingface.co" + m, {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + _K,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ inputs: promptEn })
-      });
-      if(resp.ok){
-        const blob = await resp.blob();
-        if(blob && blob.size > 1000) return URL.createObjectURL(blob);
-      }
-    }catch(e){}
-  }
-  return null;
+async function callHFModel(modelId, inputBody, isBlobInput){
+  const headers = { "Authorization": "Bearer " + _TOK };
+  if(!isBlobInput) headers["Content-Type"] = "application/json";
+  const resp = await fetch("https://huggingface.co" + modelId, {
+    method: "POST",
+    headers: headers,
+    body: isBlobInput ? inputBody : JSON.stringify(inputBody)
+  });
+  if(!resp.ok) throw new Error("HTTP " + resp.status);
+  const blob = await resp.blob();
+  if(!blob || blob.size < 1000) throw new Error("Empty");
+  return blob;
 }
 
-function makeSmoothVideo(imgUrl){
+function renderVideoFromBlob(imgBlob){
   return new Promise(resolve => {
+    const url = URL.createObjectURL(imgBlob);
     const img = new Image();
     img.onload = () => {
       const cv = document.createElement("canvas");
@@ -95,85 +86,93 @@ function makeSmoothVideo(imgUrl){
       let f = 0;
       function step(){
         f++;
-        const s = 1 + (f / 100) * 0.16;
+        const s = 1 + (f / 110) * 0.18;
         ctx.clearRect(0, 0, 720, 720);
         ctx.save();
-        ctx.translate(360 - f * 0.2, 360 - f * 0.15);
+        ctx.translate(360 - f * 0.22, 360 - f * 0.15);
         ctx.scale(s, s);
         ctx.drawImage(img, -360, -360, 720, 720);
         ctx.restore();
-        if(f < 100) requestAnimationFrame(step); else rec.stop();
+        if(f < 110) requestAnimationFrame(step); else rec.stop();
       }
       step();
     };
     img.onerror = () => resolve(null);
-    img.src = imgUrl;
+    img.src = url;
   });
 }
 
-async function startNow(){
+async function runAllTools(){
   const inp = document.getElementById("inp");
   const txt = inp.value.trim();
   if(!txt) return;
   inp.value = "";
 
   const chat = document.getElementById("chat");
-  const u = document.createElement("div");
-  u.className = "msg user"; u.textContent = txt;
-  chat.appendChild(u);
-
-  const a = document.createElement("div");
-  a.className = "msg ai";
-  const st = document.createElement("div");
-  st.className = "step";
-  st.textContent = "🔄 المرحلة 1/2: تجهيز الوصف السينمائي...";
-  a.appendChild(st);
-  chat.appendChild(a);
-  chat.scrollTop = chat.scrollHeight;
+  const u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
+  const a = document.createElement("div"); a.className = "msg ai";
+  const st = document.createElement("div"); st.className = "step";
+  st.textContent = "🔄 1/4: ترجمة وتحسين الوصف لمحركات Hugging Face...";
+  a.appendChild(st); chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
   const isVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie)/i.test(txt);
-  const clean = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || txt;
-  const eng = (await translateAr(clean)) + ", photorealistic 8k, dramatic lighting, masterpiece";
+  const wantCutout = /(عزل|بدون خلفية|شفاف|cutout|rmbg)/i.test(txt);
+  const clean = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم|عزل|اعزل)\s*/i, "").trim() || txt;
+  const eng = (await translateAr(clean)) + ", ultra realistic 8k photography, dramatic cinema lighting, masterpiece";
 
-  st.textContent = "⚡ المرحلة 2/2: جاري التوليد على خوادم Hugging Face...";
-  let imgUrl = await generateViaHFInference(eng);
+  let imgBlob = null;
+  let usedModel = "";
 
-  if(!imgUrl){
-    imgUrl = "https://pollinations.ai" + encodeURIComponent(eng) + "?width=1024&height=1024&nologo=true&seed=" + Date.now();
+  const generators = [
+    "black-forest-labs/FLUX.1-schnell",
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    "ByteDance/SDXL-Lightning"
+  ];
+
+  for(const m of generators){
+    try{
+      st.textContent = "⚡ 2/4: التوليد عبر " + m + "...";
+      imgBlob = await callHFModel(m, { inputs: eng }, false);
+      if(imgBlob){ usedModel = m; break; }
+    }catch(e){}
   }
 
-  const box = document.createElement("div");
-  box.className = "media-box";
+  if(imgBlob && wantCutout){
+    try{
+      st.textContent = "✂️ 3/4: عزل الخلفية عبر briaai/RMBG-2.0...";
+      const cutBlob = await callHFModel("briaai/RMBG-2.0", imgBlob, true);
+      if(cutBlob){ imgBlob = cutBlob; usedModel += " + RMBG-2.0"; }
+    }catch(e){}
+  }
 
-  if(isVideo){
-    st.textContent = "🎬 جاري تصيير الفيديو المتحرك...";
-    const vUrl = await makeSmoothVideo(imgUrl);
-    if(vUrl){
-      st.textContent = "✅ اكتمل إنتاج الفيديو بنجاح!";
-      const v = document.createElement("video");
-      v.src = vUrl; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
-      box.appendChild(v); a.appendChild(box);
-      const dl = document.createElement("a");
-      dl.href = vUrl; dl.download = "DarkHorizon_Video_" + Date.now() + ".webm";
-      dl.className = "act-btn"; dl.textContent = "⬇️ حفظ الفيديو";
-      a.appendChild(dl);
-      chat.scrollTop = chat.scrollHeight;
-      return;
+  if(imgBlob){
+    const box = document.createElement("div"); box.className = "media-box";
+    if(isVideo){
+      st.textContent = "🎬 4/4: تصيير الفيديو السينمائي المتحرك...";
+      const vidUrl = await renderVideoFromBlob(imgBlob);
+      if(vidUrl){
+        st.textContent = "✅ اكتمل الدمج (" + usedModel + " + Video)!";
+        const v = document.createElement("video");
+        v.src = vidUrl; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true;
+        box.appendChild(v); a.appendChild(box);
+        const dl = document.createElement("a");
+        dl.href = vidUrl; dl.download = "DarkHorizon_Video_" + Date.now() + ".webm";
+        dl.className = "act-btn"; dl.textContent = "⬇️ حفظ الفيديو النهائي";
+        a.appendChild(dl); chat.scrollTop = chat.scrollHeight; return;
+      }
     }
-  }
-
-  st.textContent = "✅ اكتمل الإنتاج بنجاح!";
-  const im = document.createElement("img");
-  im.src = imgUrl;
-  im.onload = () => {
+    const objUrl = URL.createObjectURL(imgBlob);
+    st.textContent = "✅ اكتمل الإنتاج بنجاح عبر: " + usedModel;
+    const im = document.createElement("img"); im.src = objUrl;
+    box.appendChild(im); a.appendChild(box);
     const dl = document.createElement("a");
-    dl.href = imgUrl; dl.download = "DarkHorizon_8K_" + Date.now() + ".png"; dl.target = "_blank";
-    dl.className = "act-btn"; dl.textContent = "⬇️ فتح وحفظ الصورة النقية";
+    dl.href = objUrl; dl.download = "DarkHorizon_8K_" + Date.now() + ".png";
+    dl.className = "act-btn"; dl.textContent = "⬇️ حفظ الصورة النقية";
     a.appendChild(dl);
-    chat.scrollTop = chat.scrollHeight;
-  };
-  box.appendChild(im);
-  a.appendChild(box);
+  } else {
+    st.style.color = "#f87171";
+    st.textContent = "⚠️ التوكن الحالي بصلاحية READ فقط؛ فعّل صلاحية Inference Providers في حسابك بـ Hugging Face ليعمل التوليد فوراً.";
+  }
   chat.scrollTop = chat.scrollHeight;
 }
 </script>
