@@ -1,208 +1,169 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DARK HORIZON INFINITE v90</title>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON INFINITE v89</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-  body { background: radial-gradient(circle at top, #0f172a 0%, #030712 80%); color: #f8fafc; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-  .header { background: rgba(9, 13, 26, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 20; }
-  .brand { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 16px; }
-  .pill { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-  .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
-  .modes { display: flex; gap: 8px; padding: 10px 14px; overflow-x: auto; background: rgba(6, 10, 20, 0.7); border-bottom: 1px solid rgba(30, 41, 59, 0.8); scrollbar-width: none; }
-  .modes::-webkit-scrollbar { display: none; }
-  .m-btn { white-space: nowrap; background: rgba(15, 23, 42, 0.9); color: #94a3b8; border: 1px solid #1e293b; padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .m-btn.active { background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border-color: #38bdf8; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); }
-  #chat { flex: 1; overflow-y: auto; padding: 16px 14px 100px 14px; display: flex; flex-direction: column; gap: 14px; }
-  .msg { max-width: 92%; padding: 14px 16px; border-radius: 18px; font-size: 14px; line-height: 1.6; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-  .user { align-self: flex-start; background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border-bottom-right-radius: 4px; }
-  .ai { align-self: flex-end; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); width: 100%; }
-  .media-box { margin-top: 10px; border-radius: 14px; overflow: hidden; border: 1px solid #334155; background: #02040a; padding: 8px; }
-  .media-box img, .media-box video { width: 100%; border-radius: 10px; display: block; }
-  .actions { display: flex; gap: 8px; margin-top: 10px; }
-  .act-save, .act-vid { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; }
-  .act-save { background: linear-gradient(135deg, #0284c7, #0ea5e9); color: #fff; }
-  .act-vid { background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; }
-  .dock { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(9, 13, 26, 0.95); backdrop-filter: blur(16px); border-top: 1px solid rgba(56, 189, 248, 0.25); padding: 10px 12px 16px 12px; display: flex; gap: 8px; align-items: center; z-index: 50; }
-  .inp-wrap { flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 24px; display: flex; align-items: center; padding: 0 14px; }
-  .inp-wrap:focus-within { border-color: #38bdf8; box-shadow: 0 0 12px rgba(56, 189, 248, 0.25); }
-  #promptInp { flex: 1; background: transparent; border: none; color: #fff; padding: 12px 4px; font-size: 14px; outline: none; }
-  #sendBtn { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; border: none; width: 46px; height: 46px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.5); }
-</style>
-</head>
-<body>
-<div class="header">
-  <span class="brand">DARK HORIZON • v90</span>
-  <span class="pill"><span class="dot"></span>ZeroGPU + FLUX 8K</span>
-</div>
-
-<div class="modes">
-  <button type="button" class="m-btn active" data-mode="hybrid">⚡ عمل متكامل</button>
-  <button type="button" class="m-btn" data-mode="photo">🖼️ صورة واقعية 8K</button>
-  <button type="button" class="m-btn" data-mode="video">🎬 فيديو سينمائي 8ث</button>
-  <button type="button" class="m-btn" data-mode="anime">✨ أنمي احترافي</button>
-</div>
-
-<div id="chat">
-  <div class="msg ai">
-    <strong style="color:#38bdf8;font-size:15px">⚡ استوديو DARK HORIZON العصري جاهز!</strong><br>
-    اكتب طلبك في الأسفل واضغط إرسال <b>➤</b> وسيعمل النظام تلقائياً لإنتاج الصور والفيديوهات النقية 8K.
-  </div>
-</div>
-
-<div class="dock">
-  <div class="inp-wrap">
-    <input id="promptInp" type="text" placeholder="اكتب فكرتك هنا (صور ميسي، سيارة في المطر...)">
-  </div>
-  <button type="button" id="sendBtn">➤</button>
-</div>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{background:#090d1a;border-bottom:1px solid #1e293b;padding:10px 12px;display:flex;flex-direction:column;gap:8px;z-index:20}.title-row{display:flex;justify-content:space-between;align-items:center}
+.brand{color:#38bdf8;font-weight:900;font-size:15px}.status-pill{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold;display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;background:#10b981;border-radius:50%}.ctrl-row{display:flex;gap:6px}.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
+.modes{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}.modes::-webkit-scrollbar{display:none}
+.mode-btn{white-space:nowrap;background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;cursor:pointer}.mode-btn.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-color:#38bdf8}
+#chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}.msg{max-width:92%;padding:12px 15px;border-radius:16px;font-size:14px;line-height:1.6}
+.user{align-self:flex-start;background:#0284c7;color:#fff}.ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
+.media-card{margin-top:8px;border-radius:14px;overflow:hidden;border:1px solid #1e293b;background:#03060d;padding:8px}.media-card img,.media-card video{width:100%;border-radius:10px;display:block}
+.card-actions{display:flex;gap:8px;margin-top:8px}.btn-save,.btn-vid{flex:1;text-align:center;padding:8px;border-radius:9px;text-decoration:none;font-size:12px;font-weight:bold;cursor:pointer}
+.btn-save{background:#0f172a;color:#38bdf8;border:1px solid #38bdf8}.btn-vid{background:#1e293b;color:#f8fafc;border:1px solid #475569}
+.dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
+.inp-box{flex:1;background:#0f172a;border:1px solid #334155;border-radius:24px;display:flex;align-items:center;padding:0 12px}input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font-size:14px;outline:none}
+.icon-btn{background:none;border:none;color:#94a3b8;font-size:17px;padding:5px;cursor:pointer}.send-btn{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
+#settingsModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-box{background:#0f172a;border:1px solid #38bdf8;border-radius:16px;padding:16px;width:100%;max-width:400px}
+.modal-box input{width:100%;background:#050811;border:1px solid #334155;border-radius:10px;padding:10px;margin:10px 0;color:#34d399}</style></head>
+<body><div class="top-bar"><div class="title-row"><span class="brand">DARK HORIZON INFINITE v89</span><span class="status-pill"><span class="dot"></span>GPT + Gemini + FLUX + ICBINP 24/7</span></div>
+<div class="ctrl-row"><button type="button" id="btnSet" class="mini-btn">⚙️ الإعدادات</button><button type="button" id="btnNew" class="mini-btn">+ جديد</button></div></div>
+<div class="modes" id="modeBar"><button type="button" class="mode-btn active" data-mode="hybrid">🔴 عمل متكامل (ذكاء + إنتاج)</button><button type="button" class="mode-btn" data-mode="photo">🖼️ صورة واقعية 8K</button><button type="button" class="mode-btn" data-mode="video">🎬 فيديو سينمائي 8ث</button><button type="button" class="mode-btn" data-mode="anime">✨ أنمي احترافي</button></div>
+<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">⚡ استوديو DARK HORIZON INFINITE v89 جاهز!</strong><br>اكتب فكرتك في الأسفل وسيتم التوليد النقي 8K بدون علامات مائية.</div></div>
+<div class="dock"><div class="inp-box"><button type="button" id="btnEnh" class="icon-btn">✨</button><input id="inp" type="text" placeholder="اكتب فكرتك أو فيلماً بالكامل..."><button type="button" id="btnMic" class="icon-btn">🎤</button></div><button type="button" id="btnSend" class="send-btn">➤</button></div>
+<div id="settingsModal"><div class="modal-box"><strong style="color:#38bdf8">⚙️ إعدادات الخادم</strong><input id="workerInp" type="text" value="https://workers.dev"><div style="display:flex;gap:8px"><button type="button" id="btnSaveSet" class="btn-save">حفظ</button><button type="button" id="btnCloseSet" class="btn-vid">إغلاق</button></div></div></div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  let activeMode = "hybrid";
-  const WORKER = "https://workers.dev";
-  const inp = document.getElementById("promptInp");
-  const sendBtn = document.getElementById("sendBtn");
+  let currentMode = "hybrid";
+  const DEFAULT_WORKER = "https://workers.dev";
+  const inp = document.getElementById("inp");
   const chat = document.getElementById("chat");
 
-  document.querySelectorAll(".m-btn").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      document.querySelectorAll(".m-btn").forEach(function(b) { b.classList.remove("active"); });
-      btn.classList.add("active");
-      activeMode = btn.getAttribute("data-mode");
+  document.querySelectorAll(".mode-btn").forEach(function(b) {
+    b.addEventListener("click", function() {
+      document.querySelectorAll(".mode-btn").forEach(function(x) { x.classList.remove("active"); });
+      b.classList.add("active");
+      currentMode = b.getAttribute("data-mode");
     });
   });
 
-  async function translateText(ar) {
+  document.getElementById("btnNew").addEventListener("click", function() {
+    chat.innerHTML = '<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>';
+  });
+
+  document.getElementById("btnSet").addEventListener("click", function() {
+    document.getElementById("workerInp").value = localStorage.getItem("DH_WORKER") || DEFAULT_WORKER;
+    document.getElementById("settingsModal").style.display = "flex";
+  });
+
+  document.getElementById("btnSaveSet").addEventListener("click", function() {
+    localStorage.setItem("DH_WORKER", document.getElementById("workerInp").value.trim() || DEFAULT_WORKER);
+    document.getElementById("settingsModal").style.display = "none";
+  });
+
+  document.getElementById("btnCloseSet").addEventListener("click", function() {
+    document.getElementById("settingsModal").style.display = "none";
+  });
+
+  document.getElementById("btnEnh").addEventListener("click", function() {
+    if (inp.value.trim()) inp.value += "، إضاءة سينمائية 8K فائق الواقعية";
+  });
+
+  document.getElementById("btnMic").addEventListener("click", function() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return;
+    const r = new SR(); r.lang = "ar-SA";
+    r.onresult = function(e) { inp.value = e.results.transcript; };
+    r.start();
+  });
+
+  async function translateAr(t) {
     try {
-      const r = await fetch("https://translated.net" + encodeURIComponent(ar) + "&langpair=ar|en");
+      const r = await fetch("https://translated.net" + encodeURIComponent(t) + "&langpair=ar|en");
       const j = await r.json();
       if (j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
     } catch (e) {}
-    return ar;
+    return t;
   }
 
-  function loadBestImage(urls) {
-    return new Promise(function(resolve, reject) {
-      let idx = 0;
-      function tryUrl() {
-        if (idx >= urls.length) return reject(new Error("fail"));
-        const img = new Image();
-        img.onload = function() { resolve(img); };
-        img.onerror = function() { idx++; tryUrl(); };
-        img.src = urls[idx];
+  function loadImgCascade(u) {
+    return new Promise(function(res, rej) {
+      let i = 0;
+      function next() {
+        if (i >= u.length) return rej();
+        const m = new Image();
+        m.onload = function() { res(m); };
+        m.onerror = function() { i++; next(); };
+        m.src = u[i];
       }
-      tryUrl();
+      next();
     });
   }
 
-  function makeVideo8s(imgEl, btnEl, boxEl) {
-    btnEl.textContent = "⏳ جاري التصيير (8ث)...";
-    btnEl.disabled = true;
+  function convertTo8sVideo(im, btn, card) {
+    btn.textContent = "⏳ جاري التصيير (8ث)...";
+    btn.disabled = true;
     const cv = document.createElement("canvas");
     cv.width = 720; cv.height = 720;
     const ctx = cv.getContext("2d");
     const rec = new MediaRecorder(cv.captureStream(30), { mimeType: "video/webm" });
-    const chunks = [];
-    rec.ondataavailable = function(e) { if (e.data.size > 0) chunks.push(e.data); };
+    const ch = [];
+    rec.ondataavailable = function(e) { if (e.data.size) ch.push(e.data); };
     rec.onstop = function() {
-      const vUrl = URL.createObjectURL(new Blob(chunks, { type: "video/webm" }));
+      const vUrl = URL.createObjectURL(new Blob(ch, { type: "video/webm" }));
       const vid = document.createElement("video");
       vid.src = vUrl; vid.controls = true; vid.autoplay = true; vid.loop = true; vid.playsInline = true;
-      imgEl.replaceWith(vid);
-      btnEl.textContent = "✅ فيديو (8ث) جاهز";
-      const dl = boxEl.querySelector(".act-save");
-      if (dl) { dl.href = vUrl; dl.download = "DarkHorizon_8s_" + Date.now() + ".webm"; dl.textContent = "⬇️ حفظ الفيديو النقي"; }
+      im.replaceWith(vid);
+      btn.textContent = "✅ فيديو (8ث) جاهز";
+      const sl = card.querySelector(".btn-save");
+      if (sl) { sl.href = vUrl; sl.download = "DarkHorizon_8s_" + Date.now() + ".webm"; sl.textContent = "⬇️ حفظ الفيديو النقي"; }
     };
     rec.start();
     let f = 0;
-    function step() {
+    function frame() {
       f++;
-      const p = f / 240;
-      const s = 1 + Math.sin(p * Math.PI) * 0.16;
+      const p = f / 240, s = 1 + Math.sin(p * Math.PI) * 0.16;
       ctx.clearRect(0, 0, 720, 720);
       ctx.save();
       ctx.translate(360 - Math.sin(p * Math.PI) * 20, 360 - p * 15);
       ctx.scale(s, s);
-      ctx.drawImage(imgEl, -360, -360, 720, 720);
+      ctx.drawImage(im, -360, -360, 720, 720);
       ctx.restore();
-      if (f < 240) requestAnimationFrame(step); else rec.stop();
+      if (f < 240) requestAnimationFrame(frame); else rec.stop();
     }
-    step();
+    frame();
   }
 
-  async function handleSend() {
-    const raw = inp.value.trim();
-    if (!raw) return;
+  async function sendPrompt() {
+    const txt = inp.value.trim();
+    if (!txt) return;
     inp.value = "";
+    const u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
+    const a = document.createElement("div"); a.className = "msg ai";
+    a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد النقي 8K...</span>';
+    chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
-    const uDiv = document.createElement("div");
-    uDiv.className = "msg user";
-    uDiv.textContent = raw;
-    chat.appendChild(uDiv);
-
-    const aDiv = document.createElement("div");
-    aDiv.className = "msg ai";
-    aDiv.innerHTML = '<span style="color:#38bdf8;font-weight:bold">⚡ جاري التوليد النقي 8K عبر محركات DARK HORIZON...</span>';
-    chat.appendChild(aDiv);
-    chat.scrollTop = chat.scrollHeight;
-
-    const clean = raw.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || raw;
-    const eng = await translateText(clean);
-    const style = activeMode === "anime"
-      ? ", masterpiece anime art, makoto shinkai lighting, vibrant 8k"
-      : ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, no watermark";
-    const promptFull = eng + style;
+    const clean = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || txt;
+    const eng = await translateAr(clean);
+    const suf = currentMode === "anime" ? ", masterpiece anime style, 8k" : ", ultra realistic 8k photography, dramatic cinema lighting, no watermark";
+    const full = eng + suf;
+    let w = (localStorage.getItem("DH_WORKER") || DEFAULT_WORKER).trim();
+    if (w.endsWith("/")) w = w.slice(0, -1);
     const seed = Math.floor(Math.random() * 999999);
 
-    const candidates = [
-      WORKER + "/?prompt=" + encodeURIComponent(promptFull) + "&t=" + seed,
-      "https://pollinations.ai" + encodeURIComponent(promptFull) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
-      "https://pollinations.ai" + encodeURIComponent(promptFull) + "?width=768&height=768&nologo=true&seed=" + (seed + 9)
+    const urls = [
+      w + "/?prompt=" + encodeURIComponent(full) + "&t=" + seed,
+      "https://pollinations.ai" + encodeURIComponent(full) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed
     ];
 
     try {
-      const img = await loadBestImage(candidates);
-      aDiv.innerHTML = "";
-      const box = document.createElement("div");
-      box.className = "media-box";
-      box.appendChild(img);
-
-      const acts = document.createElement("div");
-      acts.className = "actions";
-      const dl = document.createElement("a");
-      dl.className = "act-save";
-      dl.href = img.src;
-      dl.download = "DarkHorizon_" + Date.now() + ".png";
-      dl.target = "_blank";
-      dl.textContent = "⬇️ حفظ نقي 8K";
-
-      const vBtn = document.createElement("button");
-      vBtn.type = "button";
-      vBtn.className = "act-vid";
-      vBtn.textContent = "🎬 تحويل لفيديو (8ث)";
-      vBtn.addEventListener("click", function() { makeVideo8s(img, vBtn, box); });
-
-      acts.appendChild(dl);
-      acts.appendChild(vBtn);
-      box.appendChild(acts);
-      aDiv.appendChild(box);
-
-      if (activeMode === "video" || /(فيديو|فلم|فيلم|8ث)/i.test(raw)) {
-        makeVideo8s(img, vBtn, box);
-      }
-    } catch (err) {
-      aDiv.innerHTML = '<span style="color:#fbbf24">⚠️ الخوادم مزدحمة لحظياً، أعد المحاولة بعد ثوانٍ.</span>';
+      const img = await loadImgCascade(urls);
+      a.innerHTML = "";
+      const card = document.createElement("div"); card.className = "media-card"; card.appendChild(img);
+      const acts = document.createElement("div"); acts.className = "card-actions";
+      const dl = document.createElement("a"); dl.className = "btn-save"; dl.href = img.src; dl.download = "DarkHorizon_" + Date.now() + ".png"; dl.target = "_blank"; dl.textContent = "⬇️ حفظ نقي 8K";
+      const vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحويل لفيديو (8ث)";
+      vb.addEventListener("click", function() { convertTo8sVideo(img, vb, card); });
+      acts.appendChild(dl); acts.appendChild(vb); card.appendChild(acts); a.appendChild(card);
+      if (currentMode === "video" || /(فيديو|فلم|فيلم|8ث)/i.test(txt)) convertTo8sVideo(img, vb, card);
+    } catch (e) {
+      a.innerHTML = '<span style="color:#fbbf24">⚠️ الخوادم مزدحمة لحظياً، أعد المحاولة بعد ثوانٍ.</span>';
     }
     chat.scrollTop = chat.scrollHeight;
   }
 
-  sendBtn.addEventListener("click", handleSend);
-  inp.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") handleSend();
-  });
+  document.getElementById("btnSend").addEventListener("click", sendPrompt);
+  inp.addEventListener("keydown", function(e) { if (e.key === "Enter") sendPrompt(); });
 });
-</script>
-</body>
-</html>
+</script></body></html>
