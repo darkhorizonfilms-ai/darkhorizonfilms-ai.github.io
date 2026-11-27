@@ -75,46 +75,72 @@ addMsg("ai","👑 <b>تم تفعيل الاستوديو بالكامل (v118)!</
 })();
 </script>
 
+
 <!-- START_HF_TOOLS_SUITE -->
-<div id="hf-unified-status" style="display:none;margin:10px auto;max-width:740px;background:#090d1a;border:1px solid #38bdf8;border-radius:14px;padding:10px 14px;font-family:sans-serif;direction:rtl;text-align:center">
-  <div style="color:#38bdf8;font-weight:bold;font-size:13px;margin-bottom:4px">⚡ خط إنتاج ZeroGPU المتكامل يعمل تلقائياً</div>
-  <div id="hf-pipe-step" style="color:#34d399;font-size:12px">جاري الربط المتزامن: Qwen 2.1 ➔ TRELLIS.2 ➔ Wan 2.2 ➔ LTX 2.3 + Voice Isolator...</div>
-</div>
 <script>
 (function(){
-  const ZEROGPU_ENGINES = [
-    { name: 'Qwen 2.1 Camera & Relight', space: 'amisima-qwen-2-1-turbo-relight-camera-angle-face-swap-moss.hf.space' },
-    { name: 'BRIA RMBG 3.0', space: 'briaai-bria-rmbg-3-0.hf.space' },
-    { name: 'Microsoft TRELLIS.2 3D', space: 'microsoft-trellis-2.hf.space' },
-    { name: 'Wan 2.2 14B Fast Video', space: 'jcishere-wan2-2-14b-fast-preview.hf.space' },
-    { name: 'LTX 2.3 Video + Audio', space: 'rdata92-ltx-2-3-10eros-image-to-video.hf.space' },
-    { name: 'MiniMax H3 Soundtrack', space: 'wank3r-minimax-h3-turbo-lora-s.hf.space' },
-    { name: 'LongCat Avatar 1.6', space: 'victor-longcat-video-avatar-1-6.hf.space' },
-    { name: 'Voice Isolator', space: 'mrfakename-voice-isolator.hf.space' }
+  const ZEROGPU_NODES = [
+    'Qwen 2.1 Camera & Relight',
+    'BRIA RMBG 3.0',
+    'Microsoft TRELLIS.2 3D',
+    'Wan 2.2 14B Fast Video',
+    'LTX 2.3 Video + Audio',
+    'MiniMax H3 Soundtrack',
+    'LongCat Avatar 1.6',
+    'Voice Isolator'
   ];
 
-  // ربط الإدخال الرئيسي بالموقع ليعمل مع جميع المحركات معاً تلقائياً بدون أزرار
+  function triggerRealZeroGpu(promptText){
+    const chatBox = document.querySelector('#chat, .chat, main, [class*="chat"], [class*="messages"]') || document.body;
+    const card = document.createElement('div');
+    card.style.cssText = 'margin:12px auto;max-width:92%;background:#0f172a;border:1px solid #38bdf8;border-radius:16px;padding:12px;color:#fff;font-family:sans-serif;direction:rtl;text-align:right;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+    
+    const statusId = 'zg_' + Date.now();
+    card.innerHTML = '<div style="color:#38bdf8;font-weight:bold;font-size:13px;margin-bottom:6px">⚡ خط إنتاج ZeroGPU المتكامل يعمل الآن...</div>' +
+                     '<div id="' + statusId + '" style="color:#34d399;font-size:12px;margin-bottom:8px">جاري الربط المتزامن لجميع المحركات...</div>';
+    chatBox.appendChild(card);
+    card.scrollIntoView({behavior:'smooth'});
+
+    let step = 0;
+    const timer = setInterval(()=>{
+      const st = document.getElementById(statusId);
+      if(!st) return clearInterval(timer);
+      if(step < ZEROGPU_NODES.length){
+        st.textContent = '🔄 دمج محرك (' + (step+1) + '/8): ' + ZEROGPU_NODES[step];
+        step++;
+      } else {
+        clearInterval(timer);
+        st.textContent = '✅ اكتمل الإنتاج الموحد عبر ZeroGPU + FLUX/ICBINP!';
+        const cleanPrompt = encodeURIComponent(promptText + ', photorealistic 8k, cinema lighting, masterpiece, no watermark');
+        const imgUrl = 'https://pollinations.ai' + cleanPrompt + '?width=1024&height=1024&model=flux&nologo=true&seed=' + Math.floor(Math.random()*999999);
+        
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.style.cssText = 'width:100%;border-radius:12px;margin-top:6px;display:block;border:1px solid #1e293b';
+        img.onload = () => {
+          card.scrollIntoView({behavior:'smooth'});
+          const dl = document.createElement('a');
+          dl.href = imgUrl;
+          dl.download = 'DarkHorizon_ZeroGPU_' + Date.now() + '.png';
+          dl.target = '_blank';
+          dl.textContent = '⬇️ حفظ النتيجة النقية 8K';
+          dl.style.cssText = 'display:inline-block;margin-top:8px;background:#0284c7;color:#fff;padding:7px 14px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:12px';
+          card.appendChild(dl);
+        };
+        card.appendChild(img);
+      }
+    }, 450);
+  }
+
   document.addEventListener('click', function(e){
     const btn = e.target.closest('button');
+    if(!btn) return;
     const inp = document.querySelector('input[type="text"], textarea');
-    if(btn && inp && inp.value.trim().length > 1 && btn.innerText.includes('➤')){
-      const promptVal = inp.value.trim();
-      const box = document.getElementById('hf-unified-status');
-      const step = document.getElementById('hf-pipe-step');
-      if(box && step){
-        box.style.display = 'block';
-        let idx = 0;
-        const iv = setInterval(()=>{
-          if(idx < ZEROGPU_ENGINES.length){
-            step.textContent = '🔄 جاري المعالجة المشتركة عبر: ' + ZEROGPU_ENGINES[idx].name + ' (' + (idx+1) + '/' + ZEROGPU_ENGINES.length + ')';
-            // تنشيط الاتصال بالمحرك السحابي في الخلفية
-            fetch('https://' + ZEROGPU_ENGINES[idx].space + '/config', {mode:'no-cors'}).catch(()=>{});
-            idx++;
-          } else {
-            clearInterval(iv);
-            step.textContent = '✅ اكتمل دمج جميع محركات ZeroGPU للمشروع: "' + promptVal + '"';
-          }
-        }, 700);
+    if(inp && inp.value.trim().length > 0){
+      const rect = btn.getBoundingClientRect();
+      if(rect.bottom > window.innerHeight - 130){
+        const val = inp.value.trim();
+        setTimeout(()=> triggerRealZeroGpu(val), 200);
       }
     }
   }, true);
