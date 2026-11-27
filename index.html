@@ -65,6 +65,7 @@ input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font
 </div>
 <div id="charModal"><div class="modal-box"><strong style="color:#fbbf24">🎭 بصمة تثبيت الشخصية (Character DNA Lock)</strong><p style="font-size:11px;color:#94a3b8;margin-top:4px">هذا الوصف يُدمج تلقائياً في كل مشهد لتثبيت ملامح الشخصية وملابسها:</p><textarea id="charDnaInp"></textarea><div style="display:flex;gap:8px"><button type="button" onclick="saveCharLock()" class="btn-save">حفظ البصمة</button><button type="button" onclick="closeCharLock()" class="btn-vid">إغلاق</button></div></div></div>
 
+
 <script>
 var activeMode = "drama";
 var DEFAULT_DNA = "70-year-old dignified East Asian billionaire patriarch, neat silver white hair, sharp wise eyes, wearing a tailored dark charcoal Mandarin collar suit with white inner shirt, holding a wooden cane with gold ring";
@@ -123,11 +124,11 @@ function goSend() {
   var chat = document.getElementById("chat");
   var u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
   var a = document.createElement("div"); a.className = "msg ai";
-  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري الاتصال المباشر بخوادم الصور (بدون حظر)...</span>';
+  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد المباشر (9:16)...</span>';
   chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
   var clean = txt.replace("صور ", "").replace("صورة ", "").replace("فيديو ", "").trim();
-  if (!clean || clean === "صور" || clean === "صورة") {
+  if (!clean || clean === "صور" || clean === "صورة" || clean === "فيديو") {
     loadImgServers("sitting in a luxury mansion hall speaking seriously, cinematic close up", txt, a, chat);
     return;
   }
@@ -144,27 +145,18 @@ function goSend() {
     .catch(function() { loadImgServers(clean, txt, a, chat); });
 }
 function loadImgServers(sceneEn, rawTxt, a, chat) {
-  var fullPrompt = "";
-  var w = 576, h = 1024;
-  if (activeMode === "drama") {
-    fullPrompt = "Chinese billionaire short drama movie still, " + getCharDNA() + ", " + sceneEn + ", dramatic warm rim lighting, 35mm cinema lens, photorealistic 8k";
-  } else if (activeMode === "anime") {
-    fullPrompt = sceneEn + ", masterpiece anime style, makoto shinkai lighting, 8k";
-    w = 768; h = 768;
-  } else {
-    fullPrompt = sceneEn + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus";
-    w = 768; h = 768;
-  }
-
+  var fullPrompt = activeMode === "drama"
+    ? "Chinese billionaire short drama movie still, " + getCharDNA() + ", " + sceneEn + ", dramatic warm rim lighting, 35mm cinema lens, photorealistic 8k"
+    : sceneEn + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus";
+  var w = activeMode === "drama" ? 576 : 768;
+  var h = activeMode === "drama" ? 1024 : 768;
   var enc = encodeURIComponent(fullPrompt);
   var seed = Math.floor(Math.random() * 999999);
-  // خوادم صور مباشرة تعمل عبر <img> بدون أي حظر CORS
   var servers = [
     "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&model=flux&nologo=true&seed=" + seed,
     "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&model=turbo&nologo=true&seed=" + (seed + 11),
     "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&nologo=true&seed=" + (seed + 22)
   ];
-
   var idx = 0;
   function tryServer() {
     if (idx >= servers.length) {
@@ -172,7 +164,6 @@ function loadImgServers(sceneEn, rawTxt, a, chat) {
       return;
     }
     var im = new Image();
-    im.crossOrigin = "anonymous";
     im.onload = function() {
       a.innerHTML = "";
       var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
@@ -186,10 +177,7 @@ function loadImgServers(sceneEn, rawTxt, a, chat) {
       chat.scrollTop = chat.scrollHeight;
       if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
     };
-    im.onerror = function() {
-      idx++;
-      tryServer();
-    };
+    im.onerror = function() { idx++; tryServer(); };
     im.src = servers[idx];
   }
   tryServer();
