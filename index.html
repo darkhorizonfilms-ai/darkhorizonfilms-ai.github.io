@@ -64,43 +64,24 @@ input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font
   <button type="button" onclick="goSend()" class="send-btn">➤</button>
 </div>
 <div id="charModal"><div class="modal-box"><strong style="color:#fbbf24">🎭 بصمة تثبيت الشخصية (Character DNA Lock)</strong><p style="font-size:11px;color:#94a3b8;margin-top:4px">هذا الوصف يُدمج تلقائياً في كل مشهد لتثبيت ملامح الشخصية وملابسها:</p><textarea id="charDnaInp"></textarea><div style="display:flex;gap:8px"><button type="button" onclick="saveCharLock()" class="btn-save">حفظ البصمة</button><button type="button" onclick="closeCharLock()" class="btn-vid">إغلاق</button></div></div></div>
+
 <script>
 var activeMode = "drama";
 var DEFAULT_DNA = "70-year-old dignified East Asian billionaire patriarch, neat silver white hair, sharp wise eyes, wearing a tailored dark charcoal Mandarin collar suit with white inner shirt, holding a wooden cane with gold ring";
-var HF_KEY = "hf_OrXsyULTb" + "SARsYLyDu" + "ZHehxgnwh" + "klgVxzl";
 
-function getCharDNA() {
-  return localStorage.getItem("DH_CHAR_DNA") || DEFAULT_DNA;
-}
-function openCharLock() {
-  document.getElementById("charDnaInp").value = getCharDNA();
-  document.getElementById("charModal").style.display = "flex";
-}
-function saveCharLock() {
-  var v = document.getElementById("charDnaInp").value.trim();
-  localStorage.setItem("DH_CHAR_DNA", v || DEFAULT_DNA);
-  document.getElementById("charModal").style.display = "none";
-}
-function closeCharLock() {
-  document.getElementById("charModal").style.display = "none";
-}
-function quickScene(txt) {
-  document.getElementById("inp").value = txt;
-  goSend();
-}
+function getCharDNA() { return localStorage.getItem("DH_CHAR_DNA") || DEFAULT_DNA; }
+function openCharLock() { document.getElementById("charDnaInp").value = getCharDNA(); document.getElementById("charModal").style.display = "flex"; }
+function saveCharLock() { localStorage.setItem("DH_CHAR_DNA", document.getElementById("charDnaInp").value.trim() || DEFAULT_DNA); document.getElementById("charModal").style.display = "none"; }
+function closeCharLock() { document.getElementById("charModal").style.display = "none"; }
+function quickScene(txt) { document.getElementById("inp").value = txt; goSend(); }
 function pickMode(el) {
   var all = document.querySelectorAll(".mode-btn");
   for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
   el.classList.add("active");
   activeMode = el.getAttribute("data-mode") || "drama";
 }
-function resetChat() {
-  document.getElementById("chat").innerHTML = '<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>';
-}
-function addMagic() {
-  var inp = document.getElementById("inp");
-  if (inp.value.trim()) inp.value += " ، إضاءة درامية سينمائية 8K";
-}
+function resetChat() { document.getElementById("chat").innerHTML = '<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>'; }
+function addMagic() { var inp = document.getElementById("inp"); if (inp.value.trim()) inp.value += " ، إضاءة درامية سينمائية 8K"; }
 function runMic() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return;
@@ -109,8 +90,7 @@ function runMic() {
   r.start();
 }
 function makeVid(im, btn, card) {
-  btn.textContent = "⏳ جاري التصيير (8ث)...";
-  btn.disabled = true;
+  btn.textContent = "⏳ جاري التصيير (8ث)..."; btn.disabled = true;
   var cv = document.createElement("canvas"); cv.width = 576; cv.height = 1024;
   var ctx = cv.getContext("2d");
   var rec = new MediaRecorder(cv.captureStream(30), { mimeType: "video/webm" });
@@ -136,29 +116,6 @@ function makeVid(im, btn, card) {
   }
   step();
 }
-function showMedia(url, isBlob, rawTxt, a, chat) {
-  var im = new Image();
-  im.onload = function() {
-    a.innerHTML = "";
-    var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
-    var acts = document.createElement("div"); acts.className = "card-actions";
-    var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = url; dl.download = "DarkHorizon_Scene_" + Date.now() + ".png";
-    if (!isBlob) dl.target = "_blank";
-    dl.textContent = "⬇️ حفظ المشهد";
-    var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحريك محلي (8ث)";
-    vb.onclick = function() { makeVid(im, vb, card); };
-    var wan = document.createElement("a"); wan.className = "btn-tool"; wan.href = "https://huggingface.co"; wan.target = "_blank"; wan.textContent = "🎥 تحريك Wan 2.2";
-    var lip = document.createElement("a"); lip.className = "btn-tool"; lip.href = "https://huggingface.co"; lip.target = "_blank"; lip.textContent = "🗣️ نطق LivePortrait";
-    acts.appendChild(dl); acts.appendChild(vb); acts.appendChild(wan); acts.appendChild(lip);
-    card.appendChild(acts); a.appendChild(card);
-    chat.scrollTop = chat.scrollHeight;
-    if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
-  };
-  im.onerror = function() {
-    a.innerHTML = '<span style="color:#fbbf24">⚠️ تعذر تحميل المشهد، أعد الإرسال.</span>';
-  };
-  im.src = url;
-}
 function goSend() {
   var inp = document.getElementById("inp"), txt = inp.value.trim();
   if (!txt) return;
@@ -166,55 +123,75 @@ function goSend() {
   var chat = document.getElementById("chat");
   var u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
   var a = document.createElement("div"); a.className = "msg ai";
-  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">🎭 جاري دمج بصمة الشخصية وتوليد المشهد 9:16...</span>';
+  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري الاتصال المباشر بخوادم الصور (بدون حظر)...</span>';
   chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
   var clean = txt.replace("صور ", "").replace("صورة ", "").replace("فيديو ", "").trim();
   if (!clean || clean === "صور" || clean === "صورة") {
-    buildAndRun("sitting in a luxury mansion hall speaking seriously, cinematic close up", txt, a, chat);
+    loadImgServers("sitting in a luxury mansion hall speaking seriously, cinematic close up", txt, a, chat);
     return;
   }
   if (!/[؀-ۿ]/.test(txt)) {
-    buildAndRun(txt, txt, a, chat);
+    loadImgServers(txt, txt, a, chat);
     return;
   }
   fetch("https://translated.net" + encodeURIComponent(clean) + "&langpair=ar|en")
     .then(function(r) { return r.json(); })
     .then(function(j) {
       var en = (j && j.responseData && j.responseData.translatedText) ? j.responseData.translatedText : clean;
-      buildAndRun(en, txt, a, chat);
+      loadImgServers(en, txt, a, chat);
     })
-    .catch(function() { buildAndRun(clean, txt, a, chat); });
+    .catch(function() { loadImgServers(clean, txt, a, chat); });
 }
-function buildAndRun(sceneEn, rawTxt, a, chat) {
+function loadImgServers(sceneEn, rawTxt, a, chat) {
   var fullPrompt = "";
   var w = 576, h = 1024;
   if (activeMode === "drama") {
-    fullPrompt = "Chinese billionaire short drama movie still, " + getCharDNA() + ", " + sceneEn + ", dramatic warm rim lighting, shallow depth of field, 35mm cinema lens, photorealistic 8k, vertical 9:16";
+    fullPrompt = "Chinese billionaire short drama movie still, " + getCharDNA() + ", " + sceneEn + ", dramatic warm rim lighting, 35mm cinema lens, photorealistic 8k";
   } else if (activeMode === "anime") {
     fullPrompt = sceneEn + ", masterpiece anime style, makoto shinkai lighting, 8k";
     w = 768; h = 768;
   } else {
-    fullPrompt = sceneEn + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, no watermark";
+    fullPrompt = sceneEn + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus";
     w = 768; h = 768;
   }
 
-  fetch("https://huggingface.co", {
-    method: "POST",
-    headers: { "Authorization": "Bearer " + HF_KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({ inputs: fullPrompt, parameters: { width: w, height: h } })
-  })
-  .then(function(resp) {
-    if (!resp.ok) throw new Error("HF_" + resp.status);
-    return resp.blob();
-  })
-  .then(function(blob) {
-    showMedia(URL.createObjectURL(blob), true, rawTxt, a, chat);
-  })
-  .catch(function() {
-    var seed = Math.floor(Math.random() * 999999);
-    var fb = "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=" + w + "&height=" + h + "&model=flux&nologo=true&seed=" + seed;
-    showMedia(fb, false, rawTxt, a, chat);
-  });
+  var enc = encodeURIComponent(fullPrompt);
+  var seed = Math.floor(Math.random() * 999999);
+  // خوادم صور مباشرة تعمل عبر <img> بدون أي حظر CORS
+  var servers = [
+    "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&model=flux&nologo=true&seed=" + seed,
+    "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&model=turbo&nologo=true&seed=" + (seed + 11),
+    "https://pollinations.ai" + enc + "?width=" + w + "&height=" + h + "&nologo=true&seed=" + (seed + 22)
+  ];
+
+  var idx = 0;
+  function tryServer() {
+    if (idx >= servers.length) {
+      a.innerHTML = '<span style="color:#fbbf24">⚠️ تعذر التحميل، اضغط على زر مشهد آخر في الأعلى.</span>';
+      return;
+    }
+    var im = new Image();
+    im.crossOrigin = "anonymous";
+    im.onload = function() {
+      a.innerHTML = "";
+      var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
+      var acts = document.createElement("div"); acts.className = "card-actions";
+      var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = im.src; dl.download = "DarkHorizon_" + Date.now() + ".png"; dl.target = "_blank"; dl.textContent = "⬇️ حفظ المشهد";
+      var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحريك محلي (8ث)";
+      vb.onclick = function() { makeVid(im, vb, card); };
+      var wan = document.createElement("a"); wan.className = "btn-tool"; wan.href = "https://huggingface.co"; wan.target = "_blank"; wan.textContent = "🎥 تحريك Wan 2.2";
+      acts.appendChild(dl); acts.appendChild(vb); acts.appendChild(wan);
+      card.appendChild(acts); a.appendChild(card);
+      chat.scrollTop = chat.scrollHeight;
+      if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
+    };
+    im.onerror = function() {
+      idx++;
+      tryServer();
+    };
+    im.src = servers[idx];
+  }
+  tryServer();
 }
 </script></body></html>
