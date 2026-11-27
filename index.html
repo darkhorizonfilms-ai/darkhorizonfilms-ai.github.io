@@ -1,125 +1,38 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DARK HORIZON • Pure Hugging Face 400K Studio</title>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>DARK HORIZON INFINITE v89</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:13px 16px;display:flex;justify-content:space-between;align-items:center}
-.brand{color:#38bdf8;font-weight:900;font-size:15px}
-.badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
-#chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:94%;padding:13px 15px;border-radius:16px;font-size:14px;line-height:1.6}
-.user{align-self:flex-start;background:#0284c7;color:#fff}
-.ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
-.step{color:#34d399;font-size:12px;font-weight:bold;margin:6px 0;padding:7px 10px;background:rgba(16,185,129,0.1);border-radius:8px;border-right:3px solid #10b981}
-.media-box{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img,.media-box video{width:100%;display:block}
-@keyframes cinemaPan{0%{transform:scale(1) translate(0,0)}50%{transform:scale(1.18) translate(-2%,-2%)}100%{transform:scale(1.05) translate(1%,1%)}}
-.cinema-motion{animation:cinemaPan 8s ease-in-out infinite}
-.act-btn{display:block;width:100%;text-align:center;margin-top:8px;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{background:#090d1a;border-bottom:1px solid #1e293b;padding:10px 12px;display:flex;flex-direction:column;gap:8px;z-index:20}.title-row{display:flex;justify-content:space-between;align-items:center}
+.brand{color:#38bdf8;font-weight:900;font-size:15px}.status-pill{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold;display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;background:#10b981;border-radius:50%}.ctrl-row{display:flex;gap:6px}.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
+.modes{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}.modes::-webkit-scrollbar{display:none}
+.mode-btn{white-space:nowrap;background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;cursor:pointer}.mode-btn.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-color:#38bdf8}
+#chat{flex:1;overflow-y:auto;padding:14px 14px 96px 14px;display:flex;flex-direction:column;gap:12px}.msg{max-width:92%;padding:12px 15px;border-radius:16px;font-size:14px;line-height:1.6}
+.user{align-self:flex-start;background:#0284c7;color:#fff}.ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
+.media-card{margin-top:8px;border-radius:14px;overflow:hidden;border:1px solid #1e293b;background:#03060d;padding:8px}.media-card img,.media-card video{width:100%;border-radius:10px;display:block}
+.card-actions{display:flex;gap:8px;margin-top:8px}.btn-save,.btn-vid{flex:1;text-align:center;padding:8px;border-radius:9px;text-decoration:none;font-size:12px;font-weight:bold;cursor:pointer}
+.btn-save{background:#0f172a;color:#38bdf8;border:1px solid #38bdf8}.btn-vid{background:#1e293b;color:#f8fafc;border:1px solid #475569}
 .dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
-input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
-button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
-</style>
-</head>
-<body>
-<header>
-  <span class="brand">DARK HORIZON • HF 400K</span>
-  <span class="badge">🟢 100% Hugging Face النقي</span>
-</header>
-<div id="chat">
-  <div class="msg ai">
-    <strong style="color:#38bdf8">⚡ استوديو DARK HORIZON النقي (بدون أي علامة مائية)</strong><br>
-    يعمل حصرياً بمحركات <b>Hugging Face</b> (<b>FLUX.1-schnell</b> • <b>SDXL</b> • <b>ZeroGPU Spaces</b>). اكتب طلبك في الأسفل فقط!
-  </div>
-</div>
-<div class="dock">
-  <input id="inp" type="text" placeholder="اكتب طلبك هنا (صورة أو فيديو نقي 100%)..." onkeydown="if(event.key==='Enter')runPureHF()">
-  <button type="button" class="send" onclick="runPureHF()">➤</button>
-</div>
+.inp-box{flex:1;background:#0f172a;border:1px solid #334155;border-radius:24px;display:flex;align-items:center;padding:0 12px}input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font-size:14px;outline:none}
+.icon-btn{background:none;border:none;color:#94a3b8;font-size:17px;padding:5px;cursor:pointer}.send-btn{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
+#settingsModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:center;justify-content:center;padding:16px}.modal-box{background:#0f172a;border:1px solid #38bdf8;border-radius:16px;padding:16px;width:100%;max-width:400px}
+.modal-box input{width:100%;background:#050811;border:1px solid #334155;border-radius:10px;padding:10px;margin:10px 0;color:#34d399}</style></head>
+<body><div class="top-bar"><div class="title-row"><span class="brand">DARK HORIZON INFINITE v89</span><span class="status-pill"><span class="dot"></span>GPT + Gemini + FLUX + ICBINP 24/7</span></div>
+<div class="ctrl-row"><button class="mini-btn" onclick="openSettings()">⚙️ الإعدادات</button><button class="mini-btn" onclick="newChat()">+ جديد</button></div></div>
+<div class="modes" id="modeBar"><button class="mode-btn active" data-mode="hybrid" onclick="setMode(this)">🔴 عمل متكامل (ذكاء + إنتاج)</button><button class="mode-btn" data-mode="photo" onclick="setMode(this)">🖼️ صورة واقعية 8K</button><button class="mode-btn" data-mode="video" onclick="setMode(this)">🎬 فيديو سينمائي 8ث</button><button class="mode-btn" data-mode="anime" onclick="setMode(this)">✨ أنمي احترافي</button></div>
+<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">⚡ استوديو DARK HORIZON INFINITE v89 جاهز!</strong><br>اكتب فكرتك في الأسفل وسيتم التوليد النقي 8K بدون علامات مائية.</div></div>
+<div class="dock"><div class="inp-box"><button class="icon-btn" onclick="enhanceCurrentInput()">✨</button><input id="inp" type="text" placeholder="اكتب فكرتك أو فيلماً بالكامل..." onkeydown="if(event.key==='Enter')sendPrompt()"><button class="icon-btn" onclick="voiceInput()">🎤</button></div><button class="send-btn" onclick="sendPrompt()">➤</button></div>
+<div id="settingsModal"><div class="modal-box"><strong style="color:#38bdf8">⚙️ إعدادات الخادم</strong><input id="workerInp" type="text" value="https://workers.dev"><div style="display:flex;gap:8px"><button class="btn-save" onclick="saveSettings()">حفظ</button><button class="btn-vid" onclick="document.getElementById('settingsModal').style.display='none'">إغلاق</button></div></div></div>
 <script>
-const _H = ["hf_OrXsyULTb","SARsYLyDu","ZHehxgnwh","klgVxzl"].join("");
-
-async function translateAr(txt){
-  if(/^(صور|صورة|صوره|image|photo)$/i.test(txt.trim())){
-    return "Epic futuristic warrior in glowing armor standing in rain, ultra realistic 8k photography, dramatic cinema lighting, masterpiece";
-  }
-  try{
-    const r = await fetch("https://translated.net" + encodeURIComponent(txt) + "&langpair=ar|en");
-    const j = await r.json();
-    if(j && j.responseData && j.responseData.translatedText) return j.responseData.translatedText;
-  }catch(e){}
-  return txt;
-}
-
-async function generatePureHuggingFace(promptEn, stEl){
-  const hfModels = [
-    "black-forest-labs/FLUX.1-schnell",
-    "stabilityai/stable-diffusion-xl-base-1.0",
-    "ByteDance/SDXL-Lightning",
-    "prompthero/openjourney-v4"
-  ];
-  for(const model of hfModels){
-    try{
-      stEl.textContent = "⚡ جاري التوليد النقي عبر Hugging Face (" + model.split("/")[1] + ")...";
-      const resp = await fetch("https://huggingface.co" + model, {
-        method: "POST",
-        headers: { "Authorization": "Bearer " + _H, "Content-Type": "application/json" },
-        body: JSON.stringify({ inputs: promptEn })
-      });
-      if(resp.ok){
-        const blob = await resp.blob();
-        if(blob && blob.size > 3000) return { url: URL.createObjectURL(blob), engine: model };
-      }
-    }catch(e){}
-  }
-  return null;
-}
-
-async function runPureHF(){
-  const inp = document.getElementById("inp");
-  const txt = inp.value.trim();
-  if(!txt) return;
-  inp.value = "";
-
-  const chat = document.getElementById("chat");
-  const u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
-  const a = document.createElement("div"); a.className = "msg ai";
-  const st = document.createElement("div"); st.className = "step";
-  st.textContent = "🔄 1/2: ترجمة وتحسين الوصف السينمائي...";
-  a.appendChild(st); chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
-
-  const isVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie)/i.test(txt);
-  const clean = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || txt;
-  const eng = (await translateAr(clean)) + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, masterpiece";
-
-  const res = await generatePureHuggingFace(eng, st);
-  if(res){
-    const box = document.createElement("div"); box.className = "media-box";
-    const im = document.createElement("img");
-    if(isVideo){
-      im.classList.add("cinema-motion");
-      st.textContent = "🎬 اكتمل إنتاج المشهد المتحرك النقي عبر: " + res.engine;
-    } else {
-      st.textContent = "✅ اكتمل الإنتاج النقي 100% عبر: " + res.engine;
-    }
-    im.src = res.url;
-    box.appendChild(im);
-    a.appendChild(box);
-
-    const dl = document.createElement("a");
-    dl.href = res.url; dl.download = "DarkHorizon_PureHF_" + Date.now() + ".png";
-    dl.className = "act-btn"; dl.textContent = "⬇️ حفظ النتيجة النقية (بدون أي شعار)";
-    a.appendChild(dl);
-  } else {
-    st.style.color = "#f87171";
-    st.textContent = "⚠️ خادم Hugging Face قيد التهيئة، أعد إرسال الطلب بعد ثوانٍ.";
-  }
-  chat.scrollTop = chat.scrollHeight;
-}
-</script>
-</body>
-</html>
+let currentMode='hybrid';const DEFAULT_WORKER='https://workers.dev';
+function setMode(b){document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentMode=b.dataset.mode;}
+function newChat(){document.getElementById('chat').innerHTML='<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>';}
+function openSettings(){document.getElementById('workerInp').value=localStorage.getItem('DH_WORKER')||DEFAULT_WORKER;document.getElementById('settingsModal').style.display='flex';}
+function saveSettings(){localStorage.setItem('DH_WORKER',document.getElementById('workerInp').value.trim()||DEFAULT_WORKER);document.getElementById('settingsModal').style.display='none';}
+function voiceInput(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const r=new SR();r.lang='ar-SA';r.onresult=e=>{document.getElementById('inp').value=e.results.transcript;};r.start();}
+function enhanceCurrentInput(){const i=document.getElementById('inp');if(i.value.trim())i.value+='، إضاءة سينمائية 8K فائق الواقعية';}
+async function translateAr(t){try{const r=await fetch('https://translated.net|en');const j=await r.json();if(j&&j.responseData&&j.responseData.translatedText)return j.responseData.translatedText;}catch(e){}return t;}
+function loadImgCascade(u){return new Promise((res,rej)=>{let i=0;function next(){if(i>=u.length)return rej();const m=new Image();m.onload=()=>res(m);m.onerror=()=>{i++;next();};m.src=u[i];}next();});}
+function convertTo8sVideo(im,btn,card){btn.textContent='⏳ جاري التصيير...';btn.disabled=true;const cv=document.createElement('canvas');cv.width=720;cv.height=720;const ctx=cv.getContext('2d');const rec=new MediaRecorder(cv.captureStream(30),{mimeType:'video/webm'});const ch=[];rec.ondataavailable=e=>{if(e.data.size)ch.push(e.data);};rec.onstop=()=>{const vUrl=URL.createObjectURL(new Blob(ch,{type:'video/webm'}));const vid=document.createElement('video');vid.src=vUrl;vid.controls=true;vid.autoplay=true;vid.loop=true;vid.playsInline=true;im.replaceWith(vid);btn.textContent='✅ فيديو (8ث) جاهز';const sl=card.querySelector('.btn-save');if(sl){sl.href=vUrl;sl.download='DarkHorizon_8s_'+Date.now()+'.webm';sl.textContent='⬇️ حفظ الفيديو النقي';}};rec.start();let f=0;function frame(){f++;const p=f/240,s=1+Math.sin(p*Math.PI)*0.16;ctx.clearRect(0,0,720,720);ctx.save();ctx.translate(360-Math.sin(p*Math.PI)*20,360-p*15);ctx.scale(s,s);ctx.drawImage(im,-360,-360,720,720);ctx.restore();if(f<240)requestAnimationFrame(frame);else rec.stop();}frame();}
+async function sendPrompt(){const inp=document.getElementById('inp'),txt=inp.value.trim();if(!txt)return;inp.value='';const chat=document.getElementById('chat'),u=document.createElement('div');u.className='msg user';u.textContent=txt;chat.appendChild(u);const a=document.createElement('div');a.className='msg ai';a.innerHTML='<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد النقي 8K...</span>';chat.appendChild(a);chat.scrollTop=chat.scrollHeight;const clean=txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i,'').trim()||txt,eng=await translateAr(clean),suf=currentMode==='anime'?', masterpiece anime style, 8k':', ultra realistic 8k photography, dramatic cinema lighting, no watermark',full=eng+suf,w=(localStorage.getItem('DH_WORKER')||DEFAULT_WORKER).replace(/\/$/,''),seed=Math.floor(Math.random()*999999);const urls=[w+'/?prompt='+encodeURIComponent(full)+'&t='+seed,'https://pollinations.ai];try{const img=await loadImgCascade(urls);a.innerHTML='';const card=document.createElement('div');card.className='media-card';card.appendChild(img);const acts=document.createElement('div');acts.className='card-actions';const dl=document.createElement('a');dl.className='btn-save';dl.href=img.src;dl.download='DarkHorizon_'+Date.now()+'.png';dl.target='_blank';dl.textContent='⬇️ حفظ نقي 8K';const vb=document.createElement('button');vb.className='btn-vid';vb.textContent='🎬 تحويل لفيديو (8ث)';vb.onclick=()=>convertTo8sVideo(img,vb,card);acts.appendChild(dl);acts.appendChild(vb);card.appendChild(acts);a.appendChild(card);if(currentMode==='video'||/(فيديو|فلم|فيلم|8ث)/i.test(txt))convertTo8sVideo(img,vb,card);}catch(e){a.innerHTML='<span style="color:#fbbf24">⚠️ الخوادم مزدحمة لحظياً، أعد المحاولة بعد ثوانٍ.</span>';}chat.scrollTop=chat.scrollHeight;}
+</script></body></html>
