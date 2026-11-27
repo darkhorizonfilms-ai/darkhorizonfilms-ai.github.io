@@ -3,121 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DARK HORIZON • ZeroGPU Studio</title>
+<title>DARK HORIZON • ZeroGPU Spaces Hub</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
-header{background:rgba(9,13,26,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(56,189,248,0.2);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;z-index:10}
-.brand{background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:16px;letter-spacing:.5px}
-.badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.5);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:bold;display:flex;align-items:center;gap:6px}
-.dot{width:8px;height:8px;background:#10b981;border-radius:50%;box-shadow:0 0 8px #10b981}
-#chat{flex:1;overflow-y:auto;padding:16px 14px 95px 14px;display:flex;flex-direction:column;gap:14px}
-.msg{max-width:92%;padding:14px 16px;border-radius:18px;font-size:14px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
-.user{align-self:flex-start;background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-bottom-right-radius:4px}
-.ai{align-self:flex-end;background:rgba(15,23,42,0.85);backdrop-filter:blur(10px);border:1px solid rgba(56,189,248,0.22);width:100%}
-.step{color:#34d399;font-size:12px;font-weight:bold;margin:8px 0;padding:6px 10px;background:rgba(16,185,129,0.1);border-radius:8px;border-right:3px solid #10b981}
-.media-box{margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img{width:100%;display:block}
-.actions{display:flex;gap:8px;margin-top:10px}
-.dl-btn{flex:1;text-align:center;background:linear-gradient(135deg,#0284c7,#0ea5e9);color:#fff;padding:10px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:bold}
-.dock{position:fixed;bottom:0;left:0;right:0;background:rgba(9,13,26,0.95);backdrop-filter:blur(16px);border-top:1px solid rgba(56,189,248,0.25);padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
-.inp-wrap{flex:1;background:#0f172a;border:1px solid #334155;border-radius:24px;display:flex;align-items:center;padding:0 12px}
-.inp-wrap:focus-within{border-color:#38bdf8;box-shadow:0 0 12px rgba(56,189,248,0.25)}
-input{flex:1;background:transparent;border:none;color:#fff;padding:12px 6px;font-size:14px;outline:none}
-.mic-btn{background:none;border:none;color:#94a3b8;font-size:18px;padding:6px;cursor:pointer}
-.send-btn{background:linear-gradient(135deg,#0284c7,#38bdf8);color:#fff;border:none;width:46px;height:46px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(2,132,199,0.5)}
+body{background:#03060d;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+header{background:#090d1a;border-bottom:1px solid #1e293b;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.brand{color:#38bdf8;font-weight:900;font-size:15px}
+.badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.tabs{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:7px 12px;border-radius:10px;font-size:12px;font-weight:bold;cursor:pointer;transition:.2s}
+.tab.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-color:#38bdf8;box-shadow:0 2px 10px rgba(2,132,199,0.4)}
+.frame-wrap{flex:1;position:relative;background:#050811}
+iframe{width:100%;height:100%;border:none;display:block}
 </style>
 </head>
 <body>
 <header>
   <span class="brand">DARK HORIZON • ZeroGPU</span>
-  <span class="badge"><span class="dot"></span>ZeroGPU Spaces متصلة</span>
+  <span class="badge">🟢 12 أداة ZeroGPU مجانية</span>
 </header>
 
-<div id="chat">
-  <div class="msg ai">
-    <strong style="color:#38bdf8;font-size:15px">⚡ استوديو Hugging Face ZeroGPU الموحد</strong><br>
-    اكتب فكرتك في الأسفل وستعمل جميع أدوات ZeroGPU المجانية معاً تلقائياً لإنتاج عملك:<br>
-    <div style="margin-top:8px;font-size:12px;color:#94a3b8">• Qwen 2.1 Relight & Angle • BRIA RMBG 3.0 • TRELLIS.2 3D • Wan 2.2 Video • LTX 2.3 Audio • MiniMax H3 • LongCat Avatar • Voice Isolator</div>
-  </div>
-</div>
+<div class="tabs" id="tabBar"></div>
 
-<div class="dock">
-  <div class="inp-wrap">
-    <input id="inp" type="text" placeholder="اكتب طلبك هنا (صورة، مشهد، أنمي، 3D)..." onkeydown="if(event.key==='Enter')runAll()">
-    <button class="mic-btn" onclick="startVoice()" title="إدخال صوتي">🎤</button>
-  </div>
-  <button class="send-btn" onclick="runAll()">➤</button>
+<div class="frame-wrap">
+  <iframe id="spaceFrame" src="https://hf.space" allow="microphone;camera;clipboard-write;fullscreen"></iframe>
 </div>
 
 <script>
-const ZEROGPU_SPACES = [
-  'Qwen 2.1 Turbo (الإضاءة وزاوية الكاميرا)',
-  'BRIA RMBG 3.0 (العزل النقي)',
-  'Microsoft TRELLIS.2 (البناء ثلاثي الأبعاد)',
-  'Wan 2.2 14B Fast (توليد الحركة)',
-  'LTX 2.3 (دمج الفيديو والصوت)',
-  'MiniMax H3 Turbo (المؤثرات السينمائية)',
-  'LongCat-Video-Avatar 1.6',
-  'Voice Isolator (تنقية الصوت)'
+const SPACES = [
+  { name: "⚡ FLUX.1 Schnell (صور)", url: "https://hf.space" },
+  { name: "🎬 Wan 2.2 فيديو سريع", url: "https://hf.space" },
+  { name: "🔊 LTX 2.3 فيديو + صوت", url: "https://hf.space" },
+  { name: "🎵 MiniMax H3 سينمائي", url: "https://hf.space" },
+  { name: "🎤 LongCat وجه متكلم", url: "https://hf.space" },
+  { name: "🏢 TRELLIS.2 مجسمات 3D", url: "https://hf.space" },
+  { name: "🎥 Qwen 2.1 زاوية وإضاءة", url: "https://hf.space" },
+  { name: "🖼 Krea 2 تعديل صور", url: "https://hf.space" },
+  { name: "🎭 BFS تبديل الوجوه", url: "https://hf.space" },
+  { name: "✂️ BRIA إزالة الخلفية 3.0", url: "https://hf.space" },
+  { name: "🎙 Voice Isolator عزل الصوت", url: "https://hf.space" },
+  { name: "🎨 MiniMax H3 صور", url: "https://hf.space" }
 ];
 
-function startVoice(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR) return alert('المتصفح لا يدعم الإدخال الصوتي');
-  const r = new SR(); r.lang = 'ar-SA';
-  r.onresult = e => { document.getElementById('inp').value = e.results[0][0].transcript; };
-  r.start();
-}
+const bar = document.getElementById('tabBar');
+const frame = document.getElementById('spaceFrame');
 
-function runAll(){
-  const inp = document.getElementById('inp');
-  const txt = inp.value.trim();
-  if(!txt) return;
-  inp.value = '';
-
-  const chat = document.getElementById('chat');
-  const uDiv = document.createElement('div');
-  uDiv.className = 'msg user';
-  uDiv.textContent = txt;
-  chat.appendChild(uDiv);
-
-  const aDiv = document.createElement('div');
-  aDiv.className = 'msg ai';
-  const stId = 'st_' + Date.now();
-  aDiv.innerHTML = '<div style="color:#38bdf8;font-weight:bold;font-size:13px">🚀 جاري التشغيل الموحد عبر ZeroGPU Spaces...</div><div id="'+stId+'" class="step">بدء الاتصال بالمحركات...</div>';
-  chat.appendChild(aDiv);
-  chat.scrollTop = chat.scrollHeight;
-
-  let i = 0;
-  const iv = setInterval(()=>{
-    const st = document.getElementById(stId);
-    if(i < ZEROGPU_SPACES.length){
-      st.textContent = '🔄 (' + (i+1) + '/8) معالجة مشتركة: ' + ZEROGPU_SPACES[i];
-      i++;
-    } else {
-      clearInterval(iv);
-      st.textContent = '✅ اكتمل الإنتاج الموحد عبر جميع أدوات ZeroGPU!';
-      const q = encodeURIComponent(txt + ', ultra realistic 8k, cinema lighting, masterpiece, no watermark');
-      const imgUrl = 'https://pollinations.ai' + q + '?width=1024&height=1024&model=flux&nologo=true&seed=' + Math.floor(Math.random()*999999);
-      
-      const box = document.createElement('div');
-      box.className = 'media-box';
-      const img = document.createElement('img');
-      img.src = imgUrl;
-      img.onload = ()=>{
-        chat.scrollTop = chat.scrollHeight;
-        const acts = document.createElement('div');
-        acts.className = 'actions';
-        acts.innerHTML = '<a href="'+imgUrl+'" download="ZeroGPU_'+Date.now()+'.png" target="_blank" class="dl-btn">⬇️ حفظ النتيجة النقية 8K</a>';
-        aDiv.appendChild(acts);
-      };
-      box.appendChild(img);
-      aDiv.appendChild(box);
-      chat.scrollTop = chat.scrollHeight;
-    }
-  }, 380);
-}
+SPACES.forEach((sp, idx) => {
+  const btn = document.createElement('button');
+  btn.className = 'tab' + (idx === 0 ? ' active' : '');
+  btn.textContent = sp.name;
+  btn.onclick = () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    frame.src = sp.url;
+  };
+  bar.appendChild(btn);
+});
 </script>
 </body>
 </html>
