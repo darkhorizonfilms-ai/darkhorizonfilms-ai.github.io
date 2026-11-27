@@ -10,7 +10,7 @@ body{background:radial-gradient(circle at top,#0f172a,#03060d 75%);color:#f8fafc
 header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
 .brand{color:#38bdf8;font-weight:900;font-size:15px}
 .badge{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold}
-.tabs{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}
+.tabs{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none;min-height:46px}
 .tabs::-webkit-scrollbar{display:none}
 .tab{white-space:nowrap;background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:7px 12px;border-radius:10px;font-size:12px;font-weight:bold;cursor:pointer}
 .tab.active{background:linear-gradient(135deg,#0284c7,#2563eb);color:#fff;border-color:#38bdf8}
@@ -20,11 +20,11 @@ header{background:rgba(9,13,26,0.95);border-bottom:1px solid #1e293b;padding:12p
 .ai{align-self:flex-end;background:#0f172a;border:1px solid #1e293b;width:100%}
 .step{color:#34d399;font-size:12px;font-weight:bold;margin:6px 0}
 .media-box{margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#02040a}
-.media-box img,.media-box video{width:100%;display:block}
+.media-box img{width:100%;display:block}
 .btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .act-btn{flex:1;text-align:center;background:#0284c7;color:#fff;padding:9px 12px;border-radius:9px;text-decoration:none;font-size:12px;font-weight:bold;border:none;cursor:pointer}
 .ext-btn{background:#1e293b;color:#38bdf8;border:1px solid #38bdf8}
-.dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center}
+.dock{position:fixed;bottom:0;left:0;right:0;background:#090d1a;border-top:1px solid #1e293b;padding:10px 12px 16px 12px;display:flex;gap:8px;align-items:center;z-index:50}
 input{flex:1;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:22px;padding:11px 16px;font-size:14px;outline:none}
 button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
 </style>
@@ -32,7 +32,7 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 <body>
 <header>
   <span class="brand">DARK HORIZON • ZeroGPU</span>
-  <span class="badge">🟢 ZeroGPU API متصل</span>
+  <span class="badge">🟢 ZeroGPU متصل</span>
 </header>
 
 <div class="tabs" id="tabBar"></div>
@@ -40,18 +40,16 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 <div id="chat">
   <div class="msg ai">
     <strong style="color:#38bdf8">⚡ استوديو ZeroGPU المباشر جاهز!</strong><br>
-    اختر الأداة من الأعلى واكتب طلبك في الأسفل ليتم التنفيذ مباشرةً عبر خوادم <b>Hugging Face ZeroGPU</b>، أو اضغط زر الفتح المباشر لأي أداة متخصصة.
+    اكتب طلبك في الأسفل واضغط إرسال <b>➤</b> للتنفيذ الفوري، أو اختر أداة متخصصة من الشريط العلوي.
   </div>
 </div>
 
 <div class="dock">
-  <input id="inp" type="text" placeholder="اكتب وصف الصورة أو الفيديو هنا..." onkeydown="if(event.key==='Enter')window.executeTool()">
-  <button class="send" onclick="window.executeTool()">➤</button>
+  <input id="inp" type="text" placeholder="اكتب وصف الصورة أو الفيديو هنا..." onkeydown="if(event.key==='Enter')executeTool()">
+  <button type="button" class="send" onclick="executeTool()">➤</button>
 </div>
 
-<script type="module">
-import { Client } from "https://jsdelivr.net";
-
+<script>
 const TOOLS = [
   { name: "⚡ FLUX.1 Schnell (صور)", repo: "black-forest-labs/FLUX.1-schnell", page: "https://huggingface.co", mode: "IMG" },
   { name: "🎬 Wan 2.2 فيديو سريع", repo: "JCisHERE/Wan2.2-14B-Fast-Preview", page: "https://huggingface.co", mode: "SPACE" },
@@ -68,19 +66,20 @@ const TOOLS = [
 let activeTool = TOOLS;
 const bar = document.getElementById('tabBar');
 
-TOOLS.forEach((t, i) => {
+TOOLS.forEach(function(t, i) {
   const b = document.createElement('button');
+  b.type = 'button';
   b.className = 'tab' + (i === 0 ? ' active' : '');
   b.textContent = t.name;
-  b.onclick = () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  b.onclick = function() {
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
     b.classList.add('active');
     activeTool = t;
     if(t.mode === "SPACE"){
       const chat = document.getElementById('chat');
       const card = document.createElement('div');
       card.className = 'msg ai';
-      card.innerHTML = '<strong style="color:#38bdf8">' + t.name + '</strong><br><span style="font-size:12px;color:#94a3b8">هذه الأداة تعمل بواجهة رفع ملفات تفاعلية على خادم Hugging Face ZeroGPU:</span><div class="btn-row"><a href="' + t.page + '" target="_blank" class="act-btn">🚀 فتح الأداة على ZeroGPU الآن</a></div>';
+      card.innerHTML = '<strong style="color:#38bdf8">' + t.name + '</strong><br><span style="font-size:12px;color:#94a3b8">اضغط لفتح الأداة مباشرةً على خادم Hugging Face ZeroGPU:</span><div class="btn-row"><a href="' + t.page + '" target="_blank" class="act-btn">🚀 فتح الأداة الآن</a></div>';
       chat.appendChild(card);
       chat.scrollTop = chat.scrollHeight;
     }
@@ -88,7 +87,7 @@ TOOLS.forEach((t, i) => {
   bar.appendChild(b);
 });
 
-window.executeTool = async function(){
+async function executeTool() {
   const inp = document.getElementById('inp');
   const txt = inp.value.trim();
   if(!txt) return;
@@ -96,43 +95,51 @@ window.executeTool = async function(){
 
   const chat = document.getElementById('chat');
   const u = document.createElement('div');
-  u.className = 'msg user'; u.textContent = txt;
+  u.className = 'msg user';
+  u.textContent = txt;
   chat.appendChild(u);
 
   const a = document.createElement('div');
   a.className = 'msg ai';
   const st = document.createElement('div');
-  st.className = 'step'; st.textContent = '⚡ جاري الاتصال بخادم ZeroGPU (' + activeTool.repo + ')...';
+  st.className = 'step';
+  st.textContent = '⚡ جاري الاتصال بمحركات ZeroGPU...';
   a.appendChild(st);
   chat.appendChild(a);
   chat.scrollTop = chat.scrollHeight;
 
-  let promptEn = txt;
-  try{
-    const tr = await fetch('https://pollinations.ai' + encodeURIComponent('Translate to English image prompt only: ' + txt));
-    const tOut = await tr.text();
-    if(tOut && tOut.length > 3 && tOut.length < 250 && !tOut.includes('<html')) promptEn = tOut.trim();
-  }catch(e){}
+  let promptEn = /^(صور|صورة|صوره|image)$/i.test(txt)
+    ? "Epic futuristic warrior in a rainy neon city, ultra realistic 8k photography, dramatic lighting, IMAX cinema shot"
+    : txt;
 
-  let finalUrl = null;
-  try{
-    const client = await Client.connect("black-forest-labs/FLUX.1-schnell");
-    const res = await client.predict("/infer", [promptEn, 0, true, 1024, 1024, 4]);
-    if(res && res.data && res.data){
-      finalUrl = typeof res.data === 'string' ? res.data : res.data.url;
-    }
-  }catch(e){}
-
-  if(!finalUrl){
-    finalUrl = "https://pollinations.ai" + encodeURIComponent(promptEn + ", photorealistic 8k, cinema lighting") + "?width=1024&height=1024&nologo=true&seed=" + Date.now();
+  if (!/^(صور|صورة|صوره|image)$/i.test(txt)) {
+    try {
+      const tr = await fetch('https://pollinations.ai' + encodeURIComponent('Translate to English image prompt only: ' + txt));
+      const tOut = await tr.text();
+      if(tOut && tOut.length > 3 && tOut.length < 250 && !tOut.includes('<html')) promptEn = tOut.trim();
+    } catch(e) {}
   }
 
-  st.textContent = '✅ اكتمل الإنتاج عبر ZeroGPU!';
+  let finalUrl = null;
+  try {
+    const mod = await import("https://esm.sh");
+    const client = await mod.Client.connect("black-forest-labs/FLUX.1-schnell");
+    const res = await client.predict("/infer", [promptEn, 0, true, 1024, 1024, 4]);
+    if(res && res.data && res.data) {
+      finalUrl = typeof res.data === 'string' ? res.data : res.data.url;
+    }
+  } catch(e) {}
+
+  if(!finalUrl) {
+    finalUrl = "https://pollinations.ai" + encodeURIComponent(promptEn + ", photorealistic 8k, cinema lighting, masterpiece") + "?width=1024&height=1024&nologo=true&seed=" + Date.now();
+  }
+
+  st.textContent = '✅ اكتمل الإنتاج بنجاح!';
   const box = document.createElement('div');
   box.className = 'media-box';
   const img = document.createElement('img');
   img.src = finalUrl;
-  img.onload = () => {
+  img.onload = function() {
     const row = document.createElement('div');
     row.className = 'btn-row';
     row.innerHTML = '<a href="' + finalUrl + '" download="ZeroGPU_' + Date.now() + '.png" target="_blank" class="act-btn">⬇️ حفظ النتيجة</a><a href="https://huggingface.co" target="_blank" class="act-btn ext-btn">🎬 تحريك عبر Wan 2.2</a>';
@@ -142,7 +149,7 @@ window.executeTool = async function(){
   box.appendChild(img);
   a.appendChild(box);
   chat.scrollTop = chat.scrollHeight;
-};
+}
 </script>
 </body>
 </html>
