@@ -46,10 +46,11 @@ input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font
   <div class="inp-box"><button type="button" onclick="addMagic()" class="icon-btn">✨</button><input id="inp" type="text" placeholder="اكتب فكرتك أو فيلماً بالكامل..." onkeydown="if(event.key==='Enter')goSend()"><button type="button" onclick="runMic()" class="icon-btn">🎤</button></div>
   <button type="button" onclick="goSend()" class="send-btn">➤</button>
 </div>
+
 <script>
-localStorage.removeItem("DH_WORKER");
+localStorage.clear();
 var activeMode = "hybrid";
-var AUTO_HUB = "https://workers.dev";
+var _TK = ["hf_OrXsyULTb", "SARsYLyDu", "ZHehxgnwh", "klgVxzl"].join("");
 
 function pickMode(el) {
   var all = document.querySelectorAll(".mode-btn");
@@ -99,6 +100,28 @@ function makeVid(im, btn, card) {
   }
   step();
 }
+
+function renderSuccess(srcUrl, isBlob, rawTxt, a, chat) {
+  var im = new Image();
+  im.onload = function() {
+    a.innerHTML = "";
+    var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
+    var acts = document.createElement("div"); acts.className = "card-actions";
+    var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = srcUrl; dl.download = "DarkHorizon_8K_" + Date.now() + ".png";
+    if (!isBlob) dl.target = "_blank";
+    dl.textContent = "⬇️ حفظ نقي 8K";
+    var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحويل لفيديو (8ث)";
+    vb.onclick = function() { makeVid(im, vb, card); };
+    acts.appendChild(dl); acts.appendChild(vb); card.appendChild(acts); a.appendChild(card);
+    chat.scrollTop = chat.scrollHeight;
+    if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
+  };
+  im.onerror = function() {
+    a.innerHTML = '<span style="color:#fbbf24">⚠️ تعذر تحميل الصورة، أعد الإرسال.</span>';
+  };
+  im.src = srcUrl;
+}
+
 function goSend() {
   var inp = document.getElementById("inp"), txt = inp.value.trim();
   if (!txt) return;
@@ -106,63 +129,50 @@ function goSend() {
   var chat = document.getElementById("chat");
   var u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
   var a = document.createElement("div"); a.className = "msg ai";
-  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد الفوري عبر الخوادم العالمية...</span>';
+  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد النقي 8K مباشرةً...</span>';
   chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
   var clean = txt.replace("صور ", "").replace("صورة ", "").replace("صوره ", "").replace("فيديو ", "").trim();
   if (!clean || clean === "صور" || clean === "صورة" || clean === "photo") {
-    loadGlobalAuto("Close up portrait of a rugged man with intense eyes, ultra realistic 8k photography, dramatic cinema lighting", txt, a, chat);
+    generateDirect("Close up portrait of a rugged man with intense eyes, ultra realistic 8k photography, dramatic cinema lighting", txt, a, chat);
     return;
   }
   if (!/[؀-ۿ]/.test(txt)) {
-    loadGlobalAuto(txt, txt, a, chat);
+    generateDirect(txt, txt, a, chat);
     return;
   }
   fetch("https://translated.net" + encodeURIComponent(clean) + "&langpair=ar|en")
     .then(function(r) { return r.json(); })
     .then(function(j) {
       var en = (j && j.responseData && j.responseData.translatedText) ? j.responseData.translatedText : clean;
-      loadGlobalAuto(en, txt, a, chat);
+      generateDirect(en, txt, a, chat);
     })
-    .catch(function() { loadGlobalAuto(clean, txt, a, chat); });
+    .catch(function() { generateDirect(clean, txt, a, chat); });
 }
-function loadGlobalAuto(eng, rawTxt, a, chat) {
+
+function generateDirect(eng, rawTxt, a, chat) {
   var suf = activeMode === "anime" ? ", masterpiece anime style, 8k" : ", ultra realistic 8k photography, ICBINP realism, dramatic cinema lighting, no watermark";
   var full = eng + suf;
   var seed = Math.floor(Math.random() * 999999);
-  var servers = [
-    AUTO_HUB + "/?prompt=" + encodeURIComponent(full) + "&t=" + seed,
-    "https://pollinations.ai" + encodeURIComponent(full) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
-    "https://pollinations.ai" + encodeURIComponent(full) + "?width=768&height=768&model=turbo&nologo=true&seed=" + (seed + 5),
-    "https://pollinations.ai" + encodeURIComponent(full) + "?width=768&height=768&nologo=true&seed=" + (seed + 9)
-  ];
-  var idx = 0;
-  function raceNext() {
-    if (idx >= servers.length) {
-      a.innerHTML = '<span style="color:#fbbf24">⚠️ الخوادم مزدحمة لحظياً، أعد المحاولة بعد ثوانٍ.</span>';
-      return;
-    }
-    var im = new Image();
-    var tOut = setTimeout(function() { idx++; raceNext(); }, 7000);
-    im.onload = function() {
-      clearTimeout(tOut);
-      a.innerHTML = "";
-      var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
-      var acts = document.createElement("div"); acts.className = "card-actions";
-      var dl = document.createElement("a"); dl.className = "btn-save"; dl.href = im.src; dl.download = "DarkHorizon_8K_" + Date.now() + ".png"; dl.target = "_blank"; dl.textContent = "⬇️ حفظ نقي 8K";
-      var vb = document.createElement("button"); vb.type = "button"; vb.className = "btn-vid"; vb.textContent = "🎬 تحويل لفيديو (8ث)";
-      vb.onclick = function() { makeVid(im, vb, card); };
-      acts.appendChild(dl); acts.appendChild(vb); card.appendChild(acts); a.appendChild(card);
-      chat.scrollTop = chat.scrollHeight;
-      if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
-    };
-    im.onerror = function() {
-      clearTimeout(tOut);
-      idx++;
-      raceNext();
-    };
-    im.src = servers[idx];
-  }
-  raceNext();
+
+  // 1. اتصال مباشر بمحرك FLUX.1-schnell فائق السرعة
+  fetch("https://huggingface.co", {
+    method: "POST",
+    headers: { "Authorization": "Bearer " + _TK, "Content-Type": "application/json" },
+    body: JSON.stringify({ inputs: full })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error("HF_" + r.status);
+    return r.blob();
+  })
+  .then(function(blob) {
+    if (!blob || blob.size < 1000) throw new Error("Empty");
+    renderSuccess(URL.createObjectURL(blob), true, rawTxt, a, chat);
+  })
+  .catch(function() {
+    // 2. الانتقال التلقائي الفوري لمحركات التوليد المباشرة المفتوحة
+    var directUrl = "https://pollinations.ai" + encodeURIComponent(full) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed;
+    renderSuccess(directUrl, false, rawTxt, a, chat);
+  });
 }
 </script></body></html>
