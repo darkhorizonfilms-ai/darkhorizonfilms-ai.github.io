@@ -9,7 +9,7 @@ body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-s
 .status-pill{background:rgba(16,185,129,.15);color:#34d399;border:1px solid #10b981;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:bold;display:flex;align-items:center;gap:5px}
 .dot{width:8px;height:8px;background:#10b981;border-radius:50%;box-shadow:0 0 8px #10b981}
 .ctrl-row{display:flex;gap:6px}
-.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 10px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
+.mini-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:bold;cursor:pointer}
 .modes{display:flex;overflow-x:auto;gap:6px;padding:8px 10px;background:#070b14;border-bottom:1px solid #1e293b;scrollbar-width:none}
 .modes::-webkit-scrollbar{display:none}
 .mode-btn{white-space:nowrap;background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;cursor:pointer}
@@ -29,14 +29,11 @@ body{background:#050811;color:#f8fafc;font-family:system-ui,-apple-system,sans-s
 input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font-size:14px;outline:none}
 .icon-btn{background:none;border:none;color:#94a3b8;font-size:17px;padding:5px;cursor:pointer}
 .send-btn{background:#0284c7;color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:bold;cursor:pointer}
-#settingsModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:center;justify-content:center;padding:16px}
-.modal-box{background:#0f172a;border:1px solid #38bdf8;border-radius:16px;padding:16px;width:100%;max-width:400px}
-.modal-box input{width:100%;background:#050811;border:1px solid #334155;border-radius:10px;padding:10px;margin:10px 0;color:#34d399;direction:ltr}
 </style></head>
 <body>
 <div class="top-bar">
   <div class="title-row"><span class="brand">DARK HORIZON INFINITE v89</span><span class="status-pill"><span class="dot"></span>GPT + Gemini + FLUX + ICBINP 24/7</span></div>
-  <div class="ctrl-row"><button type="button" onclick="showSet()" class="mini-btn">⚙️ الإعدادات</button><button type="button" onclick="resetChat()" class="mini-btn">+ جديد</button></div>
+  <div class="ctrl-row"><button type="button" onclick="resetChat()" class="mini-btn">+ جلسة جديدة</button></div>
 </div>
 <div class="modes">
   <button type="button" onclick="pickMode(this)" class="mode-btn active" data-mode="hybrid">🔴 عمل متكامل (ذكاء + إنتاج)</button>
@@ -44,15 +41,15 @@ input{flex:1;background:transparent;border:none;color:#fff;padding:11px 6px;font
   <button type="button" onclick="pickMode(this)" class="mode-btn" data-mode="video">🎬 فيديو سينمائي 8ث</button>
   <button type="button" onclick="pickMode(this)" class="mode-btn" data-mode="anime">✨ أنمي احترافي</button>
 </div>
-<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">⚡ استوديو DARK HORIZON INFINITE v89 جاهز!</strong><br>اكتب فكرتك في الأسفل وسيتم التوليد النقي 8K بدون علامات مائية.</div></div>
+<div id="chat"><div class="msg ai"><strong style="color:#38bdf8">⚡ استوديو DARK HORIZON INFINITE v89 جاهز!</strong><br>متصل تلقائياً بأقوى وأسرع خوادم الذكاء الاصطناعي في العالم. اكتب فكرتك في الأسفل فقط!</div></div>
 <div class="dock">
   <div class="inp-box"><button type="button" onclick="addMagic()" class="icon-btn">✨</button><input id="inp" type="text" placeholder="اكتب فكرتك أو فيلماً بالكامل..." onkeydown="if(event.key==='Enter')goSend()"><button type="button" onclick="runMic()" class="icon-btn">🎤</button></div>
   <button type="button" onclick="goSend()" class="send-btn">➤</button>
 </div>
-<div id="settingsModal"><div class="modal-box"><strong style="color:#38bdf8">⚙️ إعدادات الخادم</strong><input id="workerInp" type="text" value="https://workers.dev"><div style="display:flex;gap:8px"><button type="button" onclick="saveSet()" class="btn-save">حفظ</button><button type="button" onclick="closeSet()" class="btn-vid">إغلاق</button></div></div></div>
 <script>
+localStorage.removeItem("DH_WORKER");
 var activeMode = "hybrid";
-var DEFAULT_W = "https://workers.dev";
+var AUTO_HUB = "https://workers.dev";
 
 function pickMode(el) {
   var all = document.querySelectorAll(".mode-btn");
@@ -63,17 +60,6 @@ function pickMode(el) {
 function resetChat() {
   document.getElementById("chat").innerHTML = '<div class="msg ai"><strong style="color:#38bdf8">⚡ جلسة إنتاج جديدة جاهزة!</strong></div>';
 }
-function showSet() {
-  document.getElementById("workerInp").value = localStorage.getItem("DH_WORKER") || DEFAULT_W;
-  document.getElementById("settingsModal").style.display = "flex";
-}
-function saveSet() {
-  localStorage.setItem("DH_WORKER", document.getElementById("workerInp").value.trim() || DEFAULT_W);
-  document.getElementById("settingsModal").style.display = "none";
-}
-function closeSet() {
-  document.getElementById("settingsModal").style.display = "none";
-}
 function addMagic() {
   var inp = document.getElementById("inp");
   if (inp.value.trim()) inp.value += " ، إضاءة سينمائية 8K فائق الواقعية";
@@ -82,7 +68,7 @@ function runMic() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return;
   var r = new SR(); r.lang = "ar-SA";
-  r.onresult = function(e) { document.getElementById("inp").value = e.results[0][0].transcript; };
+  r.onresult = function(e) { document.getElementById("inp").value = e.results.transcript; };
   r.start();
 }
 function makeVid(im, btn, card) {
@@ -120,47 +106,46 @@ function goSend() {
   var chat = document.getElementById("chat");
   var u = document.createElement("div"); u.className = "msg user"; u.textContent = txt; chat.appendChild(u);
   var a = document.createElement("div"); a.className = "msg ai";
-  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد النقي 8K...</span>';
+  a.innerHTML = '<span style="color:#38bdf8;font-size:13px">⚡ جاري التوليد الفوري عبر الخوادم العالمية...</span>';
   chat.appendChild(a); chat.scrollTop = chat.scrollHeight;
 
   var clean = txt.replace("صور ", "").replace("صورة ", "").replace("صوره ", "").replace("فيديو ", "").trim();
   if (!clean || clean === "صور" || clean === "صورة" || clean === "photo") {
-    loadImg("Close up portrait of a rugged man with intense eyes and tire tread foreground, ultra realistic 8k photography, dramatic lighting", txt, a, chat);
+    loadGlobalAuto("Close up portrait of a rugged man with intense eyes, ultra realistic 8k photography, dramatic cinema lighting", txt, a, chat);
     return;
   }
   if (!/[؀-ۿ]/.test(txt)) {
-    loadImg(txt, txt, a, chat);
+    loadGlobalAuto(txt, txt, a, chat);
     return;
   }
   fetch("https://translated.net" + encodeURIComponent(clean) + "&langpair=ar|en")
     .then(function(r) { return r.json(); })
     .then(function(j) {
       var en = (j && j.responseData && j.responseData.translatedText) ? j.responseData.translatedText : clean;
-      loadImg(en, txt, a, chat);
+      loadGlobalAuto(en, txt, a, chat);
     })
-    .catch(function() { loadImg(clean, txt, a, chat); });
+    .catch(function() { loadGlobalAuto(clean, txt, a, chat); });
 }
-function loadImg(eng, rawTxt, a, chat) {
+function loadGlobalAuto(eng, rawTxt, a, chat) {
   var suf = activeMode === "anime" ? ", masterpiece anime style, 8k" : ", ultra realistic 8k photography, ICBINP realism, dramatic cinema lighting, no watermark";
   var full = eng + suf;
-  var w = (localStorage.getItem("DH_WORKER") || DEFAULT_W).trim();
-  if (w.charAt(w.length - 1) === "/") w = w.slice(0, -1);
   var seed = Math.floor(Math.random() * 999999);
-  var urls = [
-    w + "/?prompt=" + encodeURIComponent(full) + "&t=" + seed,
+  var servers = [
+    AUTO_HUB + "/?prompt=" + encodeURIComponent(full) + "&t=" + seed,
     "https://pollinations.ai" + encodeURIComponent(full) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
-    "https://pollinations.ai" + encodeURIComponent(full) + "?width=768&height=768&nologo=true&seed=" + (seed + 3)
+    "https://pollinations.ai" + encodeURIComponent(full) + "?width=768&height=768&model=turbo&nologo=true&seed=" + (seed + 5),
+    "https://pollinations.ai" + encodeURIComponent(full) + "?width=768&height=768&nologo=true&seed=" + (seed + 9)
   ];
   var idx = 0;
-  function tryNext() {
-    if (idx >= urls.length) {
+  function raceNext() {
+    if (idx >= servers.length) {
       a.innerHTML = '<span style="color:#fbbf24">⚠️ الخوادم مزدحمة لحظياً، أعد المحاولة بعد ثوانٍ.</span>';
       return;
     }
     var im = new Image();
-    var timer = setTimeout(function() { idx++; tryNext(); }, 10000);
+    var tOut = setTimeout(function() { idx++; raceNext(); }, 7000);
     im.onload = function() {
-      clearTimeout(timer);
+      clearTimeout(tOut);
       a.innerHTML = "";
       var card = document.createElement("div"); card.className = "media-card"; card.appendChild(im);
       var acts = document.createElement("div"); acts.className = "card-actions";
@@ -172,12 +157,12 @@ function loadImg(eng, rawTxt, a, chat) {
       if (activeMode === "video" || rawTxt.indexOf("فيديو") !== -1) makeVid(im, vb, card);
     };
     im.onerror = function() {
-      clearTimeout(timer);
+      clearTimeout(tOut);
       idx++;
-      tryNext();
+      raceNext();
     };
-    im.src = urls[idx];
+    im.src = servers[idx];
   }
-  tryNext();
+  raceNext();
 }
 </script></body></html>
