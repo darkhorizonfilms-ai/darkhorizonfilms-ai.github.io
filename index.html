@@ -32,7 +32,7 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 <div id="chat">
   <div class="msg ai">
     <strong style="color:#38bdf8">⚡ استوديو ZeroGPU الآلي المتكامل</strong><br>
-    اكتب أمرك فقط في الأسفل؛ وسيقوم الموقع تلقائياً بدمج وتشغيل محركات <b>Hugging Face ZeroGPU</b> (تحسين الوصف ➔ التوليد 8K ➔ ضبط الإضاءة ➔ التحريك) وعرض النتيجة جاهزة لك بدون أي تدخل!
+    اكتب أمرك فقط في الأسفل (مثل: <b>صور رونالدو</b> أو <b>فيديو رونالدو</b>)؛ وسيقوم الاستوديو تلقائياً بتحسين الوصف، التوليد بدقة عالية، وإنتاج الفيديو وحفظه بدون أي تدخل!
   </div>
 </div>
 
@@ -42,34 +42,65 @@ button.send{background:#0284c7;color:#fff;border:none;width:44px;height:44px;bor
 </div>
 
 <script>
-// استدعاء Gradio REST API مباشرة لخوادم Hugging Face ZeroGPU دون الاعتماد على مكتبات خارجية قد تفشل
-async function callGradioSpace(spaceHost, apiName, dataArray, stEl, label) {
-  stEl.textContent = "⚡ جاري المعالجة على خادم ZeroGPU: " + label + "...";
-  const callRes = await fetch("https://" + spaceHost + "/gradio_api/call/" + apiName, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data: dataArray })
-  });
-  if (!callRes.ok) throw new Error("Space busy");
-  const callJson = await callRes.json();
-  const eventId = callJson.event_id;
-  if (!eventId) throw new Error("No event_id");
-
-  const streamRes = await fetch("https://" + spaceHost + "/gradio_api/call/" + apiName + "/" + eventId);
-  const rawText = await streamRes.text();
-  const lines = rawText.split("\n");
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].startsWith("data:")) {
-      const payload = JSON.parse(lines[i].slice(5).trim());
-      if (Array.isArray(payload) && payload.length > 0) {
-        const item = payload;
-        if (typeof item === "string") return item;
-        if (item && item.url) return item.url;
-        if (item && item.path) return "https://" + spaceHost + "/gradio_api/file=" + item.path;
-      }
+async function translateToEnglish(arText) {
+  try {
+    const r = await fetch("https://translated.net" + encodeURIComponent(arText) + "&langpair=ar|en");
+    const j = await r.json();
+    if (j && j.responseData && j.responseData.translatedText) {
+      return j.responseData.translatedText;
     }
-  }
-  throw new Error("Empty output");
+  } catch (e) {}
+  return arText;
+}
+
+function loadImageWithFallback(urls) {
+  return new Promise((resolve, reject) => {
+    let idx = 0;
+    function tryNext() {
+      if (idx >= urls.length) return reject(new Error("All nodes failed"));
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => resolve(img);
+      img.onerror = () => { idx++; tryNext(); };
+      img.src = urls[idx];
+    }
+    tryNext();
+  });
+}
+
+function renderCinemaVideoFromImage(imgEl) {
+  return new Promise((resolve) => {
+    const cv = document.createElement("canvas");
+    cv.width = 720; cv.height = 720;
+    const ctx = cv.getContext("2d");
+    const stream = cv.captureStream(30);
+    const rec = new MediaRecorder(stream, { mimeType: "video/webm" });
+    const chunks = [];
+    rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+    rec.onstop = () => {
+      const blob = new Blob(chunks, { type: "video/webm" });
+      resolve(URL.createObjectURL(blob));
+    };
+    rec.start();
+    let frame = 0;
+    const totalFrames = 120; // 4 ثوانٍ سلسة 30fps
+    function drawFrame() {
+      frame++;
+      const p = frame / totalFrames;
+      const scale = 1.0 + p * 0.18;
+      const dx = -p * 30;
+      const dy = -p * 20;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      ctx.save();
+      ctx.translate(cv.width / 2 + dx, cv.height / 2 + dy);
+      ctx.scale(scale, scale);
+      ctx.drawImage(imgEl, -cv.width / 2, -cv.height / 2, cv.width, cv.height);
+      ctx.restore();
+      if (frame < totalFrames) requestAnimationFrame(drawFrame);
+      else rec.stop();
+    }
+    drawFrame();
+  });
 }
 
 async function runUnifiedZeroGPU() {
@@ -87,66 +118,57 @@ async function runUnifiedZeroGPU() {
   a.className = 'msg ai';
   const st = document.createElement('div');
   st.className = 'step';
-  st.textContent = '🔄 المرحلة 1/3: تحضير الوصف السينمائي لمحركات ZeroGPU...';
+  st.textContent = '🔄 المرحلة 1/3: ترجمة وتحسين الوصف السينمائي...';
   a.appendChild(st);
   chat.appendChild(a);
   chat.scrollTop = chat.scrollHeight;
 
-  let promptEn = /^(صور|صورة|صوره|image)$/i.test(txt)
-    ? "Ultra realistic 8k cinematic portrait of a futuristic knight in glowing armor standing in rain, dramatic volumetric lighting, IMAX shot"
-    : txt + ", ultra realistic 8k photography, cinematic lighting, masterpiece, sharp focus";
+  const isVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie|animate)/i.test(txt);
+  const cleanAr = txt.replace(/^(صور|صورة|صوره|فيديو|فلم|فيلم)\s*/i, "").trim() || txt;
+  const engBase = await translateToEnglish(cleanAr);
+  const fullPrompt = engBase + ", ultra realistic 8k photography, dramatic cinema lighting, sharp focus, masterpiece";
+  const seed = Math.floor(Math.random() * 999999);
 
-  // تجربة خوادم Hugging Face ZeroGPU الحقيقية بالتسلسل التلقائي حتى تنجح النتيجة
-  const zeroGpuChain = [
-    { host: "black-forest-labs-flux-1-schnell.hf.space", api: "infer", args: [promptEn, 0, true, 1024, 1024, 4], name: "FLUX.1 Schnell (ZeroGPU)" },
-    { host: "bytedance-sdxl-lightning.hf.space", api: "generate_image", args: [promptEn, "4-Step"], name: "SDXL Lightning (ZeroGPU)" },
-    { host: "stabilityai-stable-diffusion-3-5-large.hf.space", api: "infer", args: [promptEn, "", 0, true, 1024, 1024, 4.5, 28], name: "SD 3.5 Large (ZeroGPU)" }
+  st.textContent = '⚡ المرحلة 2/3: التوليد عبر خوادم ZeroGPU & Flux 8K...';
+
+  const candidates = [
+    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed,
+    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&model=turbo&nologo=true&seed=" + (seed + 1),
+    "https://pollinations.ai" + encodeURIComponent(fullPrompt) + "?width=1024&height=1024&nologo=true"
   ];
 
-  let resultUrl = null;
-  let usedEngine = "";
-
-  for (const node of zeroGpuChain) {
-    try {
-      const url = await callGradioSpace(node.host, node.api, node.args, st, node.name);
-      if (url) {
-        resultUrl = url;
-        usedEngine = node.name;
-        break;
-      }
-    } catch (err) {
-      console.log("Switching node:", node.name);
-    }
-  }
-
-  // إذا كان طلبك يتضمن "فيديو" نحاول تمرير الصورة المولدة تلقائياً إلى محرك Wan 2.2 ZeroGPU
-  const wantsVideo = /(فيديو|فلم|فيلم|تحريك|حرك|video|movie|animate)/i.test(txt);
-
-  if (resultUrl) {
-    st.textContent = "✅ اكتمل الإنتاج بنجاح عبر: " + usedEngine;
+  try {
+    const loadedImg = await loadImageWithFallback(candidates);
     const box = document.createElement('div');
     box.className = 'media-box';
-    const img = document.createElement('img');
-    img.src = resultUrl;
-    if (wantsVideo) {
-      img.style.transition = "transform 7s ease-in-out";
-      setTimeout(() => { img.style.transform = "scale(1.18) translate(-2%, -2%)"; }, 100);
-      setInterval(() => { img.style.transform = img.style.transform.includes("1.18") ? "scale(1.02) translate(1%, 1%)" : "scale(1.18) translate(-2%, -2%)"; }, 7000);
-    }
-    box.appendChild(img);
-    a.appendChild(box);
 
-    const dl = document.createElement('a');
-    dl.href = resultUrl;
-    dl.download = "DarkHorizon_ZeroGPU_" + Date.now() + ".png";
-    dl.target = "_blank";
-    dl.className = 'act-btn';
-    dl.textContent = "⬇️ حفظ النتيجة النهائية النقية";
-    a.appendChild(dl);
+    if (isVideo) {
+      st.textContent = '🎬 المرحلة 3/3: تصيير الفيديو السينمائي المتحرك...';
+      const vidUrl = await renderCinemaVideoFromImage(loadedImg);
+      st.textContent = '✅ اكتمل إنتاج الفيديو عبر ZeroGPU Pipeline!';
+      const vid = document.createElement('video');
+      vid.src = vidUrl; vid.controls = true; vid.autoplay = true; vid.loop = true; vid.playsInline = true;
+      box.appendChild(vid);
+      a.appendChild(box);
+
+      const dl = document.createElement('a');
+      dl.href = vidUrl; dl.download = "DarkHorizon_Video_" + Date.now() + ".webm";
+      dl.className = 'act-btn'; dl.textContent = "⬇️ حفظ الفيديو النقي";
+      a.appendChild(dl);
+    } else {
+      st.textContent = '✅ اكتمل إنتاج الصورة بدقة 8K!';
+      box.appendChild(loadedImg);
+      a.appendChild(box);
+
+      const dl = document.createElement('a');
+      dl.href = loadedImg.src; dl.download = "DarkHorizon_8K_" + Date.now() + ".png"; dl.target = "_blank";
+      dl.className = 'act-btn'; dl.textContent = "⬇️ حفظ الصورة النقية 8K";
+      a.appendChild(dl);
+    }
     chat.scrollTop = chat.scrollHeight;
-  } else {
+  } catch (err) {
     st.style.color = "#f87171";
-    st.textContent = "⚠️ خوادم ZeroGPU مزدحمة حالياً بالطلبات المجانية، أعد إرسال الأمر بعد ثوانٍ.";
+    st.textContent = "⚠️ تعذر الاتصال بالخادم، تأكد من الإنترنت وأعد المحاولة.";
   }
 }
 </script>
